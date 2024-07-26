@@ -1,0 +1,55 @@
+{
+  "_args": [
+    [
+      "babel-helper-is-react-class@1.0.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_development": true,
+  "_from": "babel-helper-is-react-class@1.0.0",
+  "_id": "babel-helper-is-react-class@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-9rulVgj7gg5/m33Z2zcYov042fe4WcNDGT52M0S5RjiNREg6Izreo/beEdAAiQTSnkb6/tzJ5c2cNaZN3fYHVw==",
+  "_location": "/babel-helper-is-react-class",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "babel-helper-is-react-class@1.0.0",
+    "name": "babel-helper-is-react-class",
+    "escapedName": "babel-helper-is-react-class",
+    "rawSpec": "1.0.0",
+    "saveSpec": null,
+    "fetchSpec": "1.0.0"
+  },
+  "_requiredBy": [
+    "/babel-plugin-transform-react-pure-class-to-function"
+  ],
+  "_resolved": "https://registry.npmjs.org/babel-helper-is-react-class/-/babel-helper-is-react-class-1.0.0.tgz",
+  "_spec": "1.0.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "James Kyle",
+    "email": "me@thejameskyle.com"
+  },
+  "bugs": {
+    "url": "https://github.com/thejamekyle/babel-helper-is-react-class/issues"
+  },
+  "dependencies": {},
+  "description": "",
+  "devDependencies": {},
+  "homepage": "https://github.com/thejamekyle/babel-helper-is-react-class#readme",
+  "keywords": [
+    "babel-helper",
+    "react",
+    "optimize"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "name": "babel-helper-is-react-class",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thejamekyle/babel-helper-is-react-class/tree/master/packages/babel-helper-is-react-class"
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,39 @@
+.seeAllContainer {
+	/* float: right; */
+	/* position: relative; */
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+.seeAllBtn,
+.seeAllBtn:hover,
+.seeAllBtn:focus,
+.seeAllBtn:active:focus {
+	font-size: 14px;
+	color: #fff;
+	z-index: 1;
+    line-height: 24px;
+    position: relative;
+	padding: 5px;
+	text-decoration: none;
+	display: inline-block;
+	vertical-align: top;
+	outline: 0;
+	background-color: #FF7358;
+	border-radius: 6px;
+	width: 5rem;
+}
+.seeAllBtnIcon {
+	margin-top: -4px;
+}
+@media screen and (max-width: 1170px) {
+	/* .seeAllBtn {
+		position: absolute;
+		right: 0;
+	} */
+}
+@media screen and (max-width: 767px) {
+	.seeAllContainer {
+		display: none;
+	}
+}

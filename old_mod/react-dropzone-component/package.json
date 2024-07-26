@@ -1,0 +1,88 @@
+{
+  "_args": [
+    [
+      "react-dropzone-component@2.0.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "react-dropzone-component@2.0.0",
+  "_id": "react-dropzone-component@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-SMHUnV2B3nA6gTBuZKIOSqhDYSLXT9m2DNqXoYwb5PkAfoVdA2wlv+tcz2jfVwwgdH8aiROu3rQ5wcmXcuirHA==",
+  "_location": "/react-dropzone-component",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-dropzone-component@2.0.0",
+    "name": "react-dropzone-component",
+    "escapedName": "react-dropzone-component",
+    "rawSpec": "2.0.0",
+    "saveSpec": null,
+    "fetchSpec": "2.0.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-dropzone-component/-/react-dropzone-component-2.0.0.tgz",
+  "_spec": "2.0.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "bugs": {
+    "url": "https://github.com/felixrieseberg/React-Dropzone/issues"
+  },
+  "dependencies": {
+    "dropzone": "^4.3.0",
+    "extend": "^3.0.0"
+  },
+  "description": "A Dropzone Component for ReactJS",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "jest-cli": "^0.8.1",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-tools": "^0.13.3",
+    "standard": "^10.0.2",
+    "uglify-js": "^2.8.22",
+    "webpack": "^2.4.1"
+  },
+  "homepage": "https://github.com/felixrieseberg/React-Dropzone#readme",
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/*"
+    ]
+  },
+  "license": "MIT",
+  "main": "dist/react-dropzone.js",
+  "maintainers": [
+    {
+      "name": "Felix Rieseberg",
+      "email": "felix@felixrieseberg.com",
+      "url": "http://www.felixrieseberg.com"
+    },
+    {
+      "name": "Erik Schlegel",
+      "email": "erik.schlegel@gmail.com",
+      "url": "erikschlegel.com"
+    }
+  ],
+  "name": "react-dropzone-component",
+  "peerDependencies": {
+    "react-dom": "^0.14.0 || >0.14.0 || ^15.0.1",
+    "react": ">=0.13 || >0.14.0-alpha || >0.14.0 || ^15.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felixrieseberg/React-Dropzone.git"
+  },
+  "scripts": {
+    "build": "webpack && uglifyjs ./dist/react-dropzone.js -c -m -o ./dist/react-dropzone.min.js --source-map ./dist/react-dropzone.min.js.map",
+    "prepublish": "npm run build",
+    "test": "standard ./src && jest"
+  },
+  "standalone": "React-Dropzone",
+  "version": "2.0.0"
+}

@@ -1,0 +1,125 @@
+{
+  "_args": [
+    [
+      "lodash@4.17.21",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "lodash@4.17.21",
+  "_id": "lodash@4.17.21",
+  "_inBundle": false,
+  "_integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==",
+  "_location": "/lodash",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "lodash@4.17.21",
+    "name": "lodash",
+    "escapedName": "lodash",
+    "rawSpec": "4.17.21",
+    "saveSpec": null,
+    "fetchSpec": "4.17.21"
+  },
+  "_requiredBy": [
+    "/@pm2/io/async",
+    "/@pm2/js-api/async",
+    "/babel-cli",
+    "/babel-core",
+    "/babel-core/babel-generator",
+    "/babel-core/babel-traverse",
+    "/babel-eslint/babel-traverse",
+    "/babel-helper-bindify-decorators/babel-traverse",
+    "/babel-helper-call-delegate/babel-traverse",
+    "/babel-helper-define-map",
+    "/babel-helper-explode-assignable-expression/babel-traverse",
+    "/babel-helper-explode-class/babel-traverse",
+    "/babel-helper-function-name/babel-traverse",
+    "/babel-helper-regex",
+    "/babel-helper-remap-async-to-generator/babel-traverse",
+    "/babel-helper-replace-supers/babel-traverse",
+    "/babel-plugin-transform-es2015-block-scoping",
+    "/babel-plugin-transform-es2015-block-scoping/babel-traverse",
+    "/babel-plugin-transform-es2015-classes/babel-traverse",
+    "/babel-plugin-transform-es2015-parameters/babel-traverse",
+    "/babel-register",
+    "/babel-template",
+    "/babel-template/babel-traverse",
+    "/babel-types",
+    "/colorguard/postcss-reporter",
+    "/easy-extender",
+    "/enzyme",
+    "/eslint",
+    "/eslint-plugin-css-modules",
+    "/form-data/async",
+    "/globule",
+    "/inquirer",
+    "/node-sass",
+    "/portscanner/async",
+    "/postcss-icss-selectors",
+    "/postcss-reporter",
+    "/postcss-sorting",
+    "/pretty-error",
+    "/react-dates",
+    "/react-google-maps",
+    "/react-proxy",
+    "/react-quill",
+    "/redux",
+    "/redux-form",
+    "/renderkid",
+    "/sass-graph",
+    "/sequelize",
+    "/sequelize-cli",
+    "/sitemap",
+    "/stylefmt/stylelint-order",
+    "/stylelint",
+    "/stylelint/doiuse",
+    "/stylelint/stylehacks/postcss-reporter",
+    "/stylelint/table",
+    "/table",
+    "/twilio",
+    "/vizion/async",
+    "/webpack-bundle-analyzer",
+    "/webpack/async",
+    "/write-file-webpack-plugin"
+  ],
+  "_resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz",
+  "_spec": "4.17.21",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/lodash/lodash/issues"
+  },
+  "contributors": [
+    {
+      "name": "John-David Dalton",
+      "email": "john.david.dalton@gmail.com"
+    },
+    {
+      "name": "Mathias Bynens",
+      "email": "mathias@qiwi.be"
+    }
+  ],
+  "description": "Lodash modular utilities.",
+  "homepage": "https://lodash.com/",
+  "icon": "https://lodash.com/icon.svg",
+  "keywords": [
+    "modules",
+    "stdlib",
+    "util"
+  ],
+  "license": "MIT",
+  "main": "lodash.js",
+  "name": "lodash",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lodash/lodash.git"
+  },
+  "scripts": {
+    "test": "echo \"See https://travis-ci.org/lodash-archive/lodash-cli for testing details.\""
+  },
+  "version": "4.17.21"
+}

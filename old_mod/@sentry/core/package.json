@@ -1,0 +1,62 @@
+{
+  "_args": [
+    [
+      "@sentry/core@7.56.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "@sentry/core@7.56.0",
+  "_id": "@sentry/core@7.56.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Nuyyfh09Yz27kPo74fXHlrdmZeK6zrlJVtxQ6LkwuoaTBcNcesNXVaOtr6gjvUGUmsfriVPP3Jero5LXufV7GQ==",
+  "_location": "/@sentry/core",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@sentry/core@7.56.0",
+    "name": "@sentry/core",
+    "escapedName": "@sentry%2fcore",
+    "scope": "@sentry",
+    "rawSpec": "7.56.0",
+    "saveSpec": null,
+    "fetchSpec": "7.56.0"
+  },
+  "_requiredBy": [
+    "/@sentry-internal/tracing",
+    "/@sentry/node"
+  ],
+  "_resolved": "https://registry.npmjs.org/@sentry/core/-/core-7.56.0.tgz",
+  "_spec": "7.56.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "Sentry"
+  },
+  "bugs": {
+    "url": "https://github.com/getsentry/sentry-javascript/issues"
+  },
+  "dependencies": {
+    "@sentry/types": "7.56.0",
+    "@sentry/utils": "7.56.0",
+    "tslib": "^1.9.3"
+  },
+  "description": "Base implementation for all Sentry JavaScript SDKs",
+  "engines": {
+    "node": ">=8"
+  },
+  "homepage": "https://github.com/getsentry/sentry-javascript/tree/master/packages/core",
+  "license": "MIT",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "name": "@sentry/core",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/getsentry/sentry-javascript.git"
+  },
+  "sideEffects": false,
+  "types": "types/index.d.ts",
+  "version": "7.56.0"
+}

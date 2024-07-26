@@ -1,0 +1,118 @@
+{
+  "_args": [
+    [
+      "lyef-switch-button@1.4.2",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "lyef-switch-button@1.4.2",
+  "_id": "lyef-switch-button@1.4.2",
+  "_inBundle": false,
+  "_integrity": "sha512-7rxT23T9Iv9H7Zp6WPS0rP28qjVuZsOL0V+xHgqnhuV7YfPC7Qu2TlUNsuHsaeh0vKCiRauky1TmV75R50tAPw==",
+  "_location": "/lyef-switch-button",
+  "_phantomChildren": {
+    "isomorphic-fetch": "2.2.1",
+    "loose-envify": "1.4.0",
+    "object-assign": "4.1.1",
+    "promise": "7.3.1",
+    "prop-types": "15.8.1",
+    "setimmediate": "1.0.5",
+    "ua-parser-js": "0.7.35"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "lyef-switch-button@1.4.2",
+    "name": "lyef-switch-button",
+    "escapedName": "lyef-switch-button",
+    "rawSpec": "1.4.2",
+    "saveSpec": null,
+    "fetchSpec": "1.4.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/lyef-switch-button/-/lyef-switch-button-1.4.2.tgz",
+  "_spec": "1.4.2",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "lyef",
+    "url": "http://lyef.github.io/"
+  },
+  "bugs": {
+    "url": "https://github.com/lyef/lyef-switch-button/issues"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.8",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "description": "A switch button (on/off) React component.",
+  "devDependencies": {
+    "@personare/react-storybook-decorator-github-corner": "^0.1.4",
+    "@storybook/react": "^3.1.5",
+    "@storybook/storybook-deployer": "^2.0.0",
+    "assert-equal-jsx": "^1.0.3",
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-airbnb": "^2.0.0",
+    "chai": "^3.5.0",
+    "enzyme": "^2.9.1",
+    "eslint": "^2.13.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.12.0",
+    "eslint-plugin-jsx-a11y": "^1.5.5",
+    "eslint-plugin-react": "^5.2.2",
+    "husky": "^0.11.4",
+    "jsdom": "^9.4.1",
+    "mocha": "^2.5.3",
+    "nyc": "^7.0.0",
+    "raw-loader": "^0.5.1",
+    "react-test-renderer": "^15.6.1",
+    "rimraf": "^2.5.3",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0",
+    "style-loader": "^0.13.1",
+    "uglify-js": "^2.7.0"
+  },
+  "homepage": "https://github.com/lyef/lyef-switch-button#README",
+  "keywords": [
+    "react",
+    "component",
+    "switch",
+    "button",
+    "es6"
+  ],
+  "license": "MIT",
+  "main": "dist/Main.js",
+  "name": "lyef-switch-button",
+  "nyc": {
+    "exclude": [
+      "tests",
+      "dist"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lyef/lyef-switch-button.git"
+  },
+  "scripts": {
+    "babel": "babel src -d dist",
+    "build": "npm run clean && npm run babel && npm run minify",
+    "build-storybook": "build-storybook -c ./storybook -o .out",
+    "clean": "rimraf dist",
+    "deploy-storybook": "storybook-to-ghpages",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "minify": "uglifyjs -c -m -o dist/Main.min.js dist/Main.js",
+    "prepush": "npm run lint && npm test",
+    "pub": "npm run build && npm publish",
+    "start": "npm run storybook",
+    "storybook": "start-storybook -p 9001 -c ./storybook",
+    "test": "mocha --require tests/helpers/setup.js tests/specs/**/*.spec.js",
+    "test:coverage": "nyc --reporter=html --reporter=text ./node_modules/.bin/mocha tests/helpers/setup.js tests/specs/**/*.spec.js",
+    "test:tdd": "mocha --require tests/helpers/setup.js tests/specs/**/*.spec.js -w"
+  },
+  "version": "1.4.2"
+}

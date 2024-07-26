@@ -1,0 +1,23 @@
+# Include your project-specific ignores in this file
+# Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
+#build/*
+.yarn/cache/*
+images/upload/*
+images/home/*
+images/avatar/*
+images/popularLocation/*
+database.sqlite
+db/config/config_backup.json
+_cacache/*
+_logs/*
+node_modules
+ncp-debug.log
+npm-debug.log
+.idea
+.DS_Store
+/build/node_modules
+/build/.env
+
+
+/build
+.env

@@ -1,0 +1,21 @@
+@import '../variables.css';
+.logoColor{
+	color:var(--btn-primary-bg);
+}
+.whiteColor{
+	color:#fff;
+}
+svg#Layer_1 {
+	display: inline-block;
+	width: 153px;
+	height: 45px;
+}
+
+@media screen and (max-width: 767px) {
+	svg#Layer_1 {
+		width: 135px;
+		height: 40px;
+		margin: auto;
+		display: block;
+	}
+}

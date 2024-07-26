@@ -1,0 +1,28 @@
+.scrollingContainer {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.2);
+  }
+  
+  .scrollingContainer::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .scrollingContainer::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .scrollingContainer::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+  }
+  
+  .scrollingItem {
+    color: white;
+    display: inline-block;
+    padding: 8px 16px;
+    white-space: nowrap;
+  }
+  

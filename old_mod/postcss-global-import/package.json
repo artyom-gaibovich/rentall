@@ -1,0 +1,67 @@
+{
+  "_args": [
+    [
+      "postcss-global-import@1.0.6",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_development": true,
+  "_from": "postcss-global-import@1.0.6",
+  "_id": "postcss-global-import@1.0.6",
+  "_inBundle": false,
+  "_integrity": "sha512-+vACUVuINEqRiN9gZsR6inKMSqSDmT19FDzhvouB0CXyQ1ARI+lhEGTPtNm1E+ymTzV6aAPfA7jo6tVimHKSDw==",
+  "_location": "/postcss-global-import",
+  "_phantomChildren": {
+    "cssesc": "3.0.0",
+    "fastparse": "1.1.2",
+    "source-map": "0.6.1"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "postcss-global-import@1.0.6",
+    "name": "postcss-global-import",
+    "escapedName": "postcss-global-import",
+    "rawSpec": "1.0.6",
+    "saveSpec": null,
+    "fetchSpec": "1.0.6"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/postcss-global-import/-/postcss-global-import-1.0.6.tgz",
+  "_spec": "1.0.6",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/scherebedov/postcss-global-import/issues"
+  },
+  "dependencies": {
+    "css-selector-tokenizer": "^0.7.0",
+    "postcss": "^6.0.14",
+    "resolve": "^1.1.7"
+  },
+  "description": "Post Css plugin for global import css.",
+  "devDependencies": {
+    "cssnano": "^3.10.0",
+    "glob": "^7.1.2",
+    "jest": "^21.2.1",
+    "postcss-modules": "^1.1.0"
+  },
+  "engine": "node >= 6.0.0",
+  "homepage": "https://github.com/scherebedov/postcss-global-import#readme",
+  "keywords": [
+    "Postcss"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "postcss-global-import",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scherebedov/postcss-global-import.git"
+  },
+  "scripts": {
+    "test": "jest --useStderr"
+  },
+  "version": "1.0.6"
+}

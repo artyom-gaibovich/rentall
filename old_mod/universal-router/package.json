@@ -1,0 +1,76 @@
+{
+  "_args": [
+    [
+      "universal-router@2.0.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "universal-router@2.0.0",
+  "_id": "universal-router@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-pdnM1UvIANacDn3jweNkf3ExW9VKLPiM/xa6AavUTD7ZyuhMYPwPA50NPIQcOZ8moid4Cm+sBE6MoJJTwoakgg==",
+  "_location": "/universal-router",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "universal-router@2.0.0",
+    "name": "universal-router",
+    "escapedName": "universal-router",
+    "rawSpec": "2.0.0",
+    "saveSpec": null,
+    "fetchSpec": "2.0.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/universal-router/-/universal-router-2.0.0.tgz",
+  "_spec": "2.0.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "Kriasoft",
+    "email": "support@kriasoft.com",
+    "url": "https://www.kriasoft.com"
+  },
+  "browser": "browser.js",
+  "bugs": {
+    "url": "https://github.com/kriasoft/universal-router/issues"
+  },
+  "contributors": [
+    {
+      "name": "Konstantin Tarkus",
+      "email": "hello@tarkus.me",
+      "url": "https://tarkus.me"
+    },
+    {
+      "name": "Vladimir Kutepov",
+      "email": "frenzzy.man@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "babel-runtime": "^6.11.6",
+    "path-to-regexp": "^1.6.0"
+  },
+  "description": "Isomorphic router for JavaScript web applications",
+  "homepage": "https://www.kriasoft.com/universal-router/",
+  "jsnext:browser": "browser.mjs",
+  "jsnext:main": "main.mjs",
+  "keywords": [
+    "react",
+    "reactjs",
+    "react-component",
+    "route",
+    "routes",
+    "router",
+    "routing",
+    "flux"
+  ],
+  "license": "MIT",
+  "main": "main.js",
+  "name": "universal-router",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kriasoft/universal-router.git"
+  },
+  "version": "2.0.0"
+}

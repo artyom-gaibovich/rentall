@@ -1,0 +1,69 @@
+{
+  "_args": [
+    [
+      "require-tree@0.3.3",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_development": true,
+  "_from": "require-tree@0.3.3",
+  "_id": "require-tree@0.3.3",
+  "_inBundle": false,
+  "_integrity": "sha512-LjmJaymxJ8E6b9dk3nONQ+forCpoc2qiGe1piu70xx0i4bmhtzMmkKy3HZTeGEngnHdQJgWKmQmPcZD7SvWPvQ==",
+  "_location": "/require-tree",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "require-tree@0.3.3",
+    "name": "require-tree",
+    "escapedName": "require-tree",
+    "rawSpec": "0.3.3",
+    "saveSpec": null,
+    "fetchSpec": "0.3.3"
+  },
+  "_requiredBy": [
+    "/editorconfig-tools"
+  ],
+  "_resolved": "https://registry.npmjs.org/require-tree/-/require-tree-0.3.3.tgz",
+  "_spec": "0.3.3",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "Ricardo Tomasi"
+  },
+  "bugs": {
+    "url": "https://github.com/ricardobeat/require-tree/issues"
+  },
+  "dependencies": {},
+  "description": "require() whole directory trees",
+  "devDependencies": {
+    "mocha": ""
+  },
+  "directories": {
+    "test": "test"
+  },
+  "homepage": "https://github.com/ricardobeat/require-tree#readme",
+  "keywords": [
+    "require",
+    "tree",
+    "multiple",
+    "paths",
+    "nested",
+    "folders",
+    "directory",
+    "directories",
+    "loader",
+    "api"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "require-tree",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ricardobeat/require-tree.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "0.3.3"
+}

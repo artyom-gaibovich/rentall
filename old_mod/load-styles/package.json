@@ -1,0 +1,43 @@
+{
+  "_args": [
+    [
+      "load-styles@2.0.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_development": true,
+  "_from": "load-styles@2.0.0",
+  "_id": "load-styles@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-bKtTRlB+V8jij88ZoX73whwAbme5VQfmNPiK9KWDSyYevZgy3uwivIPBeM9w5+nyhA2BFFyWMSqPNola9MSn+A==",
+  "_location": "/load-styles",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "load-styles@2.0.0",
+    "name": "load-styles",
+    "escapedName": "load-styles",
+    "rawSpec": "2.0.0",
+    "saveSpec": null,
+    "fetchSpec": "2.0.0"
+  },
+  "_requiredBy": [
+    "/babel-plugin-transform-import-css"
+  ],
+  "_resolved": "https://registry.npmjs.org/load-styles/-/load-styles-2.0.0.tgz",
+  "_spec": "2.0.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "description": "Add a CSS <style> tag to the document's <head> node",
+  "keywords": [
+    "css",
+    "load",
+    "dynamic",
+    "head",
+    "style"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "load-styles",
+  "version": "2.0.0"
+}

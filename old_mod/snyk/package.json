@@ -1,0 +1,96 @@
+{
+  "_args": [
+    [
+      "snyk@1.1185.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "snyk@1.1185.0",
+  "_id": "snyk@1.1185.0",
+  "_inBundle": false,
+  "_integrity": "sha512-fV5UgDSnXa/JliSeR2nzPopdTLLO0g20sEqOSo0ZeMSLcAoh2teHZ4eHgGEej0IwYx6Ne/z17sKEwm5nbuAaIA==",
+  "_location": "/snyk",
+  "_phantomChildren": {
+    "boolean": "3.2.0",
+    "es6-error": "4.1.1",
+    "matcher": "3.0.0",
+    "roarr": "2.15.4",
+    "semver": "7.5.3",
+    "serialize-error": "7.0.1"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "snyk@1.1185.0",
+    "name": "snyk",
+    "escapedName": "snyk",
+    "rawSpec": "1.1185.0",
+    "saveSpec": null,
+    "fetchSpec": "1.1185.0"
+  },
+  "_requiredBy": [
+    "/fcm-node"
+  ],
+  "_resolved": "https://registry.npmjs.org/snyk/-/snyk-1.1185.0.tgz",
+  "_spec": "1.1185.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "snyk.io"
+  },
+  "bin": {
+    "snyk": "bin/snyk"
+  },
+  "bugs": {
+    "url": "https://github.com/snyk/snyk/issues"
+  },
+  "dependencies": {
+    "@sentry/node": "^7.36.0",
+    "global-agent": "^3.0.0"
+  },
+  "description": "snyk library and cli utility",
+  "devDependencies": {
+    "jest": "^29.4.1",
+    "rimraf": "^4.1.2",
+    "ts-jest": "^29.0.5",
+    "typescript": "^4.9.5"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "*"
+  ],
+  "homepage": "https://github.com/snyk/snyk#readme",
+  "keywords": [
+    "security",
+    "vulnerabilities",
+    "advisories",
+    "audit",
+    "snyk",
+    "scan",
+    "docker",
+    "container",
+    "scanning"
+  ],
+  "license": "Apache-2.0",
+  "name": "snyk",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snyk/snyk.git"
+  },
+  "scripts": {
+    "build": "tsc && cp -R src/generated wrapper_dist/",
+    "clean": "npx rimraf wrapper_dist tsconfig.tsbuildinfo",
+    "postinstall": "node wrapper_dist/bootstrap.js exec",
+    "test": "npx jest test/*"
+  },
+  "version": "1.1185.0"
+}

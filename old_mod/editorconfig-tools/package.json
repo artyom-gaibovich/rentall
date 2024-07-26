@@ -1,0 +1,85 @@
+{
+  "_args": [
+    [
+      "editorconfig-tools@0.1.1",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_development": true,
+  "_from": "editorconfig-tools@0.1.1",
+  "_id": "editorconfig-tools@0.1.1",
+  "_inBundle": false,
+  "_integrity": "sha512-damS/0It5JEpc/H8CR8pw7q93xTbWg6GgVoTrMulyrAVTwr6rH5eLogvZa/KfRxaxOJN1TnLELuHCmmNRn4G1Q==",
+  "_location": "/editorconfig-tools",
+  "_phantomChildren": {
+    "keypress": "0.1.0",
+    "natives": "1.1.6",
+    "sigmund": "1.0.1",
+    "underscore.string": "2.4.0",
+    "when": "3.7.8"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "editorconfig-tools@0.1.1",
+    "name": "editorconfig-tools",
+    "escapedName": "editorconfig-tools",
+    "rawSpec": "0.1.1",
+    "saveSpec": null,
+    "fetchSpec": "0.1.1"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/editorconfig-tools/-/editorconfig-tools-0.1.1.tgz",
+  "_spec": "0.1.1",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "Sean Lang",
+    "email": "slang800@gmail.com"
+  },
+  "bin": {
+    "editorconfig-tools": "bin/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/slang800/editorconfig-tools/issues"
+  },
+  "dependencies": {
+    "argparse": "^0.1.15",
+    "detect-indent": "^0.1.4",
+    "editorconfig": "^0.12.1",
+    "fobject": "0.0.3",
+    "graceful-fs": "^3.0.4",
+    "lodash": "^2.4.1",
+    "require-tree": "^0.3.3",
+    "when": "^3.1.0"
+  },
+  "description": "Tools for verifying/fixing code style based on an EditorConfig file",
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "mocha": "^2.0.1",
+    "should": "^4.1.0"
+  },
+  "homepage": "https://github.com/slang800/editorconfig-tools#readme",
+  "keywords": [
+    "editorconfig",
+    "tools",
+    "validate",
+    "fix",
+    "enforce",
+    "code-quality",
+    "formatting",
+    "infer"
+  ],
+  "license": "MIT",
+  "main": "lib",
+  "name": "editorconfig-tools",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/slang800/editorconfig-tools.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "0.1.1"
+}

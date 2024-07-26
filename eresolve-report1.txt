@@ -1,0 +1,72 @@
+# npm resolution error report
+
+2022-08-03T19:00:32.419Z
+
+While resolving: rentall@3.0
+Found: webpack@2.7.0
+node_modules/webpack
+  dev webpack@"^2.2.1" from the root project
+
+Could not resolve dependency:
+peer webpack@"^3.0.0 || ^4.0.0" from sass-loader@7.3.1
+node_modules/sass-loader
+  dev sass-loader@"7.3.1" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force, or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
+
+Raw JSON explanation object:
+
+{
+  "code": "ERESOLVE",
+  "current": {
+    "name": "webpack",
+    "version": "2.7.0",
+    "whileInstalling": {
+      "name": "rentall",
+      "version": "3.0",
+      "path": "/var/www/rentall-v3.0"
+    },
+    "location": "node_modules/webpack",
+    "dependents": [
+      {
+        "type": "dev",
+        "name": "webpack",
+        "spec": "^2.2.1",
+        "from": {
+          "location": "/var/www/rentall-v3.0"
+        }
+      }
+    ]
+  },
+  "edge": {
+    "type": "peer",
+    "name": "webpack",
+    "spec": "^3.0.0 || ^4.0.0",
+    "error": "INVALID",
+    "from": {
+      "name": "sass-loader",
+      "version": "7.3.1",
+      "whileInstalling": {
+        "name": "rentall",
+        "version": "3.0",
+        "path": "/var/www/rentall-v3.0"
+      },
+      "location": "node_modules/sass-loader",
+      "dependents": [
+        {
+          "type": "dev",
+          "name": "sass-loader",
+          "spec": "7.3.1",
+          "from": {
+            "location": "/var/www/rentall-v3.0"
+          }
+        }
+      ]
+    }
+  },
+  "peerConflict": null,
+  "strictPeerDeps": false,
+  "force": false
+}

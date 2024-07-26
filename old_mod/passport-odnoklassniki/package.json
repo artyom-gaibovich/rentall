@@ -1,0 +1,85 @@
+{
+  "_args": [
+    [
+      "passport-odnoklassniki@0.2.0",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "passport-odnoklassniki@0.2.0",
+  "_id": "passport-odnoklassniki@0.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-q7rwkLx3Qw+OyPtdhx+D6iuqJ8OHyLBU3H/q5SeOXbxp3Z0yKiOnkk3tKQ85gIriJ8wKCIsJ0F70KMUsEr2ABA==",
+  "_location": "/passport-odnoklassniki",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "passport-odnoklassniki@0.2.0",
+    "name": "passport-odnoklassniki",
+    "escapedName": "passport-odnoklassniki",
+    "rawSpec": "0.2.0",
+    "saveSpec": null,
+    "fetchSpec": "0.2.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/passport-odnoklassniki/-/passport-odnoklassniki-0.2.0.tgz",
+  "_spec": "0.2.0",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "http://www.jaredhanson.net/"
+  },
+  "bugs": {
+    "url": "http://github.com/ozon1234/passport-odnoklassniki/issues"
+  },
+  "contributors": [
+    {
+      "name": "Alexey Kozlov",
+      "email": "ozon1234@gmail.com"
+    },
+    {
+      "name": "atomoc",
+      "email": "atomoc@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "passport-oauth2": "1.x.x",
+    "pkginfo": "0.2.x"
+  },
+  "description": "Odnoklassniki.ru authentication strategy for Passport.",
+  "devDependencies": {
+    "vows": "0.6.x"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "homepage": "https://github.com/ozon1234/passport-odnoklassniki#readme",
+  "keywords": [
+    "passport",
+    "odnoklassniki",
+    "одноклассники",
+    "auth",
+    "authn",
+    "authentication",
+    "identity"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "./lib/passport-odnoklassniki",
+  "name": "passport-odnoklassniki",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ozon1234/passport-odnoklassniki.git"
+  },
+  "scripts": {
+    "test": "NODE_PATH=lib node_modules/.bin/vows test/*-test.js"
+  },
+  "version": "0.2.0"
+}

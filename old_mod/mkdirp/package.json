@@ -1,0 +1,88 @@
+{
+  "_args": [
+    [
+      "mkdirp@0.5.6",
+      "C:\\dev\\rentall-v3.0"
+    ]
+  ],
+  "_from": "mkdirp@0.5.6",
+  "_id": "mkdirp@0.5.6",
+  "_inBundle": false,
+  "_integrity": "sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==",
+  "_location": "/mkdirp",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "mkdirp@0.5.6",
+    "name": "mkdirp",
+    "escapedName": "mkdirp",
+    "rawSpec": "0.5.6",
+    "saveSpec": null,
+    "fetchSpec": "0.5.6"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "/babel-cli/output-file-sync",
+    "/babel-loader",
+    "/babel-loader/find-cache-dir",
+    "/babel-plugin-react-intl",
+    "/babel-register",
+    "/cssnano/svgo",
+    "/eslint",
+    "/eslint-loader/find-cache-dir",
+    "/eslint-loader/loader-fs-cache",
+    "/file-entry-cache/write",
+    "/multer",
+    "/node-sass",
+    "/node-sass/fstream",
+    "/node-sass/node-gyp",
+    "/webpack",
+    "/webpack-bundle-analyzer",
+    "/write-file-webpack-plugin"
+  ],
+  "_resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.6.tgz",
+  "_spec": "0.5.6",
+  "_where": "C:\\dev\\rentall-v3.0",
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "bin": {
+    "mkdirp": "bin/cmd.js"
+  },
+  "bugs": {
+    "url": "https://github.com/substack/node-mkdirp/issues"
+  },
+  "dependencies": {
+    "minimist": "^1.2.6"
+  },
+  "description": "Recursively mkdir, like `mkdir -p`",
+  "devDependencies": {
+    "tap": "^16.0.1"
+  },
+  "files": [
+    "bin",
+    "index.js"
+  ],
+  "homepage": "https://github.com/substack/node-mkdirp#readme",
+  "keywords": [
+    "mkdir",
+    "directory"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "mkdirp",
+  "publishConfig": {
+    "tag": "legacy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/substack/node-mkdirp.git"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "version": "0.5.6"
+}

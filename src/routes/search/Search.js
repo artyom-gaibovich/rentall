@@ -155,10 +155,19 @@ export class Search extends React.Component {
         preset: 'twirl#invertedVioletClusterIcons',
         groupByCoordinates: false,
         clusterDisableClickZoom: true
-      }),
+      })
+
+      clusterer.options.set({
+        maxZoom: 40,
+        gridSize: 180,
+        hasBalloon: false,
+        hasHint: false,
+        clusterDisableClickZoom: true
+      });
+
+
       getPointData = function (index, title, id, listingData, coverPhotoUrl) {
         return {
-          ///balloonContentBody: 'балун <strong>метки ' + index + '</strong>',
           balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
           balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
           balloonContentFooter: listingData.basePrice + " за ночь",
@@ -244,7 +253,6 @@ export class Search extends React.Component {
             } else {
               object.options.set('preset', 'islands#blackStretchyIcon');
               object.options.set('zIndex', 1);
-
 
             }
           })

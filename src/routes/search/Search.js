@@ -45,6 +45,9 @@ export class Search extends React.Component {
   // static resultData = searchResultsData;
   static scriptInit = false;
   static yandexMapMobile = true;
+
+
+
   static map = null;
   static added = {}
   static propTypes = {
@@ -79,7 +82,7 @@ export class Search extends React.Component {
       smallDevice: false,
       load: false,
     };
- 
+
     this.handleResize = this.handleResize.bind(this);
   }
   static async sleep(ms){
@@ -98,13 +101,12 @@ export class Search extends React.Component {
     }
     const mapSection = document.querySelector("#map")
     Search.yandexMapMobile = !Search.yandexMapMobile;
-    // console.log(Search.yandexMapMobile)
     if(mapSection && mapSection.children.length === 0){
       Search.map = new ymaps.Map(mapSection, {
         center: [searchedHouses[0] ? searchedHouses[0].lat: 39, searchedHouses[0] ? searchedHouses[0].lng: 43],
         zoom: 12
       })
-      ymaps.onHover 
+      ymaps.onHover
       // Search.map.controls.remove("zoomControl");
       Search.map.controls.remove("searchControl");
       Search.map.controls.remove("geolocationControl");
@@ -116,72 +118,108 @@ export class Search extends React.Component {
     }
 
 
-  // }
-    // // console.log(JSON.stringify(mapsData))
-		try {
-			// console.log('initing ymaps', initialFilter, searchSettings)
-		} catch (E) {}
+      searchedHouses.map((item,index) => {
+       const coverPhotoUrl = item.listPhotos[0].name;
+       const myGeoObject = new ymaps.GeoObject({
+         roomId: item.id,
+         geometry: {
+             type: "Point",
+             coordinates:[item.lat, item.lng]
+         },
+         modules:['geoObject.addon.balloon'],
+         properties: {
+           balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
+             balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+             balloonContentFooter: item.listingData.basePrice + " за ночь",
+             iconContent: item.listingData.basePrice,
+         }
+         }, {
+         preset: 'islands#blackStretchyIcon'
+       })
+       myGeoObject.roomId = item.id
 
-   
-  //   const coverPhoto = Array.from(document.querySelectorAll("._3pERg.swiper-lazy.swiper-lazy-loaded"))
-  //   const filteredCovers = coverPhoto.filter(function(_, index) {
-  //     return index % 2 == 1;
-  // })
-    //const mapItems = await Search.getMapItems();
-    // mapItems.map((item,index) => {
-     searchedHouses.map((item,index) => {
-      const coverPhotoUrl = item.listPhotos[0].name;
-      const myGeoObject = new ymaps.GeoObject({
-        roomId: item.id,
-        geometry: {
-            type: "Point",
-            coordinates:[item.lat, item.lng]
-        },
-        modules:['geoObject.addon.balloon'],
-        properties: {
-          balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
-            balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-            balloonContentFooter: item.listingData.basePrice + " за ночь",
-            iconContent: item.listingData.basePrice,
-        }
-        }, {
-        preset: 'islands#blackStretchyIcon'
+       Search.added[item.id] = true
+       Search.map && Search.map.geoObjects.add(myGeoObject)
+     })
+       Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
+     const mapItems = await Search.getMapItems();
+     //features/task3_make_clusterization_by_regions !
+      let clusterer;
+      let geoObjects;
+      let getPointOptions;
+      let getPointData;
+      let points;
+
+
+      clusterer = new ymaps.Clusterer({
+        preset: 'twirl#invertedVioletClusterIcons',
+        groupByCoordinates: false,
+        clusterDisableClickZoom: true
+      }),
+      getPointData = function (index) {
+        return {
+          balloonContentBody: 'балун <strong>метки ' + index + '</strong>',
+          clusterCaption: 'метка <strong>' + index + '</strong>'
+        };
+    },
+      points = mapItems.map(el=> {
+        return [el.lat, el.lng]
       })
-      myGeoObject.roomId = item.id
-
-      Search.added[item.id] = true
-      Search.map && Search.map.geoObjects.add(myGeoObject)
-    })
-		Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
-    const mapItems = await Search.getMapItems();
-    mapItems.map((item,index) => {
-      if (!Search.added[item.id]) {
-        
-        const coverPhotoUrl = item.listPhotos[0].name;
-        const myGeoObject = new ymaps.GeoObject({
-          geometry: {
-              type: "Point",
-              coordinates:[item.lat, item.lng]
-          },
-          modules:['geoObject.addon.balloon'],
-          properties: {
-            balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
-              balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-              balloonContentFooter: item.listingData.basePrice + " за ночь",
-              iconContent: item.listingData.basePrice,
+      geoObjects = [];
+      getPointOptions = function () {
+            return {
+              preset: 'islands#blackStretchyIcon'
+            };
           }
-          }, {
-          preset: 'islands#blackStretchyIcon'
-        })
-        myGeoObject.roomId = item.id
-        Search.map && Search.map.geoObjects.add(myGeoObject)
-      } else {
-        // console.log('skip early added item')
+      for(var i = 0, len = mapItems.length; i < len; i++) {
+        geoObjects[i] = new ymaps.Placemark(points[i], getPointData(i), getPointOptions());
       }
-      
-    })
+      clusterer.add(geoObjects);
+
+      clusterer.events.once('objectsaddtomap', function () {
+        Search.map.setBounds(clusterer.getBounds());
+      });
+
+      clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
+            var target = e.get('target'), // Геообъект - источник события.
+                eType = e.get('type'), // Тип события.
+                zIndex = Number(eType === 'mouseenter') * 1000; // 1000 или 0 в зависимости от типа события.
+
+            target.options.set('zIndex', zIndex);
+          });
+
+      Search.map && Search.map.geoObjects.add(clusterer);
+
+      //Clustered !!!
+
+      mapItems.map((item,index) => {
+       if (!Search.added[item.id]) {
+
+         const coverPhotoUrl = item.listPhotos[0].name;
+         const myGeoObject = new ymaps.GeoObject({
+           geometry: {
+               type: "Point",
+               coordinates:[item.lat, item.lng]
+           },
+           modules:['geoObject.addon.balloon'],
+           properties: {
+             balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
+               balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+               balloonContentFooter: item.listingData.basePrice + " за ночь",
+               iconContent: item.listingData.basePrice,
+           }
+           }, {
+           preset: 'islands#blackStretchyIcon'
+         })
+         myGeoObject.roomId = item.id
+         //Search.map && Search.map.geoObjects.add(myGeoObject)
+       } else {
+         // console.log('skip early added item')
+       }
+
+     })
 	}
-  
+
 
   componentWillMount() {
     const { getListingFields } = this.props;
@@ -194,7 +232,7 @@ export class Search extends React.Component {
     const isBrowser = typeof window !== 'undefined';
     if (isBrowser) {
       this.handleResize();
-      window.addEventListener("ymap_hover", function(event) { 
+      window.addEventListener("ymap_hover", function(event) {
         // alert("catch ymap_hover event" + event.target.tagName);
         // console.log("catch ymap_hover event", event.detail.id)
         if (Search.map) {
@@ -207,7 +245,7 @@ export class Search extends React.Component {
               object.options.set('preset', 'islands#blackStretchyIcon');
               object.options.set('zIndex', 1);
 
-  
+
             }
           })
         }
@@ -215,7 +253,7 @@ export class Search extends React.Component {
       });
       window.addEventListener('resize', this.handleResize);
     }
-    
+
 // if(!Search.scriptInit){
 //   const script = document.createElement("script");
 //   Search.scriptInit = true;
@@ -293,9 +331,10 @@ export class Search extends React.Component {
       }),
       credentials: 'include',
     });
-  
+
     const response = await resp.json();
-    // console.log('map results', response, query)
+     console.log('map results', response, query)
+
     return response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng)
   }
   handleResize(e) {
@@ -425,14 +464,14 @@ export class Search extends React.Component {
               /> */}
             </div>
           }
-           {smallDevice &&  <div style={{display:"block"}} className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl', s.nonactiveMap)}> 
+           {smallDevice &&  <div style={{display:"block"}} className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl', s.nonactiveMap)}>
           <div id="map" style={{height: '100%', maxWidth: '700px'}}>
             </div>
             </div> }
           {
             smallDevice && searchMap && <div className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl')}>
               <MapResults initialFilter={initialFilter} searchSettings={searchSettings} />
-              
+
             </div>
           }
 

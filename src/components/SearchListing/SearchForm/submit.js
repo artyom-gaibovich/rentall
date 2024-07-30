@@ -4,7 +4,7 @@ import fetch from '../../../core/fetch';
 // Redux
 import { getSearchResults, loadingSearchResults } from '../../../actions/getSearchResults';
 
-//ymaps 
+//ymaps
 export let submitData;
 async function submit(values, dispatch) {
   dispatch(loadingSearchResults());
@@ -114,7 +114,7 @@ async function submit(values, dispatch) {
 // console.log(data)
 submitData = data.SearchListing;
   if (data && data.SearchListing) {
-    
+
     dispatch(getSearchResults(data.SearchListing));
   }
 }

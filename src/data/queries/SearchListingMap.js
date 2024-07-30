@@ -29,7 +29,7 @@ const SearchListingMap = {
     try {
       let limit = 999999999999999999,
         offset = 0;
-    
+
 
       // SQL query for results
       const results = await Listing.findAll({

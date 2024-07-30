@@ -1,16 +1,16 @@
+'use strict';
+
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface.addColumn('listing', 'location', {
             type: Sequelize.GEOMETRY('POINT'),
-            allowNull: true,
+            allowNull: true
         });
-        await queryInterface.addIndex('listing', ['location'], {
-            type: 'SPATIAL',
-        });
+
+        await queryInterface.sequelize.query('CREATE SPATIAL INDEX listing_location_spatial ON listing(location);');
     },
 
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.removeIndex('listing', ['location']);
         await queryInterface.removeColumn('listing', 'location');
-    },
+    }
 };

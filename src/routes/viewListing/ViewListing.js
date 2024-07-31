@@ -143,9 +143,9 @@ class ViewListing extends React.Component {
           status
         }
       }`;
-  
+
     const dateOfBirth = `05-1990-$23`;
-  
+
     const params = {
       firstName: `anonymousFirstName_${Date.now()}`,
       lastName: `anonymousLastName_${Date.now()}`,
@@ -153,7 +153,7 @@ class ViewListing extends React.Component {
       password: `anonymousPassword_${Date.now()}`,
       dateOfBirth,
     };
-  
+
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
@@ -166,38 +166,15 @@ class ViewListing extends React.Component {
       }),
       credentials: 'include',
     });
-  
+
     const { data } = await resp.json();
-    console.log('hidden register response', data)
     this.props.dispatch(loadAccount());
     this.props.dispatch(setRuntimeVariable({
       name: 'isAuthenticated',
       value: true,
     }));
 
-    // if (data.userRegister.status == 'success') {
-    //   dispatch(closeSignupModal());
-    //   const registerScreen = true;
-    //   const refer = values.refer;
-    //   dispatch(loadAccount(registerScreen, refer));
-    //   dispatch(setRuntimeVariable({
-    //     name: 'isAuthenticated',
-    //     value: true,
-    //   }));
-    // } else if (data.userRegister.status == 'email') {
-    //   throw new SubmissionError({ _error: messages.emailAlreadyExists });
-    // } else if (data.userRegister.status == 'loggedIn') {
-    //   dispatch(loadAccount());
-    //   dispatch(setRuntimeVariable({
-    //     name: 'isAuthenticated',
-    //     value: true,
-    //   }));
-    //   throw new SubmissionError({ _error: messages.loggedIn });
-    // } else if (data.userRegister.status == 'adminLoggedIn') {
-    //   throw new SubmissionError({ _error: messages.adminLoggedIn });
-    // } else {
-    //   throw new SubmissionError({ _error: messages.somethingWentWrong });
-    // }
+
   }
   static onHiddenRegister(values, dispatch) {
     console.log('onHidden', values, dispatch)
@@ -483,7 +460,7 @@ class ViewListing extends React.Component {
                         reviewsStarRating={UserListing.reviewsStarRating}
                         country={UserListing.country}
                       />
-                      
+
                       <Button
                         className={cx(s.btn, bt.btnPrimary, s.fullWidth)}
                         onClick={() => {

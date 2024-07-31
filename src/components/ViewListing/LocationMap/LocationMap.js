@@ -43,40 +43,8 @@ import messages from '../../../locale/messages';
 import { setStickyBottom } from '../../../actions/Sticky/StrickyActions';
 //how_to_get
 import {how_to_get} from '../../ViewListing/ListingDetails/ListingDetails.js'
-const GoogleMapPlace =
-  withGoogleMap(props => (
-    <GoogleMap
-      defaultZoom={14}
-      center={props.center}
-      defaultOptions={{
-        backgroundColor: '',
-        scrollwheel: false,
-        maxZoom: 16,
-        minZoom: 11,
-        streetViewControl: false,
-        zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_TOP,
-        },
-        mapTypeControl: false,
-      }}
-    >
-      <Circle
-        center={props.center}
-        radius={800}
-        options={{
-          fillColor: '#00d1c1',
-          strokeColor: '#007A87',
-        }}
-      />
-      {/* <Marker
-      position={props.markers.position}
-      draggable={false}
-      icon={{
-        url: mapPinIcon
-      }}
-    /> */}
-    </GoogleMap>
-  ));
+import {formatURL} from "../../../helpers/formatURL";
+
 
 
 class LocationMap extends React.Component {
@@ -93,7 +61,8 @@ class LocationMap extends React.Component {
     };
   }
 
-  componentWillMount() {
+
+    componentWillMount() {
     const { data } = this.props;
     const lat = data.lat;
     const lng = data.lng;
@@ -109,43 +78,140 @@ class LocationMap extends React.Component {
     if (isBrowser) {
       let ymapsInitInterval = setInterval(() => {
         if (typeof ymaps != 'object') {
-          // console.log('ymaps not defined, wait and try again')
           return false
         } else {
-          // console.log('ymaps inited searchResults')
-  
-         
           clearInterval(ymapsInitInterval)
           ymaps.ready(this.initYmaps.bind(this))
-          // this.setState({
-          //   load: true,
-          // });
-          // // console.log(searchResultsData)
-          // console.log('ymaps init end')
-  
           return false
         }
       }, 200)
     }
-    
-    // this.handleResize = this.handleResize.bind(this);
-  }
-  initYmaps () {
-		this.map = new ymaps.Map("js-ymap", {
-      center: this.state.initialCoords,
-      zoom: 12
-    });
-    let mark = new ymaps.Placemark(this.state.initialCoords, { 
-      hintContent: 'Точная информация о местоположении предоставляется после подтверждения бронирования', 
-      // balloonContent: 'Где-то тут' 
-  });
 
-  this.map.geoObjects.add(mark);
-	}
+  }
+  static async getMapItems () {
+        // lol, sorry 4 that
+        const query = `
+      query SearchListingMap {
+        SearchListingMap {
+          count
+          results {
+            id
+            title
+            lat
+            lng
+            coverPhoto
+            listPhotos {
+              id
+              name
+              type
+              status
+            }
+            listingData {
+              basePrice
+              currency
+            }
+          }
+        }
+      }
+    `;
+        const resp = await fetch('/graphql', {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                // variables: [],
+            }),
+            credentials: 'include',
+        });
+
+        const response = await resp.json();
+        console.log('map results', response, query)
+
+        return response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng)
+    }
+
+    static async sleep(ms){
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
+  async initYmaps() {
+      this.map = new ymaps.Map("js-ymap", {
+          center: this.state.initialCoords,
+          zoom: 12
+      });
+      await LocationMap.sleep(1000)
+      let mark = new ymaps.Placemark(this.state.initialCoords, {
+          hintContent: 'Точная информация о местоположении предоставляется после подтверждения бронирования',
+          // balloonContent: 'Где-то тут'
+      });
+
+
+      const mapItems = await LocationMap.getMapItems();
+      let clusterer;
+      let geoObjects;
+      let getPointOptions;
+      let getPointData;
+      let points;
+
+
+      clusterer = new ymaps.Clusterer({
+          preset: 'twirl#invertedVioletClusterIcons',
+          groupByCoordinates: false,
+          clusterDisableClickZoom: true
+      })
+
+      clusterer.options.set({
+          maxZoom: 40,
+          gridSize: 180,
+          hasBalloon: false,
+          hasHint: false,
+          clusterDisableClickZoom: true
+      });
+
+
+      getPointData = function (index, title, id, listingData, coverPhotoUrl) {
+          return {
+              balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
+              balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+              balloonContentFooter: listingData.basePrice + " за ночь",
+              iconContent: listingData.basePrice,
+          };
+      },
+          points = mapItems.map(el => {
+              return [el.lat, el.lng]
+          })
+      geoObjects = [];
+      getPointOptions = function () {
+          return {
+              preset: 'islands#blackStretchyIcon'
+          };
+      }
+      for (var i = 0, len = mapItems.length; i < len; i++) {
+          geoObjects[i] = new ymaps.Placemark(points[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
+      }
+      clusterer.add(geoObjects);
+      clusterer.events.once('objectsaddtomap', function () {
+          LocationMap.map.setBounds(clusterer.getBounds());
+      });
+      clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
+          var target = e.get('target'), // Геообъект - источник события.
+              eType = e.get('type'), // Тип события.
+              zIndex = Number(eType === 'mouseenter') * 1000;
+          target.options.set('zIndex', zIndex);
+      });
+      console.log(clusterer, 'cluster!')
+      this.map && this.map.geoObjects.add(clusterer);
+
+      this.map.geoObjects.add(mark);
+  }
+
   render() {
     const { center } = this.state;
     const { data } = this.props;
-    // console.log(how_to_get)
     const displayName = data.user.profile.displayName;
     const city = data.city;
     const country = data.country;
@@ -158,27 +224,7 @@ class LocationMap extends React.Component {
         <div className={cx(s.space2)}>
           <p><span className={cx(s.text)}>{displayName}{' '}{how_to_get}</span></p>
           <div style={{ height: 350 }} id='js-ymap'>
-            {/* <ReactGoogleMapLoader
-              params={{
-                key: googleMapAPI, // Define your api key here
-                libraries: 'places,geometry', // To request multiple libraries, separate them with a comma
-              }}
-              render={googleMaps =>
-                googleMaps && (
-                  <GoogleMapPlace
-                    containerElement={
-                      <div style={{ width: '100%', height: '100%' }} />
-                    }
-                    mapElement={
-                      <div style={{ width: '100%', height: '100%' }} />
-                    }
-                    center={center}
-                    markers={{
-                      position: new google.maps.LatLng(center.lat, center.lng),
-                    }}
-                  />
-                )}
-            /> */}
+
           </div>
           <p className={s.spaceTop1}>
             <span className={cx(s.text)}><FormattedMessage {...messages.neighborhoodInfo} /></span>
@@ -189,21 +235,13 @@ class LocationMap extends React.Component {
   }
 }
 
-// export default withStyles(s)(LocationMap);
 
 const mapState = state => ({
 
 });
 
 const mapDispatch = {
-  // setStickyBottom
 };
 
-// export default GoogleMapLoader(withStyles(s)(connect(mapState, mapDispatch)(LocationMap)), {
-//   libraries: ["places", "geometry"],
-//   region: "US",
-//   language: "en",
-//   key: googleMapAPI,
-// });
 
 export default withStyles(s)(connect(mapState, mapDispatch)(LocationMap));

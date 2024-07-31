@@ -18,12 +18,14 @@ nvm use 12.11.0
 ```bash
 yarn install --frozen-lockfile
 ```
-- Сборка проекта
-```bsah
-yarn run build
+- Запуска проекта в продакшене
+```bash
+yarn run build -- --release
+node build/server.js
 ```
-- Запуск проекта
 
-```
+- Запуск проекта в dev режиме
+
+```bash
 yarn run start
 ```

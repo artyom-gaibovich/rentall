@@ -92,7 +92,6 @@ export class Search extends React.Component {
   }
 	static async initYmaps () {
     await Search.sleep(1000)
-    //maps data undefined - onload page
     let searchedHouses
     if(submitData) {
        searchedHouses = submitData.results
@@ -101,22 +100,78 @@ export class Search extends React.Component {
     }
     const mapSection = document.querySelector("#map")
     Search.yandexMapMobile = !Search.yandexMapMobile;
-    if(mapSection && mapSection.children.length === 0){
+
+      if(mapSection && mapSection.children.length === 0){
       Search.map = new ymaps.Map(mapSection, {
         center: [searchedHouses[0] ? searchedHouses[0].lat: 39, searchedHouses[0] ? searchedHouses[0].lng: 43],
         zoom: 12
       })
       ymaps.onHover
-      // Search.map.controls.remove("zoomControl");
+      let clustererMobile;
+      let geoObjectsMobile;
+      let getPointOptionsMobile;
+      let getPointDataMobile;
+      let pointsMobile;
+
+      clustererMobile = new ymaps.Clusterer({
+        preset: 'twirl#invertedVioletClusterIcons',
+        groupByCoordinates: false,
+        clusterDisableClickZoom: true
+      })
+
+      clustererMobile.options.set({
+        maxZoom: 40,
+        gridSize: 180,
+        hasBalloon: false,
+        hasHint: false,
+        clusterDisableClickZoom: true
+      });
+
+
+      getPointDataMobile = function (index, title, id, listingData, coverPhotoUrl) {
+        return {
+          balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
+          balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+          balloonContentFooter: listingData.basePrice + " за ночь",
+          iconContent: listingData.basePrice,
+        };
+      },
+      pointsMobile = searchedHouses.map(el=> {
+            return [el.lat, el.lng]
+          })
+      geoObjectsMobile = [];
+      getPointOptionsMobile = function () {
+        return {
+          preset: 'islands#blackStretchyIcon'
+        };
+      }
+      for(var i = 0, len = searchedHouses.length; i < len; i++) {
+        geoObjectsMobile[i] = new ymaps.Placemark(pointsMobile[i], getPointDataMobile(i, searchedHouses[i].title, searchedHouses[i].id, searchedHouses[i].listingData, searchedHouses[i].listPhotos[0].name), getPointOptionsMobile());
+      }
+
+
+        clustererMobile.add(geoObjectsMobile);
+        clustererMobile.events.once('objectsaddtomap', function () {
+          Search.map.setBounds(clustererMobile.getBounds());
+        });
+        clustererMobile.events.add(['mouseenter', 'mouseleave'], function (e) {
+          var target = e.get('target'),
+              eType = e.get('type'),
+              zIndex = Number(eType === 'mouseenter') * 1000;
+
+          target.options.set('zIndex', zIndex);
+        });
+        Search.map && Search.map.geoObjects.add(clustererMobile);
+
+
+
       Search.map.controls.remove("searchControl");
       Search.map.controls.remove("geolocationControl");
       Search.map.controls.remove("trafficControl");
       Search.map.controls.remove("rulerControl");
       Search.map.controls.remove("typeSelector");
-      // Search.map.behaviors.disable("scrollZoom");
       Search.map.behaviors.disable("dblClickZoom");
     }
-
 
       searchedHouses.map((item,index) => {
        const coverPhotoUrl = item.listPhotos[0].name;
@@ -139,11 +194,15 @@ export class Search extends React.Component {
        myGeoObject.roomId = item.id
 
        Search.added[item.id] = true
-       Search.map && Search.map.geoObjects.add(myGeoObject)
      })
+
        Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
+
+
+
+
+
      const mapItems = await Search.getMapItems();
-     //features/task3_make_clusterization_by_regions !
       let clusterer;
       let geoObjects;
       let getPointOptions;
@@ -199,34 +258,6 @@ export class Search extends React.Component {
           });
       Search.map && Search.map.geoObjects.add(clusterer);
 
-      //Clustered !!!
-
-      mapItems.map((item,index) => {
-       if (!Search.added[item.id]) {
-
-         const coverPhotoUrl = item.listPhotos[0].name;
-         const myGeoObject = new ymaps.GeoObject({
-           geometry: {
-               type: "Point",
-               coordinates:[item.lat, item.lng]
-           },
-           modules:['geoObject.addon.balloon'],
-           properties: {
-             balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
-               balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-               balloonContentFooter: item.listingData.basePrice + " за ночь",
-               iconContent: item.listingData.basePrice,
-           }
-           }, {
-           preset: 'islands#blackStretchyIcon'
-         })
-         myGeoObject.roomId = item.id
-         //Search.map && Search.map.geoObjects.add(myGeoObject)
-       } else {
-         // console.log('skip early added item')
-       }
-
-     })
 	}
 
 
@@ -242,8 +273,6 @@ export class Search extends React.Component {
     if (isBrowser) {
       this.handleResize();
       window.addEventListener("ymap_hover", function(event) {
-        // alert("catch ymap_hover event" + event.target.tagName);
-        // console.log("catch ymap_hover event", event.detail.id)
         if (Search.map) {
           Search.map.geoObjects.each(object => {
             if (object.roomId == event.detail.id) {
@@ -262,39 +291,23 @@ export class Search extends React.Component {
       window.addEventListener('resize', this.handleResize);
     }
 
-// if(!Search.scriptInit){
-//   const script = document.createElement("script");
-//   Search.scriptInit = true;
-//   script.src = "https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=1f9e09ab-8f4c-467c-ba4b-6a2528430eb5";
-//   // <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=<ваш API-ключ>" type="text/javascript"></script>
-//   script.async = true;
-//   document.body.appendChild(script);
-// }
+
 
 	let ymapsInitInterval = setInterval(() => {
 		if (!ymaps) {
-			// console.log('ymaps not defined, wait and try again')
 			return false
 		} else {
-			// console.log('ymaps inited')
 			clearInterval(ymapsInitInterval)
 			ymaps.ready(Search.initYmaps)
 			this.setState({
 				load: true,
 			});
-			// console.log('ymaps init end')
 
 			return false
 		}
 	}, 200)
   }
-  // componentDidUpdate(prevProps, prevState) {
-  //   // console.log("notUpdated")
-  //   if (prevState.housesData !== this.state.housesData) {
-  //     // console.log('data changed')
-  //     ymaps.ready(this.initYmaps)
-  //   }
-  // }
+
   componentWillUnmount() {
     const isBrowser = typeof window !== 'undefined';
     if (isBrowser) {
@@ -345,6 +358,7 @@ export class Search extends React.Component {
 
     return response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng)
   }
+
   handleResize(e) {
     const { showResults } = this.props;
     const isBrowser = typeof window !== 'undefined';

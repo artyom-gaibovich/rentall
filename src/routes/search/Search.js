@@ -91,6 +91,7 @@ export class Search extends React.Component {
     });
   }
 	static async initYmaps () {
+    await Search.sleep(50)
     let searchedHouses
     if(submitData) {
        searchedHouses = submitData.results
@@ -113,9 +114,13 @@ export class Search extends React.Component {
       let pointsMobile;
 
       clustererMobile = new ymaps.Clusterer({
-        preset: 'twirl#invertedVioletClusterIcons',
+        preset: 'islands#invertedVioletClusterIcons',
         groupByCoordinates: false,
-        clusterDisableClickZoom: true
+        clusterDisableClickZoom: true,
+        balloonContentLayout: 'cluster#balloonTwoColumns',
+        openBalloonOnClick : true,
+        clusterHideIconOnBalloonOpen: false,
+        geoObjectHideIconOnBalloonOpen: false
       })
 
       clustererMobile.options.set({
@@ -123,7 +128,7 @@ export class Search extends React.Component {
         gridSize: 180,
         hasBalloon: false,
         hasHint: false,
-        clusterDisableClickZoom: true
+
       });
 
 
@@ -212,7 +217,9 @@ export class Search extends React.Component {
       clusterer = new ymaps.Clusterer({
         preset: 'twirl#invertedVioletClusterIcons',
         groupByCoordinates: false,
-        clusterDisableClickZoom: true
+        clusterDisableClickZoom: true,
+        clusterHideIconOnBalloonOpen: false,
+        geoObjectHideIconOnBalloonOpen: false
       })
 
       clusterer.options.set({
@@ -220,7 +227,7 @@ export class Search extends React.Component {
         gridSize: 180,
         hasBalloon: false,
         hasHint: false,
-        clusterDisableClickZoom: true
+        clusterDisableClickZoom: true,
       });
 
 

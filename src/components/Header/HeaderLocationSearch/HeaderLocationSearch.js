@@ -32,6 +32,7 @@ import history from '../../../core/history';
 
 //yandex
 import {Search} from "../../../routes/search/Search.js"
+import {need_locations} from "../../../helpers/locations";
 
 class HeaderLocationSearch extends Component {
 
@@ -197,7 +198,7 @@ class HeaderLocationSearch extends Component {
             return false
         } else {
             //const result = await ymaps.suggest(text)
-            const locations = [
+            const locations_old = [
                 { type: "geo", displayName: "Верхнекалиновский", value: "Верхнекалиновский" },
                 { type: "geo", displayName: "Деревянное", value: "Деревянное" },
                 { type: "geo", displayName: "Караульное", value: "Караульное" },
@@ -273,6 +274,7 @@ class HeaderLocationSearch extends Component {
                 { type: "geo", displayName: "Коконниеми", value: "Коконниеми" },
                 { type: "geo", displayName: "Повенец", value: "Повенец" },
                 { type: "geo", displayName: "Гурвич", value: "Гурвич" }]
+            const locations = need_locations
             const suggestItems = [];
             for (let location of locations) {
                 if (location.value.toLowerCase().includes(text.toLowerCase())) {

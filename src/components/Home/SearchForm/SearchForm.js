@@ -40,6 +40,7 @@ import detectMobileBrowsers from '../../../helpers/detectMobileBrowsers';
 // Locale
 import messages from '../../../locale/messages';
 import {lakes} from "../../../helpers/getUniqueSubjects";
+import {need_locations} from "../../../helpers/locations";
 
 class SearchForm extends React.Component {
     static propTypes = {
@@ -201,7 +202,7 @@ class SearchForm extends React.Component {
             })
             return false
         } else {
-            const locations = [
+            const locations_old = [
                 { type: "geo", displayName: "Верхнекалиновский", value: "Верхнекалиновский" },
                 { type: "geo", displayName: "Деревянное", value: "Деревянное" },
                 { type: "geo", displayName: "Караульное", value: "Караульное" },
@@ -277,6 +278,7 @@ class SearchForm extends React.Component {
                 { type: "geo", displayName: "Коконниеми", value: "Коконниеми" },
                 { type: "geo", displayName: "Повенец", value: "Повенец" },
                 { type: "geo", displayName: "Гурвич", value: "Гурвич" }]
+            const locations = need_locations
             const suggestItems = [];
             for (let location of locations) {
                 if (location.value.toLowerCase().includes(text.toLowerCase())) {

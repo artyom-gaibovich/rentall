@@ -143,7 +143,6 @@ class LocationMap extends React.Component {
           center: this.state.initialCoords,
           zoom: 12
       });
-      await LocationMap.sleep(1000)
       let mark = new ymaps.Placemark(this.state.initialCoords, {
           hintContent: 'Точная информация о местоположении предоставляется после подтверждения бронирования',
           // balloonContent: 'Где-то тут'
@@ -198,8 +197,8 @@ class LocationMap extends React.Component {
           LocationMap.map.setBounds(clusterer.getBounds());
       });
       clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
-          var target = e.get('target'), // Геообъект - источник события.
-              eType = e.get('type'), // Тип события.
+          var target = e.get('target'),
+              eType = e.get('type'),
               zIndex = Number(eType === 'mouseenter') * 1000;
           target.options.set('zIndex', zIndex);
       });

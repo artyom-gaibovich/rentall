@@ -91,7 +91,6 @@ export class Search extends React.Component {
     });
   }
 	static async initYmaps () {
-    await Search.sleep(1000)
     let searchedHouses
     if(submitData) {
        searchedHouses = submitData.results

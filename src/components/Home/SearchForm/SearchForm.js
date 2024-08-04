@@ -278,7 +278,7 @@ class SearchForm extends React.Component {
                 { type: "geo", displayName: "Коконниеми", value: "Коконниеми" },
                 { type: "geo", displayName: "Повенец", value: "Повенец" },
                 { type: "geo", displayName: "Гурвич", value: "Гурвич" }]
-            const locations = need_locations
+            const locations = await SearchForm.getUniqueAddresses(text)
             const suggestItems = [];
             for (let location of locations) {
                 if (location.value.toLowerCase().includes(text.toLowerCase())) {
@@ -296,6 +296,42 @@ class SearchForm extends React.Component {
             })
         }
 
+    }
+    static async getUniqueAddresses(text) {
+        // lol, sorry 4 that
+        const query = `
+      query SearchGeo($query: String!) {
+    SearchGeo(query: $query) {
+      results {
+        type
+        displayName
+        value
+      }
+    }
+  }
+    `;
+        const variables = {
+            query: text
+        };
+        const resp = await fetch('/graphql', {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                variables,
+                // variables: [],
+            }),
+            credentials: 'include',
+        });
+
+        const response = await resp.json();
+        console.log('map results', response, query)
+        console.log(response.data.SearchGeo.results)
+
+        return response.data.SearchGeo.results;
     }
 
 

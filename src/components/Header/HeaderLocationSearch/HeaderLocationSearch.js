@@ -199,82 +199,86 @@ class HeaderLocationSearch extends Component {
         } else {
             //const result = await ymaps.suggest(text)
             const locations_old = [
-                { type: "geo", displayName: "Верхнекалиновский", value: "Верхнекалиновский" },
-                { type: "geo", displayName: "Деревянное", value: "Деревянное" },
-                { type: "geo", displayName: "Караульное", value: "Караульное" },
-                { type: "geo", displayName: "Жан-Аул", value: "Жан-Аул" },
-                { type: "geo", displayName: "Станья", value: "Станья" },
-                { type: "geo", displayName: "Гандурино", value: "Гандурино" },
-                { type: "geo", displayName: "Каралат", value: "Каралат" },
-                { type: "geo", displayName: "Ревин Хутор", value: "Ревин Хутор" },
-                { type: "geo", displayName: "Иванчуг", value: "Иванчуг" },
-                { type: "geo", displayName: "Полдневое", value: "Полдневое" },
-                { type: "geo", displayName: "Самосделка", value: "Самосделка" },
-                { type: "geo", displayName: "Нижненикольский", value: "Нижненикольский" },
-                { type: "geo", displayName: "село Затон", value: "село Затон" },
-                { type: "geo", displayName: "Аккусинский", value: "Аккусинский" },
-                { type: "geo", displayName: "село Тузуклей", value: "село Тузуклей" },
-                { type: "geo", displayName: "остров Таппараки", value: "остров Таппараки" },
-                { type: "geo", displayName: "остров Лайдасалма", value: "остров Лайдасалма" },
-                { type: "geo", displayName: "Пяозеро", value: "Пяозеро" },
-                { type: "geo", displayName: "Энергоозеро", value: "Энергоозеро" },
-                { type: "geo", displayName: "Сапфорог", value: "Сапфорог" },
-                { type: "geo", displayName: "вуошкалошари остров", value: "вуошкалошари остров" },
-                { type: "geo", displayName: "остров Педаяшари", value: "остров Педаяшари" },
-                { type: "geo", displayName: "остров майя", value: "остров майя" },
-                { type: "geo", displayName: "река Софьянга", value: "река Софьянга" },
-                { type: "geo", displayName: "Нижняя Пулонга", value: "Нижняя Пулонга" },
-                { type: "geo", displayName: "Энгозеро", value: "Энгозеро" },
-                { type: "geo", displayName: "деревня Коккосалма", value: "деревня Коккосалма" },
-                { type: "geo", displayName: "озеро Пяозеро", value: "озеро Пяозеро" },
-                { type: "geo", displayName: "остров Малошари", value: "остров Малошари" },
-                { type: "geo", displayName: "остров Вуошкалошари", value: "остров Вуошкалошари" },
-                { type: "geo", displayName: "урочище Таванга", value: "урочище Таванга" },
-                { type: "geo", displayName: "Сафпорог", value: "Софпорог" },
-                { type: "geo", displayName: "территория Суоперя", value: "территория Суоперя" },
-                { type: "geo", displayName: "Кумское водохранилище", value: "Кумское водохранилище" },
-                { type: "geo", displayName: "Риеккалансаари", value: "Риеккалансаари" },
-                { type: "geo", displayName: "Волома", value: "Волома" },
-                { type: "geo", displayName: "Кааламское", value: "Кааламское" },
-                { type: "geo", displayName: "Кишкойла", value: "Кишкойла" },
-                { type: "geo", displayName: "Кулмукса", value: "Кулмукса" },
-                { type: "geo", displayName: "Тарулинна", value: "Тарулинна" },
-                { type: "geo", displayName: "Песчаное", value: "Песчаное" },
-                { type: "geo", displayName: "Нурмойла", value: "Нурмойла" },
-                { type: "geo", displayName: "Токкарлахти", value: "Токкарлахти" },
-                { type: "geo", displayName: "Кирьявалахти", value: "Кирьявалахти" },
-                { type: "geo", displayName: "Кильпола", value: "Кильпола" },
-                { type: "geo", displayName: "Эссойльское", value: "Эссойльское" },
-                { type: "geo", displayName: "Рантуэ", value: "Рантуэ" },
-                { type: "geo", displayName: "Ламберг", value: "Ламберг" },
-                { type: "geo", displayName: "Сяндеба", value: "Сяндеба" },
-                { type: "geo", displayName: "Чёлмужи", value: "Чёлмужи" },
-                { type: "geo", displayName: "Туоксъярви", value: "Туоксъярви" },
-                { type: "geo", displayName: "Ледмозерское", value: "Ледмозерское" },
-                { type: "geo", displayName: "Койкары", value: "Койкары" },
-                { type: "geo", displayName: "Ляскеля", value: "Ляскеля" },
-                { type: "geo", displayName: "Сумериа", value: "Сумериа" },
-                { type: "geo", displayName: "Важинская Пристань", value: "Важинская Пристань" },
-                { type: "geo", displayName: "Крошнозеро", value: "Крошнозеро" },
-                { type: "geo", displayName: "Шальский", value: "Шальский" },
-                { type: "geo", displayName: "Сикопохья", value: "Сикопохья" },
-                { type: "geo", displayName: "Ниэмелянхови", value: "Ниэмелянхови" },
-                { type: "geo", displayName: "Лахденпохья", value: "Лахденпохья" },
-                { type: "geo", displayName: "Шала", value: "Шала" },
-                { type: "geo", displayName: "Село Нурмойла", value: "Село Нурмойла" },
-                { type: "geo", displayName: "Остречье", value: "Остречье" },
-                { type: "geo", displayName: "Республика Карелия, Беломорский муниципальный округ, Село Лехта", value: "Село Лехта" },
-                { type: "geo", displayName: "Лобское", value: "Лобское" },
-                { type: "geo", displayName: "Олонка", value: "Олонка" },
-                { type: "geo", displayName: "Чуралахта", value: "Чуралахта" },
-                { type: "geo", displayName: "Ялгуба", value: "Ялгуба" },
-                { type: "geo", displayName: "Тихтозеро", value: "Тихтозеро" },
-                { type: "geo", displayName: "Устье Тулоксы", value: "Устье Тулоксы" },
-                { type: "geo", displayName: "Питкярантский район", value: "Питкярантский район" },
-                { type: "geo", displayName: "Коконниеми", value: "Коконниеми" },
-                { type: "geo", displayName: "Повенец", value: "Повенец" },
-                { type: "geo", displayName: "Гурвич", value: "Гурвич" }]
-            const locations = need_locations
+                {type: "geo", displayName: "Верхнекалиновский", value: "Верхнекалиновский"},
+                {type: "geo", displayName: "Деревянное", value: "Деревянное"},
+                {type: "geo", displayName: "Караульное", value: "Караульное"},
+                {type: "geo", displayName: "Жан-Аул", value: "Жан-Аул"},
+                {type: "geo", displayName: "Станья", value: "Станья"},
+                {type: "geo", displayName: "Гандурино", value: "Гандурино"},
+                {type: "geo", displayName: "Каралат", value: "Каралат"},
+                {type: "geo", displayName: "Ревин Хутор", value: "Ревин Хутор"},
+                {type: "geo", displayName: "Иванчуг", value: "Иванчуг"},
+                {type: "geo", displayName: "Полдневое", value: "Полдневое"},
+                {type: "geo", displayName: "Самосделка", value: "Самосделка"},
+                {type: "geo", displayName: "Нижненикольский", value: "Нижненикольский"},
+                {type: "geo", displayName: "село Затон", value: "село Затон"},
+                {type: "geo", displayName: "Аккусинский", value: "Аккусинский"},
+                {type: "geo", displayName: "село Тузуклей", value: "село Тузуклей"},
+                {type: "geo", displayName: "остров Таппараки", value: "остров Таппараки"},
+                {type: "geo", displayName: "остров Лайдасалма", value: "остров Лайдасалма"},
+                {type: "geo", displayName: "Пяозеро", value: "Пяозеро"},
+                {type: "geo", displayName: "Энергоозеро", value: "Энергоозеро"},
+                {type: "geo", displayName: "Сапфорог", value: "Сапфорог"},
+                {type: "geo", displayName: "вуошкалошари остров", value: "вуошкалошари остров"},
+                {type: "geo", displayName: "остров Педаяшари", value: "остров Педаяшари"},
+                {type: "geo", displayName: "остров майя", value: "остров майя"},
+                {type: "geo", displayName: "река Софьянга", value: "река Софьянга"},
+                {type: "geo", displayName: "Нижняя Пулонга", value: "Нижняя Пулонга"},
+                {type: "geo", displayName: "Энгозеро", value: "Энгозеро"},
+                {type: "geo", displayName: "деревня Коккосалма", value: "деревня Коккосалма"},
+                {type: "geo", displayName: "озеро Пяозеро", value: "озеро Пяозеро"},
+                {type: "geo", displayName: "остров Малошари", value: "остров Малошари"},
+                {type: "geo", displayName: "остров Вуошкалошари", value: "остров Вуошкалошари"},
+                {type: "geo", displayName: "урочище Таванга", value: "урочище Таванга"},
+                {type: "geo", displayName: "Сафпорог", value: "Софпорог"},
+                {type: "geo", displayName: "территория Суоперя", value: "территория Суоперя"},
+                {type: "geo", displayName: "Кумское водохранилище", value: "Кумское водохранилище"},
+                {type: "geo", displayName: "Риеккалансаари", value: "Риеккалансаари"},
+                {type: "geo", displayName: "Волома", value: "Волома"},
+                {type: "geo", displayName: "Кааламское", value: "Кааламское"},
+                {type: "geo", displayName: "Кишкойла", value: "Кишкойла"},
+                {type: "geo", displayName: "Кулмукса", value: "Кулмукса"},
+                {type: "geo", displayName: "Тарулинна", value: "Тарулинна"},
+                {type: "geo", displayName: "Песчаное", value: "Песчаное"},
+                {type: "geo", displayName: "Нурмойла", value: "Нурмойла"},
+                {type: "geo", displayName: "Токкарлахти", value: "Токкарлахти"},
+                {type: "geo", displayName: "Кирьявалахти", value: "Кирьявалахти"},
+                {type: "geo", displayName: "Кильпола", value: "Кильпола"},
+                {type: "geo", displayName: "Эссойльское", value: "Эссойльское"},
+                {type: "geo", displayName: "Рантуэ", value: "Рантуэ"},
+                {type: "geo", displayName: "Ламберг", value: "Ламберг"},
+                {type: "geo", displayName: "Сяндеба", value: "Сяндеба"},
+                {type: "geo", displayName: "Чёлмужи", value: "Чёлмужи"},
+                {type: "geo", displayName: "Туоксъярви", value: "Туоксъярви"},
+                {type: "geo", displayName: "Ледмозерское", value: "Ледмозерское"},
+                {type: "geo", displayName: "Койкары", value: "Койкары"},
+                {type: "geo", displayName: "Ляскеля", value: "Ляскеля"},
+                {type: "geo", displayName: "Сумериа", value: "Сумериа"},
+                {type: "geo", displayName: "Важинская Пристань", value: "Важинская Пристань"},
+                {type: "geo", displayName: "Крошнозеро", value: "Крошнозеро"},
+                {type: "geo", displayName: "Шальский", value: "Шальский"},
+                {type: "geo", displayName: "Сикопохья", value: "Сикопохья"},
+                {type: "geo", displayName: "Ниэмелянхови", value: "Ниэмелянхови"},
+                {type: "geo", displayName: "Лахденпохья", value: "Лахденпохья"},
+                {type: "geo", displayName: "Шала", value: "Шала"},
+                {type: "geo", displayName: "Село Нурмойла", value: "Село Нурмойла"},
+                {type: "geo", displayName: "Остречье", value: "Остречье"},
+                {
+                    type: "geo",
+                    displayName: "Республика Карелия, Беломорский муниципальный округ, Село Лехта",
+                    value: "Село Лехта"
+                },
+                {type: "geo", displayName: "Лобское", value: "Лобское"},
+                {type: "geo", displayName: "Олонка", value: "Олонка"},
+                {type: "geo", displayName: "Чуралахта", value: "Чуралахта"},
+                {type: "geo", displayName: "Ялгуба", value: "Ялгуба"},
+                {type: "geo", displayName: "Тихтозеро", value: "Тихтозеро"},
+                {type: "geo", displayName: "Устье Тулоксы", value: "Устье Тулоксы"},
+                {type: "geo", displayName: "Питкярантский район", value: "Питкярантский район"},
+                {type: "geo", displayName: "Коконниеми", value: "Коконниеми"},
+                {type: "geo", displayName: "Повенец", value: "Повенец"},
+                {type: "geo", displayName: "Гурвич", value: "Гурвич"}]
+            const locations = await HeaderLocationSearch.getUniqueAddresses(text)
             const suggestItems = [];
             for (let location of locations) {
                 if (location.value.toLowerCase().includes(text.toLowerCase())) {
@@ -293,6 +297,43 @@ class HeaderLocationSearch extends Component {
         }
 
     }
+
+    static async getUniqueAddresses(text) {
+        const query = `
+      query SearchGeo($query: String!) {
+    SearchGeo(query: $query) {
+      results {
+        type
+        displayName
+        value
+      }
+    }
+  }
+    `;
+        const variables = {
+            query: text
+        };
+        const resp = await fetch('/graphql', {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query,
+                variables,
+                // variables: [],
+            }),
+            credentials: 'include',
+        });
+
+        const response = await resp.json();
+        console.log('map results', response, query)
+        console.log(response.data.SearchGeo.results)
+
+        return response.data.SearchGeo.results;
+    }
+
 
     render() {
         const {className, containerClassName, personalized} = this.props;

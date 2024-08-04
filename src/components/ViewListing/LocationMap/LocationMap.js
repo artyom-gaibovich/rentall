@@ -145,7 +145,6 @@ class LocationMap extends React.Component {
       });
       let mark = new ymaps.Placemark(this.state.initialCoords, {
           hintContent: 'Точная информация о местоположении предоставляется после подтверждения бронирования',
-          // balloonContent: 'Где-то тут'
       });
 
 

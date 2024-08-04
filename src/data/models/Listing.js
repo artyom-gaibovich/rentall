@@ -35,7 +35,6 @@ const Listing = Model.define('Listing', {
   residenceType: {
     type: DataType.STRING,
   },
-
   bedrooms: {
     type: DataType.STRING,
   },

@@ -89,49 +89,62 @@ class LocationMap extends React.Component {
 
   }
   static async getMapItems () {
-        // lol, sorry 4 that
-        const query = `
-      query SearchListingMap {
-        SearchListingMap {
-          count
-          results {
+      const cacheKey = 'mapItemsCache';
+      const cacheTimeKey = 'mapItemsCacheTime';
+      const cacheDuration = 1000 * 60 * 60 * 24* 7;
+      const cachedData = localStorage.getItem(cacheKey);
+      const cacheTime = localStorage.getItem(cacheTimeKey);
+
+      if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime)) < cacheDuration) {
+          console.log('Returning cached data');
+          return JSON.parse(cachedData);
+      }
+
+      const query = `
+    query SearchListingMap {
+      SearchListingMap {
+        count
+        results {
+          id
+          title
+          lat
+          lng
+          coverPhoto
+          listPhotos {
             id
-            title
-            lat
-            lng
-            coverPhoto
-            listPhotos {
-              id
-              name
-              type
-              status
-            }
-            listingData {
-              basePrice
-              currency
-            }
+            name
+            type
+            status
+          }
+          listingData {
+            basePrice
+            currency
           }
         }
       }
-    `;
-        const resp = await fetch('/graphql', {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query,
-                // variables: [],
-            }),
-            credentials: 'include',
-        });
-
-        const response = await resp.json();
-        console.log('map results', response, query)
-
-        return response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng)
     }
+  `;
+
+      const resp = await fetch('/graphql', {
+          method: 'post',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+          credentials: 'include',
+      });
+
+      const response = await resp.json();
+      console.log('map results', response, query);
+
+      const filteredResults = response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng);
+
+      localStorage.setItem(cacheKey, JSON.stringify(filteredResults));
+      localStorage.setItem(cacheTimeKey, Date.now().toString());
+
+      return filteredResults;
+  }
 
     static async sleep(ms){
         return new Promise((resolve) => {
@@ -163,7 +176,7 @@ class LocationMap extends React.Component {
       })
 
       clusterer.options.set({
-          maxZoom: 40,
+          maxZoom: 30,
           gridSize: 180,
           hasBalloon: false,
           hasHint: false,

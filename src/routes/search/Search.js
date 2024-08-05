@@ -91,7 +91,7 @@ export class Search extends React.Component {
     });
   }
 	static async initYmaps () {
-    await Search.sleep(50)
+    //await Search.sleep(50)
     let searchedHouses
     if(submitData) {
        searchedHouses = submitData.results
@@ -118,13 +118,10 @@ export class Search extends React.Component {
         groupByCoordinates: false,
         clusterDisableClickZoom: true,
         balloonContentLayout: 'cluster#balloonTwoColumns',
-        openBalloonOnClick : true,
-        clusterHideIconOnBalloonOpen: false,
-        geoObjectHideIconOnBalloonOpen: false
       })
 
       clustererMobile.options.set({
-        maxZoom: 40,
+        maxZoom: 30,
         gridSize: 180,
         hasBalloon: false,
         hasHint: false,
@@ -223,7 +220,7 @@ export class Search extends React.Component {
       })
 
       clusterer.options.set({
-        maxZoom: 40,
+        maxZoom: 30,
         gridSize: 180,
         hasBalloon: false,
         hasHint: false,
@@ -321,48 +318,60 @@ export class Search extends React.Component {
     }
   }
   static async getMapItems () {
-    // lol, sorry 4 that
+    const cacheKey = 'mapItemsCache';
+    const cacheTimeKey = 'mapItemsCacheTime';
+    const cacheDuration = 1000 * 60 * 60 * 24* 7; // Кэшируем данные на 10 минут
+
+    const cachedData = localStorage.getItem(cacheKey);
+    const cacheTime = localStorage.getItem(cacheTimeKey);
+
+    if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime)) < cacheDuration) {
+      console.log('Returning cached data');
+      return JSON.parse(cachedData);
+    }
     const query = `
-      query SearchListingMap {
-        SearchListingMap {
-          count
-          results {
+    query SearchListingMap {
+      SearchListingMap {
+        count
+        results {
+          id
+          title
+          lat
+          lng
+          coverPhoto
+          listPhotos {
             id
-            title
-            lat
-            lng
-            coverPhoto
-            listPhotos {
-              id
-              name
-              type
-              status
-            }
-            listingData {
-              basePrice
-              currency
-            }
+            name
+            type
+            status
+          }
+          listingData {
+            basePrice
+            currency
           }
         }
       }
-    `;
+    }
+  `;
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        query,
-        // variables: [],
-      }),
+      body: JSON.stringify({ query }),
       credentials: 'include',
     });
-
     const response = await resp.json();
-     console.log('map results', response, query)
+    console.log('map results', response, query);
 
-    return response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng)
+    const filteredResults = response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng);
+
+    // Сохраняем данные в кэш
+    localStorage.setItem(cacheKey, JSON.stringify(filteredResults));
+    localStorage.setItem(cacheTimeKey, Date.now().toString());
+
+    return filteredResults;
   }
 
   handleResize(e) {

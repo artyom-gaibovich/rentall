@@ -12,11 +12,11 @@ const SearchGeo = {
         try {
             const results = await sequelize.query(`
         SELECT DISTINCT locality, area, province
-        FROM listings_info
-        WHERE 
-          locality LIKE :query OR
-          area LIKE :query OR
-          province LIKE :query
+        FROM listing
+        WHERE
+            (locality IS NOT NULL AND locality LIKE :query) OR
+            (area IS NOT NULL AND area LIKE :query) OR
+            (province IS NOT NULL AND province LIKE :query)
       `, {
                 replacements: { query: `%${query}%` },
                 type: sequelize.QueryTypes.SELECT

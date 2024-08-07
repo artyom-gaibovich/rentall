@@ -145,6 +145,9 @@ class LocationMap extends React.Component {
 
       return filteredResults;
   }
+  componentDidUpdate(prevProps, prevState, prevContext) {
+
+  }
 
     static async sleep(ms){
         return new Promise((resolve) => {

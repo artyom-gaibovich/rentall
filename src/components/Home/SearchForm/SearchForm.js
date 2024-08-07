@@ -192,7 +192,7 @@ class SearchForm extends React.Component {
 
 
     async getSuggest(event) {
-        const text = event.target.value.trim();
+        const text = event.target.value;
 
 
         if (!text.length) {
@@ -279,17 +279,21 @@ class SearchForm extends React.Component {
                 { type: "geo", displayName: "Повенец", value: "Повенец" },
                 { type: "geo", displayName: "Гурвич", value: "Гурвич" }]
             const locations = await SearchForm.getUniqueAddresses(text)
+            console.log(locations)
             const suggestItems = [];
             for (let location of locations) {
-                if (location.value.toLowerCase().includes(text.toLowerCase())) {
+                if (
+                    location &&
+                    location.value.toLowerCase().includes(text.toLowerCase()) &&
+                    !location.value.toLowerCase().includes("null") &&
+                    !location.value.toLowerCase().includes("undefined")) {
                     suggestItems.push(location);
                 }
                 if (suggestItems.length >= 10) {
                     break;
                 }
             }
-
-
+            console.log(suggestItems);
             this.setState({
                 ...this.state,
                 suggestItems: suggestItems
@@ -329,9 +333,9 @@ class SearchForm extends React.Component {
 
         const response = await resp.json();
         console.log('map results', response, query)
-        console.log(response.data.SearchGeo.results)
 
         return response.data.SearchGeo.results;
+
     }
 
 

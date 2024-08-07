@@ -278,17 +278,23 @@ class HeaderLocationSearch extends Component {
                 {type: "geo", displayName: "Коконниеми", value: "Коконниеми"},
                 {type: "geo", displayName: "Повенец", value: "Повенец"},
                 {type: "geo", displayName: "Гурвич", value: "Гурвич"}]
+
             const locations = await HeaderLocationSearch.getUniqueAddresses(text)
             const suggestItems = [];
             for (let location of locations) {
-                if (location.value.toLowerCase().includes(text.toLowerCase())) {
+                if (
+                    location &&
+                    location.value.toLowerCase().includes(text.toLowerCase()) &&
+                    !location.value.toLowerCase().includes("null") &&
+                    !location.value.toLowerCase().includes("undefined")) {
                     suggestItems.push(location);
                 }
                 if (suggestItems.length >= 10) {
                     break;
                 }
             }
-
+            suggestItems.sort((a, b) => a.value.length - b.value.length);
+            console.log(locations)
             this.setState({
                 ...this.state,
                 suggestItems: suggestItems

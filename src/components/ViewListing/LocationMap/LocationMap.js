@@ -175,7 +175,9 @@ class LocationMap extends React.Component {
       clusterer = new ymaps.Clusterer({
           preset: 'twirl#invertedVioletClusterIcons',
           groupByCoordinates: false,
-          clusterDisableClickZoom: true
+          clusterDisableClickZoom: true,
+          clusterHideIconOnBalloonOpen: false,
+          geoObjectHideIconOnBalloonOpen: false
       })
 
       clusterer.options.set({

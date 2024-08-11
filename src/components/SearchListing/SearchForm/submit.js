@@ -110,8 +110,6 @@ async function submit(values, dispatch) {
   });
 
   const { data } = await resp.json();
-  // console.log("submit js")
-// console.log(data)
 submitData = data.SearchListing;
   if (data && data.SearchListing) {
 

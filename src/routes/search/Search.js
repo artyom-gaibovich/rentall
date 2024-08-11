@@ -92,47 +92,186 @@ export class Search extends React.Component {
         });
     }
 
-/*
-    static async initYmaps() {
-        await Search.sleep(50)
-        let searchedHouses
-        if (submitData) {
-            searchedHouses = submitData.results
-        } else {
-            searchedHouses = searchResultsData.results;
-        }
-        const mapSection = document.querySelector("#map")
-        Search.yandexMapMobile = !Search.yandexMapMobile;
-        console.log('thart is 1')
-        if (mapSection && mapSection.children.length === 0) {
-            Search.map = new ymaps.Map(mapSection, {
-                center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
-                zoom: 12
-            })
-            ymaps.onHover
-            let clustererMobile;
-            let geoObjectsMobile;
-            let getPointOptionsMobile;
-            let getPointDataMobile;
-            let pointsMobile;
+    static getCenter(locations) {
+        let minLng = Infinity, maxLng = -Infinity;
+        let minLat = Infinity, maxLat = -Infinity;
 
-            clustererMobile = new ymaps.Clusterer({
-                preset: 'islands#invertedVioletClusterIcons',
+        locations.forEach(location => {
+            if (location.lng < minLng) minLng = location.lng;
+            if (location.lng > maxLng) maxLng = location.lng;
+            if (location.lat < minLat) minLat = location.lat;
+            if (location.lat > maxLat) maxLat = location.lat;
+        });
+
+        const centerLng = (minLng + maxLng) / 2;
+        const centerLat = (minLat + maxLat) / 2;
+
+        return {lng: centerLng, lat: centerLat};
+    }
+
+    /*
+        static async initYmaps() {
+            await Search.sleep(50)
+            let searchedHouses
+            if (submitData) {
+                searchedHouses = submitData.results
+            } else {
+                searchedHouses = searchResultsData.results;
+            }
+            const mapSection = document.querySelector("#map")
+            Search.yandexMapMobile = !Search.yandexMapMobile;
+            console.log('thart is 1')
+            if (mapSection && mapSection.children.length === 0) {
+                Search.map = new ymaps.Map(mapSection, {
+                    center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
+                    zoom: 12
+                })
+                ymaps.onHover
+                let clustererMobile;
+                let geoObjectsMobile;
+                let getPointOptionsMobile;
+                let getPointDataMobile;
+                let pointsMobile;
+
+                clustererMobile = new ymaps.Clusterer({
+                    preset: 'islands#invertedVioletClusterIcons',
+                    groupByCoordinates: false,
+                    clusterDisableClickZoom: true,
+                    balloonContentLayout: 'cluster#balloonTwoColumns',
+                })
+
+                clustererMobile.options.set({
+                    maxZoom: 30,
+                    gridSize: 180,
+                    hasBalloon: false,
+                    hasHint: false,
+
+                });
+
+
+                getPointDataMobile = function (index, title, id, listingData, coverPhotoUrl) {
+                    return {
+                        balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
+                        balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+                        balloonContentFooter: listingData.basePrice + " за ночь",
+                        iconContent: listingData.basePrice,
+                    };
+                },
+                    pointsMobile = searchedHouses.map(el => {
+                        return [el.lat, el.lng]
+                    })
+                geoObjectsMobile = [];
+                getPointOptionsMobile = function () {
+                    return {
+                        preset: 'islands#blackStretchyIcon'
+                    };
+                }
+                for (var i = 0, len = searchedHouses.length; i < len; i++) {
+                    geoObjectsMobile[i] = new ymaps.Placemark(pointsMobile[i], getPointDataMobile(i, searchedHouses[i].title, searchedHouses[i].id, searchedHouses[i].listingData, searchedHouses[i].listPhotos[0].name), getPointOptionsMobile());
+                }
+
+
+                clustererMobile.add(geoObjectsMobile);
+                clustererMobile.events.once('objectsaddtomap', function () {
+                    Search.map.setBounds(clustererMobile.getBounds());
+                });
+                clustererMobile.events.add(['mouseenter', 'mouseleave'], function (e) {
+                    var target = e.get('target'),
+                        eType = e.get('type'),
+                        zIndex = Number(eType === 'mouseenter') * 1000;
+
+                    target.options.set('zIndex', zIndex);
+                });
+                Search.map && Search.map.geoObjects.add(clustererMobile);
+
+
+                Search.map.controls.remove("searchControl");
+                Search.map.controls.remove("geolocationControl");
+                Search.map.controls.remove("trafficControl");
+                Search.map.controls.remove("rulerControl");
+                Search.map.controls.remove("typeSelector");
+                Search.map.behaviors.disable("dblClickZoom");
+            }
+            searchedHouses.map((item, index) => {
+                const coverPhotoUrl = item.listPhotos[0].name;
+                const myGeoObject = new ymaps.GeoObject({
+                    roomId: item.id,
+                    geometry: {
+                        type: "Point",
+                        coordinates: [item.lat, item.lng]
+                    },
+                    modules: ['geoObject.addon.balloon'],
+                    properties: {
+                        balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
+                        balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+                        balloonContentFooter: item.listingData.basePrice + " за ночь",
+                        iconContent: item.listingData.basePrice,
+                    }
+                }, {
+                    preset: 'islands#blackStretchyIcon'
+                })
+                myGeoObject.roomId = item.id
+
+                Search.added[item.id] = true
+            })
+
+            Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
+            //Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
+
+
+            //const mapItems = await Search.getMapItems();
+            const mapItems = [{
+                id: 1239,
+                title: "Лучший дом на свете",
+                lat: 46.114432,
+                lng: 48.067548,
+                coverPhoto: 24133,
+                listPhotos: [
+                    {
+                        id: 24133,
+                        name: "3b28f37527778a9e19b16fe86a68434a.png",
+                        type: "image/png",
+                        status: null
+                    },
+                    {
+                        id: 24134,
+                        name: "cea4cb9f772103b7297a232508d62667.png",
+                        type: "image/png",
+                        status: null
+                    }
+                ],
+                listingData: {
+                    basePrice: 1,
+                    currency: "RUB"
+                }
+            }]
+            console.log('thart is 2')
+
+            let clusterer;
+            let geoObjects;
+            let getPointOptions;
+            let getPointData;
+            let points;
+
+
+            clusterer = new ymaps.Clusterer({
+                preset: 'twirl#invertedVioletClusterIcons',
                 groupByCoordinates: false,
                 clusterDisableClickZoom: true,
-                balloonContentLayout: 'cluster#balloonTwoColumns',
+                clusterHideIconOnBalloonOpen: false,
+                geoObjectHideIconOnBalloonOpen: false
             })
 
-            clustererMobile.options.set({
+            clusterer.options.set({
                 maxZoom: 30,
                 gridSize: 180,
                 hasBalloon: false,
                 hasHint: false,
-
+                clusterDisableClickZoom: true,
             });
 
 
-            getPointDataMobile = function (index, title, id, listingData, coverPhotoUrl) {
+            getPointData = function (index, title, id, listingData, coverPhotoUrl) {
                 return {
                     balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
                     balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
@@ -140,157 +279,35 @@ export class Search extends React.Component {
                     iconContent: listingData.basePrice,
                 };
             },
-                pointsMobile = searchedHouses.map(el => {
+                points = mapItems.map(el => {
                     return [el.lat, el.lng]
                 })
-            geoObjectsMobile = [];
-            getPointOptionsMobile = function () {
+            geoObjects = [];
+            getPointOptions = function () {
                 return {
                     preset: 'islands#blackStretchyIcon'
                 };
             }
-            for (var i = 0, len = searchedHouses.length; i < len; i++) {
-                geoObjectsMobile[i] = new ymaps.Placemark(pointsMobile[i], getPointDataMobile(i, searchedHouses[i].title, searchedHouses[i].id, searchedHouses[i].listingData, searchedHouses[i].listPhotos[0].name), getPointOptionsMobile());
+            for (var i = 0, len = mapItems.length; i < len; i++) {
+                geoObjects[i] = new ymaps.Placemark(points[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
             }
-
-
-            clustererMobile.add(geoObjectsMobile);
-            clustererMobile.events.once('objectsaddtomap', function () {
-                Search.map.setBounds(clustererMobile.getBounds());
+            clusterer.add(geoObjects);
+            clusterer.events.once('objectsaddtomap', function () {
+                Search.map.setBounds(clusterer.getBounds());
             });
-            clustererMobile.events.add(['mouseenter', 'mouseleave'], function (e) {
-                var target = e.get('target'),
-                    eType = e.get('type'),
-                    zIndex = Number(eType === 'mouseenter') * 1000;
+            clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
+                var target = e.get('target'), // Геообъект - источник события.
+                    eType = e.get('type'), // Тип события.
+                    zIndex = Number(eType === 'mouseenter') * 1000; // 1000 или 0 в зависимости от типа события.
 
                 target.options.set('zIndex', zIndex);
             });
-            Search.map && Search.map.geoObjects.add(clustererMobile);
+            Search.map && Search.map.geoObjects.add(clusterer);
 
-
-            Search.map.controls.remove("searchControl");
-            Search.map.controls.remove("geolocationControl");
-            Search.map.controls.remove("trafficControl");
-            Search.map.controls.remove("rulerControl");
-            Search.map.controls.remove("typeSelector");
-            Search.map.behaviors.disable("dblClickZoom");
         }
-        searchedHouses.map((item, index) => {
-            const coverPhotoUrl = item.listPhotos[0].name;
-            const myGeoObject = new ymaps.GeoObject({
-                roomId: item.id,
-                geometry: {
-                    type: "Point",
-                    coordinates: [item.lat, item.lng]
-                },
-                modules: ['geoObject.addon.balloon'],
-                properties: {
-                    balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
-                    balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-                    balloonContentFooter: item.listingData.basePrice + " за ночь",
-                    iconContent: item.listingData.basePrice,
-                }
-            }, {
-                preset: 'islands#blackStretchyIcon'
-            })
-            myGeoObject.roomId = item.id
+    */
 
-            Search.added[item.id] = true
-        })
-
-        Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
-        //Search.map && Search.map.setBounds(Search.map.geoObjects.getBounds());
-
-
-        //const mapItems = await Search.getMapItems();
-        const mapItems = [{
-            id: 1239,
-            title: "Лучший дом на свете",
-            lat: 46.114432,
-            lng: 48.067548,
-            coverPhoto: 24133,
-            listPhotos: [
-                {
-                    id: 24133,
-                    name: "3b28f37527778a9e19b16fe86a68434a.png",
-                    type: "image/png",
-                    status: null
-                },
-                {
-                    id: 24134,
-                    name: "cea4cb9f772103b7297a232508d62667.png",
-                    type: "image/png",
-                    status: null
-                }
-            ],
-            listingData: {
-                basePrice: 1,
-                currency: "RUB"
-            }
-        }]
-        console.log('thart is 2')
-
-        let clusterer;
-        let geoObjects;
-        let getPointOptions;
-        let getPointData;
-        let points;
-
-
-        clusterer = new ymaps.Clusterer({
-            preset: 'twirl#invertedVioletClusterIcons',
-            groupByCoordinates: false,
-            clusterDisableClickZoom: true,
-            clusterHideIconOnBalloonOpen: false,
-            geoObjectHideIconOnBalloonOpen: false
-        })
-
-        clusterer.options.set({
-            maxZoom: 30,
-            gridSize: 180,
-            hasBalloon: false,
-            hasHint: false,
-            clusterDisableClickZoom: true,
-        });
-
-
-        getPointData = function (index, title, id, listingData, coverPhotoUrl) {
-            return {
-                balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
-                balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-                balloonContentFooter: listingData.basePrice + " за ночь",
-                iconContent: listingData.basePrice,
-            };
-        },
-            points = mapItems.map(el => {
-                return [el.lat, el.lng]
-            })
-        geoObjects = [];
-        getPointOptions = function () {
-            return {
-                preset: 'islands#blackStretchyIcon'
-            };
-        }
-        for (var i = 0, len = mapItems.length; i < len; i++) {
-            geoObjects[i] = new ymaps.Placemark(points[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
-        }
-        clusterer.add(geoObjects);
-        clusterer.events.once('objectsaddtomap', function () {
-            Search.map.setBounds(clusterer.getBounds());
-        });
-        clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
-            var target = e.get('target'), // Геообъект - источник события.
-                eType = e.get('type'), // Тип события.
-                zIndex = Number(eType === 'mouseenter') * 1000; // 1000 или 0 в зависимости от типа события.
-
-            target.options.set('zIndex', zIndex);
-        });
-        Search.map && Search.map.geoObjects.add(clusterer);
-
-    }
-*/
-
-    static async initYmaps () {
+    static async initYmaps() {
         await Search.sleep(1000)
         let searchedHouses
         let clusterer;
@@ -299,6 +316,9 @@ export class Search extends React.Component {
         let getPointData;
         let mapPoints;
         let housePoints;
+
+        let globalZoom;
+        let globalCenter;
         getPointOptions = function () {
             return {
                 preset: 'islands#blackStretchyIcon'
@@ -314,7 +334,8 @@ export class Search extends React.Component {
             geoObjectHideIconOnBalloonOpen: false
         })
         clusterer.options.set({
-            maxZoom: 30,
+            minClusterSize: 3,
+            maxZoom: 60,
             gridSize: 180,
             hasBalloon: false,
             hasHint: false,
@@ -329,18 +350,46 @@ export class Search extends React.Component {
             };
         }
 
-        if(submitData) {
+        if (submitData) {
             searchedHouses = submitData.results
+            console.log(submitData.count, 'submitData.count')
+            if (submitData.count > 500) {
+                globalZoom = 7
+            }
+            if (submitData.count >= 20 <= 500) {
+                globalZoom = 9
+            }
+            if (submitData.count < 20) {
+                globalZoom = 16
+            }
+            globalCenter = Search.getCenter(searchedHouses);
+
         } else {
             searchedHouses = searchResultsData.results;
+            console.log(searchResultsData.count, 'searchResultsData.count')
+            if (searchResultsData.count > 500) {
+                globalZoom = 6
+            }
+            else if (searchResultsData.count >= 20 <= 500) {
+                globalZoom = 9
+            }
+            else if (searchResultsData.count < 20) {
+                globalZoom = 16
+            }
+            globalCenter = Search.getCenter(searchedHouses);
+
         }
+
+
         const mapSection = document.querySelector("#map")
         Search.yandexMapMobile = !Search.yandexMapMobile;
         const mapItems = await Search.getMapItems();
-        if(mapSection && mapSection.children.length === 0){
+        if (mapSection && mapSection.children.length === 0) {
+            console.log(globalZoom, 'globalZoom')
             Search.map = new ymaps.Map(mapSection, {
-                center: [searchedHouses[0] ? searchedHouses[0].lat: 39, searchedHouses[0] ? searchedHouses[0].lng: 43],
-                zoom: 12
+                //center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
+                center: [globalCenter.lat, globalCenter.lng],
+                zoom: globalZoom
             })
             ymaps.onHover
             Search.map.controls.remove("searchControl");
@@ -351,32 +400,31 @@ export class Search extends React.Component {
             Search.map.behaviors.disable("dblClickZoom");
         }
 
-/*
-        searchedHouses.map((item,index) => {
-            const coverPhotoUrl = item.listPhotos[0].name;
-            const myGeoObject = new ymaps.GeoObject({
-                roomId: item.id,
-                geometry: {
-                    type: "Point",
-                    coordinates:[item.lat, item.lng]
-                },
-                modules:['geoObject.addon.balloon'],
-                properties: {
-                    balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
-                    balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
-                    balloonContentFooter: item.listingData.basePrice + " за ночь",
-                    iconContent: item.listingData.basePrice,
-                }
-            }, {
-                preset: 'islands#blackStretchyIcon'
-            })
-            myGeoObject.roomId = item.id
+        /*
+                searchedHouses.map((item,index) => {
+                    const coverPhotoUrl = item.listPhotos[0].name;
+                    const myGeoObject = new ymaps.GeoObject({
+                        roomId: item.id,
+                        geometry: {
+                            type: "Point",
+                            coordinates:[item.lat, item.lng]
+                        },
+                        modules:['geoObject.addon.balloon'],
+                        properties: {
+                            balloonContentHeader: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank">${item.title}</a>`,
+                            balloonContentBody: `<a href="/rooms/${formatURL(item.title)}-${item.id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+                            balloonContentFooter: item.listingData.basePrice + " за ночь",
+                            iconContent: item.listingData.basePrice,
+                        }
+                    }, {
+                        preset: 'islands#blackStretchyIcon'
+                    })
+                    myGeoObject.roomId = item.id
 
-            Search.added[item.id] = true
-            Search.map && Search.map.geoObjects.add(myGeoObject)
-        })
-*/
-
+                    Search.added[item.id] = true
+                    Search.map && Search.map.geoObjects.add(myGeoObject)
+                })
+        */
 
 
         mapPoints = mapItems.map(el => {
@@ -404,11 +452,31 @@ export class Search extends React.Component {
 
             target.options.set('zIndex', zIndex);
         });
+
+        Search.map.setCenter([globalCenter.lat, globalCenter.lat]);
+
         Search.map && Search.map.geoObjects.add(clusterer);
 
     }
 
+    /*
+        static getCenter(locations) {
+            let minLng = Infinity, maxLng = -Infinity;
+            let minLat = Infinity, maxLat = -Infinity;
 
+            locations.forEach(location => {
+                if (location.lng < minLng) minLng = location.lng;
+                if (location.lng > maxLng) maxLng = location.lng;
+                if (location.lat < minLat) minLat = location.lat;
+                if (location.lat > maxLat) maxLat = location.lat;
+            });
+
+            const centerLng = (minLng + maxLng) / 2;
+            const centerLat = (minLat + maxLat) / 2;
+
+            return {lng: centerLng, lat: centerLat};
+        }
+    */
 
     componentWillMount() {
         const {getListingFields} = this.props;

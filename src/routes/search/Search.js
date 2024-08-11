@@ -356,10 +356,10 @@ export class Search extends React.Component {
             if (submitData.count > 500) {
                 globalZoom = 7
             }
-            if (submitData.count >= 20 <= 500) {
+            else if (submitData.count >= 20 <= 500) {
                 globalZoom = 9
             }
-            if (submitData.count < 20) {
+            else if (submitData.count < 20) {
                 globalZoom = 16
             }
             globalCenter = Search.getCenter(searchedHouses);
@@ -387,8 +387,8 @@ export class Search extends React.Component {
         if (mapSection && mapSection.children.length === 0) {
             console.log(globalZoom, 'globalZoom')
             Search.map = new ymaps.Map(mapSection, {
-                //center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
-                center: [globalCenter.lat, globalCenter.lng],
+                center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
+                //center: [globalCenter.lat, globalCenter.lng],
                 zoom: globalZoom
             })
             ymaps.onHover
@@ -452,8 +452,7 @@ export class Search extends React.Component {
 
             target.options.set('zIndex', zIndex);
         });
-
-        Search.map.setCenter([globalCenter.lat, globalCenter.lat]);
+        Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);
 
         Search.map && Search.map.geoObjects.add(clusterer);
 

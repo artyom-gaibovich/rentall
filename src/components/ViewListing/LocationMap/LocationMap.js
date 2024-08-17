@@ -159,6 +159,7 @@ class LocationMap extends React.Component {
           center: this.state.initialCoords,
           zoom: 12
       });
+      console.log(this.state.initialCoords)
       let mark = new ymaps.Placemark(this.state.initialCoords, {
           hintContent: 'Точная информация о местоположении предоставляется после подтверждения бронирования',
       });
@@ -175,15 +176,18 @@ class LocationMap extends React.Component {
       clusterer = new ymaps.Clusterer({
           preset: 'twirl#invertedVioletClusterIcons',
           groupByCoordinates: false,
-          clusterDisableClickZoom: true
+          clusterDisableClickZoom: true,
+          clusterHideIconOnBalloonOpen: false,
+          geoObjectHideIconOnBalloonOpen: false
       })
 
       clusterer.options.set({
-          maxZoom: 30,
+          minClusterSize: 3,
+          maxZoom: 60,
           gridSize: 180,
           hasBalloon: false,
           hasHint: false,
-          clusterDisableClickZoom: true
+          clusterDisableClickZoom: true,
       });
 
 

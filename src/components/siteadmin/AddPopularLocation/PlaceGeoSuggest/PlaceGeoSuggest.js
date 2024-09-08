@@ -3,31 +3,20 @@ import PropTypes from 'prop-types';
 // Redux
 import { connect } from 'react-redux';
 
-// Constants
-import { googleMapAPI } from '../../../../config';
-
-import Geosuggest from 'react-geosuggest';
-import ReactGoogleMapLoader from 'react-google-maps-loader';
+// Redux  Action
+import { setPersonalizedValues } from '../../../../actions/personalized';
 
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from '!isomorphic-style-loader/!css-loader!react-geosuggest/module/geosuggest.css';
 
-// Redux  Action
-import { setPersonalizedValues } from '../../../../actions/personalized';
-
 class PlaceGeoSuggest extends Component {
-
   static propTypes = {
     label: PropTypes.string,
     className: PropTypes.string,
     containerClassName: PropTypes.string,
     setPersonalizedValues: PropTypes.func,
-    googleMaps: PropTypes.object,
     personalized: PropTypes.shape({
       locationAddress: PropTypes.string,
-      lat: PropTypes.number,
-      lng: PropTypes.number,
-      geography: PropTypes.string,
     }),
   };
 
@@ -36,55 +25,93 @@ class PlaceGeoSuggest extends Component {
     personalized: {
       locationAddress: null,
     },
-  }
+  };
 
   constructor(props) {
     super(props);
-    this.onSuggestSelect = this.onSuggestSelect.bind(this);
+    this.state = {
+      suggestItems: [],
+    };
     this.onTextChange = this.onTextChange.bind(this);
+    this.onSuggestSelect = this.onSuggestSelect.bind(this);
   }
 
-  onSuggestSelect(data) {
-    const { onChange } = this.props;
+  async onTextChange(event) {
+    const text = event.target.value;
 
-    if (data) {
-      onChange(data.label);
+    if (text.length === 0) {
+      this.setState({ suggestItems: [] });
+      return;
     }
+
+    // Fetch suggestions
+    const suggestItems = await this.getSuggest(text);
+    this.setState({ suggestItems });
   }
 
-  onTextChange(value) {
-    const { onChange } = this.props;
-    if (value !== undefined && value.trim() === '') {
-      onChange(value);
+  async getSuggest(text) {
+    const locations = await PlaceGeoSuggest.getUniqueAddresses(text);
+    const suggestItems = locations.filter(location =>
+      location.value.toLowerCase().includes(text.toLowerCase()),
+    ).slice(0, 10);
+
+    return suggestItems;
+  }
+
+  static async getUniqueAddresses(text) {
+    const query = `
+      query SearchGeo($query: String!) {
+        SearchGeo(query: $query) {
+          results {
+            type
+            displayName
+            value
+          }
+        }
+      }
+    `;
+    const variables = { query: text };
+    const resp = await fetch('/graphql', {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+      credentials: 'include',
+    });
+    const response = await resp.json();
+    return response.data.SearchGeo.results;
+  }
+
+  onSuggestSelect(suggestion) {
+    if (suggestion) {
+      const { onChange } = this.props;
+      onChange(suggestion.value);
     }
   }
 
   render() {
-    const { value, onChange, label, className, formName } = this.props;
-    const { containerClassName, personalized } = this.props;
+    const { label, className, containerClassName } = this.props;
+    const { suggestItems } = this.state;
 
     return (
-      <div className={'popularLocationAutoComplete'}>
-        <ReactGoogleMapLoader
-          params={{
-            key: googleMapAPI, // Define your api key here
-            libraries: 'places', // To request multiple libraries, separate them with a comma
-          }}
-          render={googleMaps =>
-                        googleMaps && (
-                        <Geosuggest
-                        country={'ru'}
-                          ref={el => this._geoSuggest = el}
-                          placeholder={label}
-                          inputClassName={className}
-                          className={containerClassName}
-                          initialValue={value}
-                          onChange={this.onTextChange}
-                          onSuggestSelect={this.onSuggestSelect}
-                          autoComplete={'off'}
-                        />
-                        )}
+      <div className={`popularLocationAutoComplete ${containerClassName}`}>
+        <input
+          type="text"
+          placeholder={label}
+          className={className}
+          onChange={this.onTextChange}
         />
+        {suggestItems.length > 0 && (
+          <ul className={s.suggestionsList}>
+            {suggestItems.map((item, index) => (
+              <li key={index} onClick={() => this.onSuggestSelect(item)}>
+                {item.displayName}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
@@ -97,12 +124,5 @@ const mapState = state => ({
 const mapDispatch = {
   setPersonalizedValues,
 };
-
-// export default GoogleMapLoader(withStyles(s)(connect(mapState, mapDispatch)(PlaceGeoSuggest)), {
-//     libraries: ["places"],
-//     region: "US",
-//     language: "en",
-//     key: googleMapAPI,
-// });
 
 export default withStyles(s)(connect(mapState, mapDispatch)(PlaceGeoSuggest));

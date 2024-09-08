@@ -69,7 +69,7 @@ class AddPopularLocationManagement extends React.Component {
             <PlaceGeoSuggest
               {...input}
               label={''}
-              className={className}
+              className={bt.commonControlInput}
               formName={'AddPopularLocation'}
             />
             {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}

@@ -22,9 +22,10 @@ import NoResults from '../NoResults';
 import submit from '../SearchForm/submit';
 
 
-//yandex maps
-import {searchResultsData} from "../../../actions/getSearchResults.js"
-import {Search} from "../../../routes/search/Search.js"
+// yandex maps
+import { searchResultsData } from '../../../actions/getSearchResults.js';
+import { Search } from '../../../routes/search/Search.js';
+
 class SearchResults extends React.Component {
   static propTypes = {
     change: PropTypes.any,
@@ -50,14 +51,12 @@ class SearchResults extends React.Component {
     this.handlePagination = this.handlePagination.bind(this);
   }
 
-  async refreshYmaps(){
-    if(Search.map){
+  async refreshYmaps() {
+    if (Search.map) {
       Search.map.geoObjects.removeAll();
-      await Search.initYmaps()
+      await Search.initYmaps();
       // console.log("map refreshed")
     } else {
-      // console.log(Search.map)
-      // console.log("map not defined")
     }
   }
   componentDidMount() {
@@ -82,7 +81,7 @@ class SearchResults extends React.Component {
     await this.refreshYmaps();
     window.scrollTo(0, 0);
   }
- 
+
 
   render() {
     const { page } = this.state;
@@ -121,7 +120,7 @@ class SearchResults extends React.Component {
                         wishListStatus={item.wishListStatus}
                         isListOwner={item.isListOwner}
                         personCount={guests}
-                        
+
                       />
                     </div>
                     ))
@@ -136,7 +135,6 @@ class SearchResults extends React.Component {
                       defaultCurrenct={1}
                       defaultPageSize={12}
                       handleChange={this.handlePagination}
-
                     />
                   </div>
                 </div>

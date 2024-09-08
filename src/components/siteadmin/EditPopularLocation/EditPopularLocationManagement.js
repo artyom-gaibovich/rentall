@@ -12,6 +12,9 @@ import validate from './validate';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import Link from '../../Link';
 
+import SearchForm from '../../Home/SearchForm/SearchForm';
+
+
 // Style
 import {
   Button,
@@ -28,6 +31,7 @@ import PlaceGeoSuggest from './PlaceGeoSuggest';
 import messages from '../../../locale/messages';
 
 import { databaseUrl, analytics, googleMapAPI, payment, googleCaptcha, emailConfig, sms, auth } from '../../../config';
+import { Example, PlaceSuggestExample } from './PlaceSuggest/PlaceSuggestExample';
 
 class EditPopularLocationManagement extends React.Component {
 
@@ -69,7 +73,7 @@ class EditPopularLocationManagement extends React.Component {
             <PlaceGeoSuggest
               {...input}
               label={''}
-              className={className}
+              className={bt.commonControlInput}
               formName={'EditPopularLocation'}
             />
             {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
@@ -78,7 +82,6 @@ class EditPopularLocationManagement extends React.Component {
       </FormGroup>
     );
   }
-
 
   render() {
     const { error, handleSubmit, submitting, dispatch, initialValues } = this.props;

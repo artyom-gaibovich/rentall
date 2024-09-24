@@ -64,10 +64,10 @@ class EditProfileForm extends Component {
       loggedinEmail = initialValues.email;
     }
     change('loggedinEmail', loggedinEmail);
-    
-    change('preferredCurrency', 'RUB')
-    change('preferredLanguage', 'ru')
-    change('gender', 'Male')
+
+    change('preferredCurrency', 'RUB');
+    change('preferredLanguage', 'ru');
+    change('gender', 'Male');
     // initialValues?.preferredCurrency = 'RUB';
     // initialValues?.preferredLanguage = 'ru';
     // initialValues?.gender = 'Male';
@@ -190,36 +190,35 @@ class EditProfileForm extends Component {
   }
 
   render() {
+    console.log('123');
     if (typeof localStorage !== 'undefined') {
-      
-      let isRegisterGoalReached = localStorage.getItem('isRegisterGoalReached')
+      const isRegisterGoalReached = localStorage.getItem('isRegisterGoalReached');
       if (!isRegisterGoalReached) {
-        console.log('dashboard isRegisterGoalReach')
+        console.log('dashboard isRegisterGoalReach');
         try {
-          ym(92387837,'reachGoal','registration_ok')
+          ym(92387837, 'reachGoal', 'registration_ok');
         } catch (e) {
-          console.log('reachGoal', e)
+          console.log('reachGoal', e);
         }
-        localStorage.setItem('isRegisterGoalReached', 'true')
+        localStorage.setItem('isRegisterGoalReached', 'true');
       } else {
-        console.log('dashboard isRegisterGoalReached filled')
-  
+        console.log('dashboard isRegisterGoalReached filled');
       }
-      console.log('dashboard render', ym)
+      console.log('dashboard render', ym);
       try {
-        let authActionsDb = localStorage.getItem('authActions')
+        let authActionsDb = localStorage.getItem('authActions');
         if (authActionsDb) {
-          authActionsDb = JSON.parse(authActionsDb)
-          console.log('create AuthActions', authActionsDb)
-          let target = authActionsDb
+          authActionsDb = JSON.parse(authActionsDb);
+          console.log('create AuthActions', authActionsDb);
+          const target = authActionsDb;
           if (target) {
             setTimeout(() => {
-              location.pathname = target.url
-            }, 1500)
+              location.pathname = target.url;
+            }, 1500);
           }
         }
       } catch (e) {
-        console.log('err in ls read', e)
+        console.log('err in ls read', e);
       }
     }
     const { error, handleSubmit, submitting, dispatch, base, availableCurrencies, initialValues } = this.props;
@@ -231,39 +230,42 @@ class EditProfileForm extends Component {
     const isPhoneStatus = !!(siteSettingStatus && siteSettingStatus.phoneNumberStatus == 1);
 
     const title = <span>{formatMessage(messages.RequiredDetails)}</span>;
+    return null;
     return (
       <div className={cx('inputFocusColor', 'commonListingBg', 'inputFocusColorEditRTL')}>
-        
+
         {error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
         <Panel className={s.panelHeader}>
           <div>
             <h3 className={bt.listingTitleText}>{title}</h3>
           </div>
           <Form onSubmit={handleSubmit(submit)}>
-           
-          {(!this.props.initialValues.email || this.props.initialValues.email.toLowerCase().includes('anonymus') || !this.props.initialValues.phoneNumber) && this.state.openRequiredModal && <div 
-            style={{
-              position: 'fixed',
-              width: '100%',
-              top: 0,
-              height: '100vh',
-              zIndex: 99,
-              background: 'rgba(0, 0, 0, 0.7)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              left: 0
-            }}
-            >
-              <div style={{
+
+            {(!this.props.initialValues.email || this.props.initialValues.email.toLowerCase().includes('anonymus') || !this.props.initialValues.phoneNumber) && this.state.openRequiredModal && <div
+              style={{
+                position: 'fixed',
                 width: '100%',
-                maxWidth: '600px',
+                top: 0,
                 height: '100vh',
-                maxHeight: '450px',
-                background: '#fff',
-                padding: '20px',
-                borderRadius: '10px',
-              }}>
+                zIndex: 99,
+                background: 'rgba(0, 0, 0, 0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                left: 0,
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: '600px',
+                  height: '100vh',
+                  maxHeight: '450px',
+                  background: '#fff',
+                  padding: '20px',
+                  borderRadius: '10px',
+                }}
+              >
                 <div>
                   <h3 className={bt.listingTitleText}>Пожалуйста, проверьте ваш номер телефона и почту. Без этих данных мы не сможем с вами связаться!</h3>
                 </div>
@@ -287,43 +289,42 @@ class EditProfileForm extends Component {
                     <label className={s.labelText} >{formatMessage(messages.phoneNumber)}</label>
                   </Col>
                   <Col xs={12} sm={9} md={9} lg={9}>
-                {!isPhoneStatus && <div className={s.widthredcd}>
-                  <CountryList
-                    input={{
-                      name: 'countryCode',
-                      onChange: this.handleChange,
-                      value: countryCode,
-                    }}
-                    className={cx(bt.commonControlSelect)}
-                    dialCode={false}
-                    getSelected={this.handleCountryChange}
-                    formName={'EditProfileForm'}
-
-                  />
-                  <Field
-                    name="phoneNumber"
-                    type="text"
-                    component={this.renderFormControlCurrency}
-                    label={formatMessage(messages.phoneNumber)}
-                    className={cx(bt.commonControlInput)}
-                    onChange={this.handleChange}
-                    country={country}
-                  />
-                </div>}
-                {
+                    {!isPhoneStatus && <div className={s.widthredcd}>
+                      <CountryList
+                        input={{
+                          name: 'countryCode',
+                          onChange: this.handleChange,
+                          value: countryCode,
+                        }}
+                        className={cx(bt.commonControlSelect)}
+                        dialCode={false}
+                        getSelected={this.handleCountryChange}
+                        formName={'EditProfileForm'}
+                      />
+                      <Field
+                        name="phoneNumber"
+                        type="text"
+                        component={this.renderFormControlCurrency}
+                        label={formatMessage(messages.phoneNumber)}
+                        className={cx(bt.commonControlInput)}
+                        onChange={this.handleChange}
+                        country={country}
+                      />
+                    </div>}
+                    {
                   isPhoneStatus && <PhoneVerificationModal />
                 }
-                <p className={s.labelText}>{formatMessage(messages.phoneNumberInfo)}</p>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} sm={12} md={12} lg={12} className={cx(s.spaceTop3, bt.textAlignRight, 'textAlignLeftRtlEdit')}>
-                <Button bsSize="small" className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting} onClick={() => this.setState({...this.state, openRequiredModal: false})}>
-                  {formatMessage(messages.save)}
-                </Button>
-              </Col>
-            </Row>
-                
+                    <p className={s.labelText}>{formatMessage(messages.phoneNumberInfo)}</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={12} sm={12} md={12} lg={12} className={cx(s.spaceTop3, bt.textAlignRight, 'textAlignLeftRtlEdit')}>
+                    <Button bsSize="small" className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting} onClick={() => this.setState({ ...this.state, openRequiredModal: false })}>
+                      {formatMessage(messages.save)}
+                    </Button>
+                  </Col>
+                </Row>
+
               </div>
             </div>
           }
@@ -365,7 +366,7 @@ class EditProfileForm extends Component {
               <Col componentClass={ControlLabel} xs={12} sm={9} md={9} lg={9}>
                 <div className={s.select}>
                   <Field name="gender" className={cx(bt.commonControlSelect, 'commonControlSelectRTL')} component={this.renderFormControlSelect} >
-                    {/* <option value="">{formatMessage(messages.gender)}</option> */} 
+                    {/* <option value="">{formatMessage(messages.gender)}</option> */}
                     <option value="Male">{formatMessage(messages.genderMale)}</option>
                     <option value="Female">{formatMessage(messages.genderFemale)}</option>
                   </Field>
@@ -403,7 +404,6 @@ class EditProfileForm extends Component {
                   </Field>
                 </div>
 
-                
 
                 <div className={cx(s.select, s.smSpace, s.birthDayWidth)}>
                   <Field name="year" className={cx(bt.commonControlSelect, 'commonControlSelectRTL')} component={this.renderFormControlSelect} >
@@ -417,7 +417,7 @@ class EditProfileForm extends Component {
                 </div>
               </Col>
             </Row>
-        
+
             <Row className={s.formGroup}>
               <Col componentClass={ControlLabel} xs={12} sm={3} md={3} lg={3} className={cx(s.textAlign, 'textAlignLeftRtlEdit')}>
                 <label className={s.labelText} >{formatMessage(messages.email)}</label>
@@ -517,7 +517,7 @@ class EditProfileForm extends Component {
                 </div>
               </Col>
             </Row>}
- 
+
             {false && <Row className={s.formGroup}>
               <Col componentClass={ControlLabel} xs={12} sm={3} md={3} lg={3} className={cx(s.textAlign, 'textAlignLeftRtlEdit')}>
                 <label className={s.labelText} >{formatMessage(messages.preferredCurrency)}</label>
@@ -541,7 +541,7 @@ class EditProfileForm extends Component {
               </Col>
             </Row>}
 
-             <Row className={s.formGroup}>
+            <Row className={s.formGroup}>
               <Col componentClass={ControlLabel} xs={12} sm={3} md={3} lg={3} className={cx(s.textAlign, 'textAlignLeftRtlEdit')}>
                 <label className={s.labelText} >{formatMessage(messages.liveLocation)}</label>
               </Col>
@@ -557,7 +557,7 @@ class EditProfileForm extends Component {
               </Col>
             </Row>
 
-             <Row className={s.formGroup}>
+            <Row className={s.formGroup}>
               <Col componentClass={ControlLabel} xs={12} sm={3} md={3} lg={3} className={cx(s.textAlign, 'textAlignLeftRtlEdit')}>
                 <label className={s.labelText} >{formatMessage(messages.info)}</label>
               </Col>
@@ -568,7 +568,7 @@ class EditProfileForm extends Component {
                   className={cx(bt.commonControlInput)}
                 />
               </Col>
-            </Row> 
+            </Row>
 
             <Row>
               <Col xs={12} sm={12} md={12} lg={12} className={cx(s.spaceTop3, bt.textAlignRight, 'textAlignLeftRtlEdit')}>

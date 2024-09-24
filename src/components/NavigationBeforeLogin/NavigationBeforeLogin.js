@@ -72,19 +72,13 @@ class NavigationBeforeLogin extends React.Component {
           </NavLink>
           */}
           <NavLink to="/contact" className={s.phoneIcon}>
-            <img src="/images/icons/phoneIcon.svg"  style={{width:"30px"}}/>
-          </NavLink>
-          <NavLink to="/become-a-host">
-            <FormattedMessage {...messages.becomeAHost} />
-          </NavLink>
-          <NavLink to="/help">
-            <FormattedMessage {...messages.help} />
+            <img src="/images/icons/phoneIcon.svg" style={{ width: '30px' }} />
           </NavLink>
           <NavLink to="#" noLink onClick={openLoginModal}>
             <FormattedMessage {...messages.login} />
           </NavLink>
-          <NavLink to="#" noLink onClick={openSignupModal}>
-            <FormattedMessage {...messages.signup} />
+          <NavLink to="/about">
+            <FormattedMessage {...messages.about} />
           </NavLink>
         </Nav>
       </div>

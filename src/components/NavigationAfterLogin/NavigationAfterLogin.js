@@ -112,82 +112,25 @@ class NavigationAfterLogin extends React.Component {
       <Nav pullRight className={'floatLeftAR'}>
         {/* <Nav pullRight className={s.newMenu}></Nav> */}
         <NavLink to="/contact" className={s.phoneIcon}>
-            <img src="/images/icons/phoneIcon.svg"  style={{width:"30px"}}/>
-          </NavLink>
+          <img src="/images/icons/phoneIcon.svg" style={{ width: '30px' }} />
+        </NavLink>
         <NavLink
           to="/"
           className={cx('visible-xs', s.breakPointScreen, s.newMenuDesign)}
         >
           <FormattedMessage {...messages.home} />
         </NavLink>
-        {/*
-        <NavLink
-          noLink
-          onClick={(e) => openHeaderModal('languageModal')}
-        >
-          {formatLocale(currentLocale)}
-        </NavLink>
-        <NavLink
-          noLink
-          onClick={(e) => openHeaderModal('currencyModal')}
-        >
-          {showCurrencySymbol(displayCurrency, currentLocale) + displayCurrency}
-        </NavLink>
-        */}
- 
         <NavLink
           to="/dashboard"
           className={cx('visible-xs', s.breakPointScreen)}
         >
           <FormattedMessage {...messages.dashboard} />
         </NavLink>
-        <NavDropdown
-          className={cx('hidden-xs', s.nonBreakPointScreen)}
-          eventKey={3}
-          title={formatMessage(messages.host)}
-          noCaret id="basic-nav-dropdown"
-        >
-          <MenuItemLink to="/rooms">
-            <FormattedMessage {...messages.manageListing} />
-          </MenuItemLink>
-          <MenuItemLink to="/become-a-host?mode=new">
-            <FormattedMessage {...messages.listYourSpace} />
-          </MenuItemLink>
-          <MenuItemLink to="/reservation/current">
-            <FormattedMessage {...messages.yourReservations} />
-          </MenuItemLink>
-          <MenuItemLink to="/user/transaction">
-            <FormattedMessage {...messages.transactionHistory} />
-          </MenuItemLink>
-        </NavDropdown>
-        <NavLink
-          // to={"/users/show/" + isVerified}
-          to={'/user/edit'}
-          className={cx('visible-xs', s.breakPointScreen)}
-        >
-          <FormattedMessage {...messages.profile} />
-        </NavLink>
-        <NavLink
-          to="/user/payout"
-          className={cx('visible-xs', s.breakPointScreen)}
-        >
-          <FormattedMessage {...messages.accountSettings} />
-        </NavLink>
-        <NavLink to="/become-a-host">
-          <FormattedMessage {...messages.becomeAHost} />
-        </NavLink>
         <NavLink to="/wishlists" >
           <FormattedMessage {...messages.saved} />
         </NavLink>
         <NavLink to="/trips/current" >
           <FormattedMessage {...messages.trips} />
-        </NavLink>
-        <NavLink to="/rooms" className={cx('visible-xs', s.breakPointScreen)}>
-          <FormattedMessage {...messages.host} />
-        </NavLink>
-        <Message />
-        <NavLink to="/help">
-          <FormattedMessage {...messages.help} />
         </NavLink>
         <Logout className={cx('visible-xs', s.breakPointScreen)} />
         <NavDropdown

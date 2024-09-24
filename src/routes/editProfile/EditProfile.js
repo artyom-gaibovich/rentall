@@ -29,9 +29,9 @@ class EditProfile extends React.Component {
             <Col xs={12} sm={3} md={3} lg={3} className={cx(s.smBottom)}>
               <EditProfileSideMenu />
             </Col>
-            <Col xs={12} sm={9} md={9} lg={9}>
+            {/* <Col xs={12} sm={9} md={9} lg={9}>
               <EditProfileForm />
-            </Col>
+            </Col> */}
           </Row>
         </Grid>
       </div>

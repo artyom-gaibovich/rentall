@@ -1,154 +1,159 @@
 @import '../../components/variables.css';
-@import '../../components/utils.css';
 @import '../../components/helpers.css';
-.landingContentTitle {
-	font-size: 24px;
-	color: #484848;
-	font-weight: bold;
+
+.landingContainer {
+  max-width: var(--max-content-width);
+  width: 100%;
+  display: block;
+  margin: 0 auto;
 }
-.landingSubTitle {
-	font-size: 20px;
-	color: #484848;
+
+.landingTitle {
+  font-size: 44px;
+  font-weight: normal;
 }
-.textareaInput {
-	height: 80px !important;
-	padding: 20px;
-	border-color: #dce0e0;
-	border-radius: 2px;
-	font-size: 14px;
-	background-color: #fff;
-	color: #767676;
+
+h1:first-child {
+  margin-top: 0;
 }
-.textHigh {
-	font-size: 18px;
-	color: #484848;
-	line-height: 1.43;
+
+p {
+  font-size: 14px;
 }
-.textTruncate {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+
+.subText {
+  font-size: 14px;
+  color: #484848;
 }
-.textLine {
-	text-decoration: line-through;
+
+.textGray {
+  font-size: 16px;
 }
-a,
-a:hover,
-a:focus,
-a:active {
-	color: var(--btn-secondary-bg);
-	text-decoration: none;
-}
-.textBold {
-	font-weight: bold;
-}
-.formGroup {
-	margin-bottom: 6px;
-}
-.landingStep {
-	font-size: 16px;
-	color: #767676;
-	line-height: 1.43;
-	font-weight: normal;
-}
-.horizontalLineThrough {
-	position: relative;
-	z-index: 1;
-	display: block;
-	margin: 15px 1px;
-	width: 100%;
-	color: #767676;
-	text-align: center;
-	font-size: 14px;
-}
+
 .panelHeader {
-	width: 100%;
-	display: block;
-	color: #484848;
-	font-size: 14px;
-	padding-bottom: 0px;
-	border-bottom: 1px solid #dce0e0;
-	border-radius: 0px;
-	border: none;
-	box-shadow: 0 8px 20px 5px #eeebeb;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
+  border-radius: 0;
+  width: 100%;
+  display: block;
+  color: #484848;
+  font-size: 16px;
+  padding-bottom: 120px;
+  border-bottom: 1px solid #dce0e0;
 }
-.profileAvatarSection {
-	position: relative;
-	margin: 0 auto;
-	margin-top: -50px;
+
+.tabItem {
+  display: block;
+  padding: 14px 15px;
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+  color: #767676;
+  cursor: pointer;
+  border-bottom: 5px solid transparent;
 }
-.profileAvatarLink {
-	backface-visibility: hidden;
-	position: relative;
-	display: inline-block;
-	overflow: hidden;
-	background-color: #bbb;
-	border-radius: 50%;
-	border: 2px solid #fff;
+
+.tabItem:hover {
+  text-decoration: none;
+  color: #484848;
 }
-.textRight {
-	text-align: right;
+
+.active .tabItem {
+  color: #484848;
+  border-color: #aaa;
+  text-decoration: none;
 }
-.textLeft {
-	text-align: left;
+
+.noMargin {
+  margin: 0;
 }
-.pullRight {
-	float: right;
+
+.lineGraph {
+  margin-top: 100px;
+  padding-bottom: 50px;
+  position: relative;
 }
-.pullLeft {
-	float: left;
+
+.graphContainer {
+  margin-left: 0;
+  margin-right: 0;
 }
-.cancelBg {
-	width: 100%;
-	height: 140px;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
+
+.timeLine {
+  text-align: center;
+  height: 24px;
 }
-.cancelLeftBg {
-	background: #fff;
-	border-radius: 4px;
-	padding: 1px 22px 5px;
-	box-shadow: 0 5px 15px 5px #eeebeb;
+
+.timeLinePoint {
+  position: absolute;
+  right: -30px;
+  top: 0;
 }
-.cancellation a {
-	font-size: 16px;
-	color: #767676;
-	line-height: 1.43;
-	font-weight: normal;
-	text-decoration: none;
+
+.refund {
+  background-color: #3fb34f;
 }
-.greenColor {
-	font-weight: bold;
-	color: #007d73 !important;
+
+.semiRefund {
+  background-color: #ffb400;
 }
-@media screen and (max-width: 991px) {
-	.textHigh {
-		font-size: 14px;
-		color: #484848;
-		line-height: 1.43;
-	}
+
+.nonRefund {
+  background-color: var(--btn-primary-bg);
 }
-@media screen and (max-width: 640px) {
-	.pullLeft {
-		float: none;
-	}
-	.pullRight {
-		float: none;
-	}
-	.btnWidth {
-		width: 100%;
-		display: block;
-		text-align: center;
-		margin-bottom: 12px;
-	}
+
+.toolTop {
+  position: relative;
+  opacity: 1;
+  padding: 6px 10px;
+  left: -50%;
+  top: -60px;
+  background-color: #fff;
 }
-@media (max-width: 360px) {
-	.textHigh {
-		font-size: 12px;
-	}
+
+.toolMarker {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  left: -6px;
+  background: #fff;
+}
+
+.toolLable {
+  position: relative;
+  left: -50%;
+  top: 3px;
+  text-align: center;
+}
+
+.toolText {
+  margin-top: 30px;
+}
+
+.FlexibleTop {
+  margin: 102px 0 0;
+}
+
+.strictPadding {
+  padding-bottom: 25px;
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .panelHeader {
+    padding-bottom: 195px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hidesm {
+    display: none;
+  }
+
+  .panelHeader {
+    padding-bottom: 0;
+  }
+
+  .strictPadding {
+    padding-bottom: 0;
+  }
 }

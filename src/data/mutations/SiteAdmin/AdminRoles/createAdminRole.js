@@ -33,42 +33,42 @@ const createAdminRole = {
       if (id) {
         const isExistAdminRole = await AdminRoles.findOne({
           where: {
-                id,
-              },
+            id,
+          },
           raw: true,
         });
 
         if (isExistAdminRole) {
           const updateRole = await AdminRoles.update({
-                name,
-                description,
-              }, {
-                  where: {
-                    id,
-                  },
-                },
+            name,
+            description,
+          }, {
+            where: {
+              id,
+            },
+          },
                     );
 
           if (updateRole) {
-                if (privileges && privileges.length > 0) {
-                    privileges.map((item) => {
-                      privilegesData.push({
-                            roleId: id,
-                            previlegeId: item,
-                          });
-                    });
-                    await AdminPrivileges.destroy({ where: { roleId: id } });
-                    await AdminPrivileges.bulkCreate(privilegesData);
-                  }
+            if (privileges && privileges.length > 0) {
+              privileges.map((item) => {
+                privilegesData.push({
+                  roleId: id,
+                  previlegeId: item,
+                });
+              });
+              await AdminPrivileges.destroy({ where: { roleId: id } });
+              await AdminPrivileges.bulkCreate(privilegesData);
+            }
 
-                return await {
-                    status: 200,
-                  };
-              }
+            return await {
+              status: 200,
+            };
+          }
           return await {
-                status: 400,
-                errorMessage: 'Oops! something went wrong. Please try again.',
-              };
+            status: 400,
+            errorMessage: 'Oops! something went wrong. Please try again.',
+          };
         }
         return await {
           status: 404,
@@ -85,11 +85,11 @@ const createAdminRole = {
 
         if (privileges && privileges.length > 0) {
           privileges.map((item) => {
-                privilegesData.push({
-                        roleId: createdId,
-                        previlegeId: item,
-                      });
-              });
+            privilegesData.push({
+              roleId: createdId,
+              previlegeId: item,
+            });
+          });
           await AdminPrivileges.bulkCreate(privilegesData);
         }
 

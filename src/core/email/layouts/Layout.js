@@ -17,8 +17,8 @@ export default props => (
             <TBody>
               <TR>
                 <TD>
-                    {props.children}
-                  </TD>
+                  {props.children}
+                </TD>
               </TR>
             </TBody>
           </Table>

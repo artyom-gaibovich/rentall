@@ -81,9 +81,9 @@ export async function paypalTransaction(reservationId, hostId, amount, currency,
             } else {
               batchStatus = getResponse.batch_header.batch_status;
               if (getResponse && getResponse.batch_header && (batchStatus === 'PENDING' || batchStatus === 'SUCCESS')) {
-                  fees = getResponse.batch_header.fees && getResponse.batch_header.fees.value;
+                fees = getResponse.batch_header.fees && getResponse.batch_header.fees.value;
 
-                  await createTransactionHistory(
+                await createTransactionHistory(
                                         reservationId,
                                         hostEmail,
                                         payoutId,
@@ -93,7 +93,7 @@ export async function paypalTransaction(reservationId, hostId, amount, currency,
                                         hostId,
                                         1,
                                     );
-                }
+              }
               status = 200;
             }
           });

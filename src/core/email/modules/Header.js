@@ -29,7 +29,7 @@ const Header = (props) => {
                     style={{ color: props.color, fontFamily: 'Arial', fontSize: '28px', textAlign: 'center' }}
                   >
                     <EmptySpace height={20} />
-                    <Img src={`${url}/images/logo/${props.logo}`} width={150} alt={sitename} style={{backgroundColor:"rgba(19,70,64,.75)"}} />
+                    <Img src={`${url}/images/logo/${props.logo}`} width={150} alt={sitename} style={{ backgroundColor: 'rgba(19,70,64,.75)' }} />
                   </TD>
                 </TR>
               </TBody>

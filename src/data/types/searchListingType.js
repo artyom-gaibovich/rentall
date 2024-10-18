@@ -10,14 +10,14 @@ import {
 } from 'graphql';
 
 import ShowListingType from './ShowListingType';
-import Listing from "../models/Listing";
+import Listing from '../models/Listing';
 
 const searchListingType = new ObjectType({
   name: 'SearchListing',
   fields: {
     count: { type: StringType },
     results: {
-      /*resolve: async (root, { minLat, maxLat, minLng, maxLng }) => {
+      /* resolve: async (root, { minLat, maxLat, minLng, maxLng }) => {
         const listing = await Listing.findAll({
           where: {
             lat: { $between: [minLat, maxLat] },
@@ -26,14 +26,14 @@ const searchListingType = new ObjectType({
         });
         console.log(listing.length)
         return listing;
-      },*/
+      }, */
       type: new List(ShowListingType),
-      /*args : {
+      /* args : {
         minLat: { type: new GraphQLNonNull(FloatType) },
         maxLat: { type: new GraphQLNonNull(FloatType) },
         minLng: { type: new GraphQLNonNull(FloatType) },
         maxLng: { type: new GraphQLNonNull(FloatType) },
-      }*/ },
+    } */ },
     status: { type: StringType },
   },
 });

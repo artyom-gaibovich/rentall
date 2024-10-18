@@ -94,7 +94,12 @@ class ProfileVerifiedView extends React.Component {
             data.userVerifiedInfo.isPhoneVerified)
     );
 
-    let isEmail, isGoogle, isYandex, isVk, isDocument, isOdnoklassniki,
+    let isEmail,
+      isGoogle,
+      isYandex,
+      isVk,
+      isDocument,
+      isOdnoklassniki,
       isFacebook,
       isSMS;
 
@@ -116,7 +121,7 @@ class ProfileVerifiedView extends React.Component {
     if (isVerifiedInfo && data.userVerifiedInfo.isVkConnected == true) {
       isVk = 'Vk';
     }
-    
+
     if (isVerifiedInfo && data.userVerifiedInfo.isYandexConnected == true) {
       isYandex = 'Yandex';
     }
@@ -146,44 +151,44 @@ class ProfileVerifiedView extends React.Component {
     } else if (data.preferredLanguage == 'es') {
       language = 'Español';
     } else if (data.preferredLanguage == 'el') {
-        language = 'Eλληνικά';
-      } else if (data.preferredLanguage == 'fr') {
-          language = 'Français';
-        } else if (data.preferredLanguage == 'it') {
-          language = 'Italiano';
-        } else if (data.preferredLanguage == 'hu') {
-          language = 'Magyar';
-        } else if (data.preferredLanguage == 'nl') {
-          language = 'Nederlands';
-        } else if (data.preferredLanguage == 'no') {
-          language = 'Norsk';
-        } else if (data.preferredLanguage == 'pl') {
-          language = 'Polski';
-        } else if (data.preferredLanguage == 'pt') {
-          language = 'Português';
-        } else if (data.preferredLanguage == 'fi') {
-          language = 'Suomi';
-        } else if (data.preferredLanguage == 'sv') {
-          language = 'Svenska';
-        } else if (data.preferredLanguage == 'tr') {
-          language = 'Türkçe';
-        } else if (data.preferredLanguage == 'is') {
-          language = 'Íslenska';
-        } else if (data.preferredLanguage == 'cs') {
-          language = 'Čeština';
-        } else if (data.preferredLanguage == 'ru') {
-          language = 'Русский';
-        } else if (data.preferredLanguage == 'th') {
-          language = 'ภาษาไทย';
-        } else if (data.preferredLanguage == 'zh') {
-          language = '中文 (简体)';
-        } else if (data.preferredLanguage == 'zh-TW') {
-          language = '中文 (繁體)';
-        } else if (data.preferredLanguage == 'ja') {
-          language = '日本語';
-        } else {
-          language = '한국어';
-        }
+      language = 'Eλληνικά';
+    } else if (data.preferredLanguage == 'fr') {
+      language = 'Français';
+    } else if (data.preferredLanguage == 'it') {
+      language = 'Italiano';
+    } else if (data.preferredLanguage == 'hu') {
+      language = 'Magyar';
+    } else if (data.preferredLanguage == 'nl') {
+      language = 'Nederlands';
+    } else if (data.preferredLanguage == 'no') {
+      language = 'Norsk';
+    } else if (data.preferredLanguage == 'pl') {
+      language = 'Polski';
+    } else if (data.preferredLanguage == 'pt') {
+      language = 'Português';
+    } else if (data.preferredLanguage == 'fi') {
+      language = 'Suomi';
+    } else if (data.preferredLanguage == 'sv') {
+      language = 'Svenska';
+    } else if (data.preferredLanguage == 'tr') {
+      language = 'Türkçe';
+    } else if (data.preferredLanguage == 'is') {
+      language = 'Íslenska';
+    } else if (data.preferredLanguage == 'cs') {
+      language = 'Čeština';
+    } else if (data.preferredLanguage == 'ru') {
+      language = 'Русский';
+    } else if (data.preferredLanguage == 'th') {
+      language = 'ภาษาไทย';
+    } else if (data.preferredLanguage == 'zh') {
+      language = '中文 (简体)';
+    } else if (data.preferredLanguage == 'zh-TW') {
+      language = '中文 (繁體)';
+    } else if (data.preferredLanguage == 'ja') {
+      language = '日本語';
+    } else {
+      language = '한국어';
+    }
 
 
     return (

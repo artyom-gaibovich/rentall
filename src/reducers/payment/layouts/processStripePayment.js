@@ -31,14 +31,14 @@ export async function processStripePayment(type, cardDetails, reservationDetails
   } else if (type === 'account') {
     URL = '/stripe-create-account';
   } else if (type === 'source') {
-      URL = '/stripe-create-source';
-    } else if (type === 'confirmReservation') {
-      URL = '/stripe-reservation-confirm';
-      variables = {
-        confirmPaymentIntentId,
-        reservationDetails,
-      };
-    }
+    URL = '/stripe-create-source';
+  } else if (type === 'confirmReservation') {
+    URL = '/stripe-reservation-confirm';
+    variables = {
+      confirmPaymentIntentId,
+      reservationDetails,
+    };
+  }
 
   const resp = await fetch(URL, {
     method: 'post',

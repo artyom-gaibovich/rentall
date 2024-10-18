@@ -5,11 +5,11 @@ export function format(time) {
 function run(fn, options) {
   const task = typeof fn.default === 'undefined' ? fn : fn.default;
   const start = new Date();
-  
+
   return task(options).then((resolution) => {
     const end = new Date();
     const time = end.getTime() - start.getTime();
-    
+
     return resolution;
   });
 }

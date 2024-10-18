@@ -18,7 +18,7 @@ export function openBookingModal() {
 
 export function closeBookingModal() {
   return async (dispatch) => {
-    console.log('end open modal 1')
+    console.log('end open modal 1');
     dispatch({
       type: CLOSE_BOOKING_MODAL,
       payload: {

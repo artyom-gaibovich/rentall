@@ -153,12 +153,12 @@ app.use(expressJwt({
 }));
 app.use((err, req, res, next) => {
   if (err) {
-    console.log('ERRRRRRRRRRRRRRRRRRRRRR', err)
+    console.log('ERRRRRRRRRRRRRRRRRRRRRR', err);
   }
   if (err.name === 'UnauthorizedError') {
-    console.log('UnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedError', err, req)
+    console.log('UnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedErrorUnauthorizedError', err, req);
     res.clearCookie('id_token');
-    res.status(401).redirect('/'); 
+    res.status(401).redirect('/');
   }
 });
 app.use(passport.initialize());
@@ -447,11 +447,10 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
 // -----------------------------------------------------------------------------
 /* eslint-disable no-console */
 models.sync({ alter: true }).catch(err => console.error(err.stack)).then(() => {
- const server = app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`The server is running at http://localhost:${port}/`);
   });
   server.keepAliveTimeout = (60 * 1000) + 1000;
-  
 });
 /* eslint-enable no-console */
 console.log('Server');

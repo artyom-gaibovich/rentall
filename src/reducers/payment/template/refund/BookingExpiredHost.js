@@ -48,7 +48,7 @@ class BookingExpiredHost extends Component {
                   <div>
 										С уважением, <br />
 										Команда {sitename}
-								</div>
+                  </div>
                 </TD>
               </TR>
             </TBody>

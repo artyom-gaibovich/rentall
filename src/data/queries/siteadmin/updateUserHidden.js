@@ -26,39 +26,39 @@ const updateUserHidden = {
     firstName,
     lastName,
     userId,
-    email
+    email,
   },
   ) {
     // if (request.user && request.user.admin == true) {
-      let isUserUpdated = false;
+    let isUserUpdated = false;
 
       // Get All User Profile Data
       // console.log('updating', phoneNumber, email, userId)
-      if (email) {
-        const updateEmail = User.update(
-          {
-            email,
+    if (email) {
+      const updateEmail = User.update(
+        {
+          email,
+        },
+        {
+          where: {
+            id: userId,
           },
-          {
-            where: {
-              id: userId,
-            },
-          },
+        },
         );
-      }
-      if (firstName && lastName) {
-        const updateData = await UserProfile.update(
-          {
-            phoneNumber,
-            email,
-            firstName,
-            lastName
+    }
+    if (firstName && lastName) {
+      const updateData = await UserProfile.update(
+        {
+          phoneNumber,
+          email,
+          firstName,
+          lastName,
+        },
+        {
+          where: {
+            profileId,
           },
-          {
-            where: {
-              profileId,
-            },
-          },
+        },
         )
           .then((instance) => {
             // Check if any rows are affected
@@ -66,20 +66,19 @@ const updateUserHidden = {
               isUserUpdated = true;
             }
           });
+    }
 
-      }
-      
-      if (phoneNumber) {
-        const updateData = await UserProfile.update(
-          {
-            phoneNumber,
-            email
+    if (phoneNumber) {
+      const updateData = await UserProfile.update(
+        {
+          phoneNumber,
+          email,
+        },
+        {
+          where: {
+            profileId,
           },
-          {
-            where: {
-              profileId,
-            },
-          },
+        },
         )
           .then((instance) => {
             // Check if any rows are affected
@@ -87,14 +86,13 @@ const updateUserHidden = {
               isUserUpdated = true;
             }
           });
+    }
 
-      }
-      
 
       // if (isUserUpdated) {
-        return {
-          status: 'success',
-        };
+    return {
+      status: 'success',
+    };
       // }
       // return {
       //   status: 'failed',

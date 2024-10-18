@@ -2,14 +2,14 @@ import React from 'react';
 import UserLayout from '../../components/Layout/UserLayout';
 import PayoutContainer from './PayoutContainer';
 import { getPayouts } from '../../actions/Payout/getPayouts';
-import { graphql, gql, compose,useQuery } from 'react-apollo';
+import { graphql, gql, compose, useQuery } from 'react-apollo';
 import fetch from '../../core/fetch';
 
 // import { useQuery, gql } from '@apollo/client';
 const title = 'Payout Preferences';
 
 const getUserData = async () => {
-   const query = `query userAccount{
+  const query = `query userAccount{
      userAccount {
        userId,
        profileId,
@@ -33,9 +33,9 @@ const getUserData = async () => {
   });
   const { data } = await resp.json();
   // console.log(data)
-  return data
+  return data;
   // let response = graphql
-}
+};
 
 export default {
 
@@ -53,15 +53,15 @@ export default {
     //   }});
 
     // const userData = store.getState().account.data;
-    let userData = {}
-    userData = await getUserData()
+    let userData = {};
+    userData = await getUserData();
     if (userData.userAccount) {
       if (userData.userAccount.expiresYookassaToken != '0' && userData.userAccount.expiresYookassaToken != 'NULL') {
-        yookassaConnect = userData.userAccount.expiresYookassaToken
+        yookassaConnect = userData.userAccount.expiresYookassaToken;
       }
     }
     // console.log('PAY USERRRRRRR', store.getState(), useQuery, userData)
-    
+
     if (!isAuthenticated) {
       return { redirect: '/login' };
     }

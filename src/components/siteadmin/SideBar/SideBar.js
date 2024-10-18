@@ -130,8 +130,8 @@ class SideBar extends Component {
               <li className={cx({ [s.active]: location == '/siteadmin' })}>
                 <Link to={'/siteadmin'} className={cx(s.sideNavitem, s.disPlayTable)} onClick={() => this.openClose()}>
                   <span className={s.disPlayTabelCell}>
-                      <FontAwesome.FaBarChart className={s.navigationIcon} />
-                    </span>
+                    <FontAwesome.FaBarChart className={s.navigationIcon} />
+                  </span>
                   <span className={s.disPlayTabelCell}><FormattedMessage {...messages.dashboard} /></span>
                 </Link>
               </li>
@@ -370,8 +370,8 @@ class SideBar extends Component {
               <li className={cx({ [s.active]: location === '/siteadmin/change/admin' })}>
                 <Link to={'/siteadmin/change/admin'} className={cx(s.sideNavitem, s.disPlayTable)} onClick={() => this.openClose()}>
                   <span className={s.disPlayTabelCell}>
-                      <FontAwesome.FaCogs className={s.navigationIcon} />
-                    </span>
+                    <FontAwesome.FaCogs className={s.navigationIcon} />
+                  </span>
                   <span className={s.disPlayTabelCell}><FormattedMessage {...messages.changePasswordLabel} /></span>
                 </Link>
               </li>

@@ -292,7 +292,7 @@ export function makePayment(
             }),
             credentials: 'include',
           });
-          const {status, confirmation} = await resp.json()
+          const { status, confirmation } = await resp.json();
 
           if (status === 'pending' && confirmation && confirmation.type === 'redirect' && confirmation.confirmation_url) {
             await dispatch({

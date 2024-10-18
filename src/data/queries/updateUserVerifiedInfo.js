@@ -75,16 +75,16 @@ const updateUserVerifiedInfo = {
           status: 'success',
         };
       }
-      
+
       if (item === 'yandex') {
         await UserVerifiedInfo.update({
           isYandexConnected: false,
         },
-        {
+          {
             where: {
               userId: request.user.id,
-            }
-        });
+            },
+          });
       }
 
       if (item === 'google') {

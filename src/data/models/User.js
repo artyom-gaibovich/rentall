@@ -1,10 +1,10 @@
-import DataType from "sequelize";
-import Model from "../sequelize";
-import bcrypt from "bcrypt";
-import { NULL } from "graphql/language/kinds";
+import DataType from 'sequelize';
+import Model from '../sequelize';
+import bcrypt from 'bcrypt';
+import { NULL } from 'graphql/language/kinds';
 
 const User = Model.define(
-  "User",
+  'User',
   {
     id: {
       type: DataType.UUID,
@@ -46,12 +46,12 @@ const User = Model.define(
   },
   {
     classMethods: {
-      generateHash: function(password) {
+      generateHash(password) {
         // eslint-disable-line
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
       },
     },
-    indexes: [{ fields: ["email"] }],
-  }
+    indexes: [{ fields: ['email'] }],
+  },
 );
 export default User;

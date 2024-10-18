@@ -53,17 +53,17 @@ class BookingConfirmationGuest extends Component {
                   <EmptySpace height={20} />
                   <div>
 										Пакуйте чемоданы - вы собираетесь {listCity}
-                </div>
+                  </div>
                   <EmptySpace height={20} />
                   <div>
-                  {hostName} подтвердил ваш запрос на {listTitle}. Пожалуйста, ознакомьтесь с подробностями вашей поездки и
+                    {hostName} подтвердил ваш запрос на {listTitle}. Пожалуйста, ознакомьтесь с подробностями вашей поездки и
 					          {' '}<a style={linkText} href={contactURL}>связаться с хостом</a>{' '} для согласования времени регистрации заезда и обмена ключами.
 					        </div>
                   <EmptySpace height={20} />
                   <div>
 										С уважением, <br />
 										Команда {sitename}
-					        </div>
+                  </div>
                 </TD>
               </TR>
             </TBody>

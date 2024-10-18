@@ -49,11 +49,11 @@ export async function sendServerEmail(to, type, content) {
 
         // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport(smtpTransport({
-      host: "goodtrip.ru",
+      host: 'goodtrip.ru',
       port: 587,
       auth: {
-        user: "support@goodtrip.ru",
-        pass: "qDrYhTX9VVDFLRB0",
+        user: 'support@goodtrip.ru',
+        pass: 'qDrYhTX9VVDFLRB0',
       },
       tls: {
         rejectUnauthorized: false,

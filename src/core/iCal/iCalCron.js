@@ -30,13 +30,13 @@ const iCalCron = (app) => {
                 const ev = data[k];
                 if (ev.start && ev.end) {
                   if (ev.start.getDate() === ev.end.getDate() && ev.start.getFullYear() === ev.end.getFullYear() && ev.start.getMonth() === ev.end.getMonth()) {
-                      await blockDates(item.listId, item.id, ev.start);
-                    } else {
-                      const range = getDates(ev.start, ev.end);
-                      range.map(async (day) => {
-                        await blockDates(item.listId, item.id, day);
-                      });
-                    }
+                    await blockDates(item.listId, item.id, ev.start);
+                  } else {
+                    const range = getDates(ev.start, ev.end);
+                    range.map(async (day) => {
+                      await blockDates(item.listId, item.id, day);
+                    });
+                  }
                 }
               }
             }

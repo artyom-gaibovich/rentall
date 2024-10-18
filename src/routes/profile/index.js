@@ -14,7 +14,7 @@ export default {
     const profileId = params.profileId;
     let profile = 0;
     let isUser = false;
-    
+
     if (profileId) {
       profile = Number(profileId);
       if (isAuthenticated && data && Number(data.profileId) == Number(profileId)) {

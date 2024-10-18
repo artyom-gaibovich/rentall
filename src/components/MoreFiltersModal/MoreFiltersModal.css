@@ -1,38 +1,136 @@
 @import '../../components/variables.css';
 
+.root {
+  padding: 20px 32px 32px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0;
+}
 /** RentAll - Begin **/
-
-.logInModalContainer {
-  max-width: 780px;
-  width:100%;
+.signupModalContainer {
+  max-width: 568px;
+  width: 100%;
+  padding: 10px;
 }
 
-.logInModalBody {
-  padding: 0px;
+.signupModalBody {
+  padding: 0;
 }
 
-.panelHeader{
+.formGroup {
+  margin-bottom: 6px;
+}
+
+.formSection {
+  overflow: hidden;
+}
+
+.modalCaptionLink {
+  color: var(--btn-secondary-bg);
+}
+
+.modalCaptionLinkLarge {
+  font-size: 16px;
+  line-height: 32px;
+}
+
+.modalCaptionLink:hover,
+.modalCaptionLink:focus {
+  color: var(--btn-secondary-bg);
+  text-decoration: underline;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  color: var(--btn-secondary-bg);
+}
+
+.lineThrough {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 12px 0px;
+  width: 100%;
+  color: #767676;
+  text-align: center;
+  font-size: 14px;
+}
+
+.lineThrough::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  margin-top: -5px;
+  margin-left: -20px;
+  width: 40px;
+  height: 10px;
+  background-color: #fff;
+  content: '';
+}
+
+.lineThrough::after {
+  position: absolute;
+  top: 49%;
+  z-index: -2;
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  content: '';
+}
+
+.horizontalLineThrough {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 15px 0px;
+  width: 100%;
+  color: #767676;
+  text-align: center;
+  font-size: 14px;
+}
+
+.captionText {
+  font-size: 16px;
   color: #484848;
-    font-size: 16px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #dce0e0;
-    background: transparent;
-    text-align: center;
+  margin: 15px 0px;
 }
 
-@media (max-width:991px) and (min-width:768px) {
-  .logInModalContainer {
-    width: auto;
-    display: block;
-    margin: 30px 15px;
-    max-width: 100%;
-  }
+.noPadding {
+  padding: 0;
 }
-@media screen and (max-width: 767px){
-  .logInModalContainer{
-    display: block;
-    width:auto;
-    max-width: 100%;
+
+.noMargin {
+  margin: 0;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.textAlignCenter {
+  text-align: center;
+}
+
+.iconPosition {
+  display: inline-block;
+  margin: -2px 8px 0 0;
+}
+
+@media screen and (max-width: 640px) {
+  .signupModalContainer {
+    margin: 0 auto;
+  }
+
+  .smSpace {
+    margin-bottom: 12px;
   }
 }

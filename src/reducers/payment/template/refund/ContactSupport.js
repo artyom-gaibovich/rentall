@@ -42,7 +42,7 @@ class ContactSupport extends React.Component {
                     </div>
           <EmptySpace height={20} />
           <div>
-                        {userType} хотел связаться с вами для поддержки, относительно бронирования #{confirmationCode} по идентификатору номера {listId}.
+            {userType} хотел связаться с вами для поддержки, относительно бронирования #{confirmationCode} по идентификатору номера {listId}.
                     </div>
           <EmptySpace height={20} />
           <div>
@@ -60,7 +60,7 @@ class ContactSupport extends React.Component {
           <div>
                         С уважением, <br />
                         Команда {sitename}
-                    </div>
+          </div>
         </Body>
         <Footer />
         <EmptySpace height={20} />

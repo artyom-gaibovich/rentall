@@ -59,7 +59,7 @@ export function loadAccount(loginScreen, refer) {
       if (data && data.userAccount) {
         const dateOfBirth = data.userAccount.dateOfBirth;
         let updatedProfileData;
-        // console.log('USERDATA LOADING', data) 
+        // console.log('USERDATA LOADING', data)
         if (dateOfBirth != null) {
           const dateOfBirthArray = dateOfBirth.split('-');
           const dateOfBirthObj = {
@@ -79,7 +79,7 @@ export function loadAccount(loginScreen, refer) {
           };
           updatedProfileData = { ...data.userAccount, ...decodedObj };
         }
-        // console.log('USERDATA UPDATED', updatedProfileData) 
+        // console.log('USERDATA UPDATED', updatedProfileData)
 
         dispatch({
           type: SET_USER_DATA_SUCCESS,

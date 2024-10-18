@@ -8,7 +8,8 @@ import { setPersonalizedValues } from '../../../../actions/personalized';
 
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from '!isomorphic-style-loader/!css-loader!react-geosuggest/module/geosuggest.css';
-
+import cx from 'classnames';
+ // Импортируем classnames как cx
 class PlaceGeoSuggest extends Component {
   static propTypes = {
     label: PropTypes.string,
@@ -27,10 +28,12 @@ class PlaceGeoSuggest extends Component {
     },
   };
 
+
   constructor(props) {
     super(props);
     this.state = {
       suggestItems: [],
+      inputValue: '', // State for input value
     };
     this.onTextChange = this.onTextChange.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
@@ -38,6 +41,8 @@ class PlaceGeoSuggest extends Component {
 
   async onTextChange(event) {
     const text = event.target.value;
+
+    this.setState({ inputValue: text }); // Update input value as user types
 
     if (text.length === 0) {
       this.setState({ suggestItems: [] });
@@ -51,9 +56,11 @@ class PlaceGeoSuggest extends Component {
 
   async getSuggest(text) {
     const locations = await PlaceGeoSuggest.getUniqueAddresses(text);
-    const suggestItems = locations.filter(location =>
-      location.value.toLowerCase().includes(text.toLowerCase()),
-    ).slice(0, 10);
+    console.log(locations);
+    const suggestItems = locations
+      .filter(location => location && location.value && location.value.toLowerCase()
+        .includes(text.toLowerCase()))
+      .slice(0, 10);
 
     return suggestItems;
   }
@@ -84,29 +91,48 @@ class PlaceGeoSuggest extends Component {
     return response.data.SearchGeo.results;
   }
 
+
   onSuggestSelect(suggestion) {
     if (suggestion) {
+      this.setState({
+        inputValue: suggestion.value, // Update the input value with the selected suggestion
+        suggestItems: [], // Clear suggestions after selection
+      });
+
       const { onChange } = this.props;
-      onChange(suggestion.value);
+      onChange(suggestion.value); // Notify parent component
+    }
+  }
+
+  componentDidMount() {
+    const { initialValues } = this.props;
+    if (initialValues && initialValues.locationAddress) {
+      this.setState({
+        inputValue: initialValues.locationAddress,
+      });
     }
   }
 
   render() {
     const { label, className, containerClassName } = this.props;
-    const { suggestItems } = this.state;
-
+    const { suggestItems, inputValue } = this.state;
     return (
       <div className={`popularLocationAutoComplete ${containerClassName}`}>
         <input
           type="text"
           placeholder={label}
-          className={className}
+          className={cx(className, 'form-control')}
+          value={inputValue} // Bind input value to state
           onChange={this.onTextChange}
         />
         {suggestItems.length > 0 && (
-          <ul className={s.suggestionsList}>
+          <ul className="suggestionsList">
             {suggestItems.map((item, index) => (
-              <li key={index} onClick={() => this.onSuggestSelect(item)}>
+              <li
+                key={index}
+                className={cx({ active: index === s.activeSuggestion })} // Добавляем класс active для подсветки
+                onClick={() => this.onSuggestSelect(item)}
+              >
                 {item.displayName}
               </li>
             ))}

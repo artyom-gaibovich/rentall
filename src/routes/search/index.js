@@ -154,9 +154,9 @@ export default {
       initialFilter.amenities = amenitiesArray;
       amenities = amenitiesArray;
     }
-    let safetyAmenities = []
+    let safetyAmenities = [];
     if ('safetyAmenities' in query && query.safetyAmenities) {
-       console.log('QUERY!df', query)
+      console.log('QUERY!df', query);
       const amenitiesArray = query.safetyAmenities.split(',').map(Number);
       initialFilter.safetyAmenities = amenitiesArray;
       safetyAmenities = amenitiesArray;

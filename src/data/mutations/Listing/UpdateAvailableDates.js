@@ -64,9 +64,9 @@ const UpdateAvailableDates = {
                 },
                   {
                     where: {
-                          listId,
-                          blockedDates: availableDatesData[blockedItem].blockedDates,
-                        },
+                      listId,
+                      blockedDates: availableDatesData[blockedItem].blockedDates,
+                    },
                   });
               }
             } else {

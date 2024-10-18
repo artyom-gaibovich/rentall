@@ -14,19 +14,18 @@ const YookassaRemoveConnection = {
     // console.log(request);
     if (request.user && request.user.admin != true) {
         // console.log('start user update')
-        const data = await User.update(
-            {
-                yookassaToken: null,
-                expiresYookassaToken: null,
-            },
-            {
-                where: {
-                id: request.user.id,
-                },
-            },
-        )
+      const data = await User.update(
+        {
+          yookassaToken: null,
+          expiresYookassaToken: null,
+        },
+        {
+          where: {
+            id: request.user.id,
+          },
+        },
+        );
         // console.log({removeYookassa: data})
-      
     } else {
       return {
         status: 'notLoggedIn',

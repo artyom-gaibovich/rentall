@@ -66,7 +66,7 @@ class ReportUserMail extends React.Component {
           <div>
                         С уважением, <br />
                         Команда {sitename}
-                    </div>
+          </div>
         </Body>
         <Footer />
         <EmptySpace height={20} />

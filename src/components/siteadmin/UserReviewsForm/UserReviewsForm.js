@@ -158,12 +158,12 @@ class UserReviewsForm extends Component {
                 />
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
-                          <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting} >
-                              <FormattedMessage {...messages.submit} />
-                            </Button>
-                        </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
+                      <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting} >
+                        <FormattedMessage {...messages.submit} />
+                      </Button>
+                    </Col>
+                  </Row>
                 </FormGroup>
               </form>
             </Panel>

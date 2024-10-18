@@ -158,8 +158,8 @@ const uploadListPhotoMobile = (app) => {
                   name: item.filename,
                   type: item.mimetype,
                 }).then((getPhoto) => {
-                    item.id = getPhoto.dataValues.id;
-                  });
+                  item.id = getPhoto.dataValues.id;
+                });
               }));
 
 
@@ -170,8 +170,8 @@ const uploadListPhotoMobile = (app) => {
                 const updateListingStatus = await Listing.update({
                   isReady: true,
                 }, {
-                    where: { id: listId },
-                  });
+                  where: { id: listId },
+                });
               }
 
               res.send({ status, files });

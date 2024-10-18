@@ -138,3 +138,39 @@
 .textGray {
 	color: rgb(77, 65, 51) !important;
 }
+
+
+.popularLocationAutoComplete {
+	position: relative;
+}
+
+.suggestionsList {
+	position: absolute;
+	z-index: 10;
+	background-color: #fff;
+	width: 100%;
+	max-height: 200px; /* Ограничиваем высоту, чтобы сделать список прокручиваемым */
+	overflow-y: auto; /* Скролл, если элементов много */
+	border: 1px solid #ccc; /* Добавляем границу */
+	border-radius: 4px; /* Округляем углы */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для красоты */
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.suggestionsList li {
+	padding: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease; /* Плавная смена фона */
+}
+
+.suggestionsList li:hover,
+.suggestionsList li.active { /* Подсветка активного элемента */
+	background-color: #f0f0f0;
+}
+
+.suggestionsList li:focus {
+	outline: none; /* Убираем стандартную обводку при фокусе */
+	background-color: #e0e0e0;
+}

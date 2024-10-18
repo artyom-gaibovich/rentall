@@ -71,9 +71,11 @@ class EditPopularLocationManagement extends React.Component {
           </Col>
           <Col xs={12} sm={12} md={12} lg={9}>
             <PlaceGeoSuggest
+              initialValues={this.props.initialValues}
               {...input}
               label={''}
               className={bt.commonControlInput}
+
               formName={'EditPopularLocation'}
             />
             {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
@@ -85,6 +87,7 @@ class EditPopularLocationManagement extends React.Component {
 
   render() {
     const { error, handleSubmit, submitting, dispatch, initialValues } = this.props;
+    console.log(initialValues, 'init')
     const { data } = this.props;
     const { formatMessage } = this.props.intl;
 

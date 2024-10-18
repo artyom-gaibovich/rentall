@@ -18,24 +18,23 @@ const GetAddressComponents = {
   },
 
   async resolve({ request }, { address }) {
-
     // Yandex API
 
-    const URL = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${yandexMapServerAPI}&geocode=${encodeURI(address)}`
+    const URL = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${yandexMapServerAPI}&geocode=${encodeURI(address)}`;
     const resp = await fetch(URL);
     const data = await resp.json();
     if (data) {
       const locationData = {};
       let addressComponents;
-      
-      const geoObject = data.response.GeoObjectCollection.featureMember[0].GeoObject;      
+
+      const geoObject = data.response.GeoObjectCollection.featureMember[0].GeoObject;
       const envelope = geoObject.boundedBy.Envelope;
       const [sw_lng, sw_lat] = envelope.lowerCorner.split(' ');
       const [ne_lng, ne_lat] = envelope.upperCorner.split(' ');
-      const [lng, lat] =  geoObject.Point.pos.split(' ');
+      const [lng, lat] = geoObject.Point.pos.split(' ');
       const geoType = geoObject.metaDataProperty.GeocoderMetaData.kind;
-      
-      geoObject.metaDataProperty.GeocoderMetaData.Address.Components.map((item, key) => {  
+
+      geoObject.metaDataProperty.GeocoderMetaData.Address.Components.map((item, key) => {
         locationData[item.kind] = item.name;
       });
 
@@ -52,9 +51,9 @@ const GetAddressComponents = {
         ne_lng,
       };
     }
-    
+
     // Google API
-    
+
     // const URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${googleMapServerAPI}`;
     // const resp = await fetch(URL);
     // const data = await resp.json();
@@ -68,7 +67,7 @@ const GetAddressComponents = {
     //   sw_lng,
     //   ne_lat,
     //   ne_lng;
-    
+
     // if (data) {
     //   data.results.map((value, key) => {
     //     viewport = value.geometry.viewport;

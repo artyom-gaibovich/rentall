@@ -62,107 +62,107 @@ class WhyHostFormBlock3 extends Component {
                 {error && <strong>{formatMessage(error)}</strong>}
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleHeading} /></label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockTitleHeading"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleHeading} /></label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockTitleHeading"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 1</label>
-                      </Col>
-                      <Col c xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockTitle1"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 1</label>
+                    </Col>
+                    <Col c xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockTitle1"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 1</label>
-                      </Col>
-                      <Col c xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockContent1"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 1</label>
+                    </Col>
+                    <Col c xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockContent1"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 2</label>
-                      </Col>
-                      <Col c xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockTitle2"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 2</label>
+                    </Col>
+                    <Col c xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockTitle2"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockContent2"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockContent2"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 3</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockTitle3"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockTitleLabel} /> 3</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockTitle3"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 3</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="hostingBlockContent3"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.hostingBlockContentLabel} /> 3</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="hostingBlockContent3"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space1}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
-                        <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
-                              <FormattedMessage {...messages.save} />
-                            </Button>
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
+                      <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
+                        <FormattedMessage {...messages.save} />
+                      </Button>
+                    </Col>
+                  </Row>
                 </FormGroup>
               </form>
             </Panel>

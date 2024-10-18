@@ -12,7 +12,7 @@ import copy from './copy';
 
 const isDebug = !process.argv.includes('--release');
 process.argv.push('--watch');
-console.log('isDebug', isDebug)
+console.log('isDebug', isDebug);
 const [clientConfig, serverConfig] = webpackConfig;
 
 /**

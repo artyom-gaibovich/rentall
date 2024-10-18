@@ -77,9 +77,9 @@ const ListingDataUpdate = {
           if (houseRules.length > 0) {
             houseRules.map(async (item, key) => {
               const updateHouseRules = await UserHouseRules.create({
-                    listId: id,
-                    houseRulesId: item,
-                  });
+                listId: id,
+                houseRulesId: item,
+              });
             });
           }
         }
@@ -93,9 +93,9 @@ const ListingDataUpdate = {
           if (fish.length > 0) {
             fish.map(async (item, key) => {
               const updateFish = await UserFish.create({
-                    listId: id,
-                    fishId: item,
-                  });
+                listId: id,
+                fishId: item,
+              });
             });
           }
         }

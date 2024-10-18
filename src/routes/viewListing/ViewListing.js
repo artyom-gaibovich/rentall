@@ -66,9 +66,9 @@ class ViewListing extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openModal: false
-    }
-    console.log('detail props', this.props.dispatch, props.dispatch, props)
+      openModal: false,
+    };
+    console.log('detail props', this.props.dispatch, props.dispatch, props);
     // props.onHiddenRegister([1,2,3])
 
     if (!props.account.userId) {
@@ -124,7 +124,6 @@ class ViewListing extends React.Component {
     isAdmin: false,
   }
   async hiddenRegister() {
-
     const query = `query (
       $firstName:String,
       $lastName:String,
@@ -144,7 +143,7 @@ class ViewListing extends React.Component {
         }
       }`;
 
-    const dateOfBirth = `05-1990-$23`;
+    const dateOfBirth = '05-1990-$23';
 
     const params = {
       firstName: `anonymousFirstName_${Date.now()}`,
@@ -173,13 +172,11 @@ class ViewListing extends React.Component {
       name: 'isAuthenticated',
       value: true,
     }));
-
-
   }
   static onHiddenRegister(values, dispatch) {
-    console.log('onHidden', values, dispatch)
+    console.log('onHidden', values, dispatch);
   }
-  componentDidMount () {
+  componentDidMount() {
 
   }
   render() {
@@ -453,7 +450,7 @@ class ViewListing extends React.Component {
                         personCapacity={UserListing.personCapacity}
                         listingData={UserListing.listingData || undefined}
                         isHost={isHost}
-                        onClose={() => this.setState({...this.state, openModal: false})}
+                        onClose={() => this.setState({ ...this.state, openModal: false })}
                         openModal={this.state.openModal}
                         bookingType={UserListing.bookingType}
                         reviewsCount={UserListing.reviewsCount}
@@ -465,9 +462,8 @@ class ViewListing extends React.Component {
                         className={cx(s.btn, bt.btnPrimary, s.fullWidth)}
                         onClick={() => {
                           console.log('start click');
-                          this.setState({...this.state, openModal: true})
+                          this.setState({ ...this.state, openModal: true });
                           console.log('end click');
-
                         }}
                       >
                         <FormattedMessage {...messages.bookNow} />
@@ -487,12 +483,10 @@ const mapState = state => ({
   account: state.account.data,
   isAdmin: state.runtime.isAdminAuthenticated,
 });
-const mapDispatch = (dispatch) => {
-  return {
-    openBookingModal,
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  openBookingModal,
+  dispatch,
+});
 export default compose(
   withStyles(s, bt),
   connect(mapState, mapDispatch),

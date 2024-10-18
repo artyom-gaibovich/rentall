@@ -58,10 +58,10 @@ class Login extends React.Component {
             </div>
           }
           <h1>{this.props.title}</h1>
-          
+
           <SocialLogin refer={socialLoginRefer} />
           <strong className={s.lineThrough}><FormattedMessage {...messages.or} /></strong>
-          
+
           <LoginForm initialValues={initialValues} />
           <hr className={s.horizontalLineThrough} />
           <div className={cx(s.formGroup, s.formSection)}>

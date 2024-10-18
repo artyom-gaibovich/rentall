@@ -5,7 +5,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
 import cx from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import HorizontalScrollingBar from "./HorizontalScrollingBar"
+import HorizontalScrollingBar from './HorizontalScrollingBar';
 // Components
 import BannerCaption from '../../components/Home/BannerCaption';
 import HomeSlider from '../../components/Home/HomeSlider';
@@ -29,6 +29,7 @@ import getHomeBanner from './getHomeBanner.graphql';
 
 // Locale
 import messages from '../../locale/messages';
+
 class Homepage extends React.Component {
   static propTypes = {
     getRecommendData: PropTypes.shape({
@@ -88,7 +89,6 @@ class Homepage extends React.Component {
         // document.getElementsByTagName('head')[0].appendChild(metrikaNoscript);
         Homepage.metrikaAdded = true;
         // console.log('metrika added');
-
       } else {
         // console.log('metrika already added');
         return null;
@@ -103,7 +103,7 @@ class Homepage extends React.Component {
     const { getPopularLocationData, layoutType, getStaticBlockInfoData, homeBannerImages } = this.props;
     const { getHomeBannerData } = this.props;
     const getHomeBanner = getHomeBannerData && getHomeBannerData.getHomeBanner;
-   
+
     return (
       <div className={s.root}>
         {/* {this.addYandexMetrika()} */}
@@ -133,7 +133,7 @@ class Homepage extends React.Component {
 
 
         <div className={s.container}>
-          <img className={s.mainPageImg} src='../../../images/home/mainPageNew.webp' />
+          <img className={s.mainPageImg} src="../../../images/home/mainPageNew.webp" />
           <div className={s.mainText}>
             <h1>Рыбалка и отдых</h1>
             <h2>Прямая бронь и  все услуги для отличного улова</h2>
@@ -164,7 +164,7 @@ class Homepage extends React.Component {
                   />
                 </div>
               }
-              </div>
+          </div>
           <div className={s.whyBlockContainer}>
             {/* <img className={s.whyBlockContainerImg} src= "../../../images/home/whyBlock.jpeg"/> */}
           </div>
@@ -176,14 +176,14 @@ class Homepage extends React.Component {
           {
             !getRecommendData.loading && !getImageBannerData.loading && !getMostViewedListingData.loading && !getStaticBlockInfoData.loading && <div className={s.pageContainer}>
               {
-                getRecommendData && getRecommendData.getRecommend.length > 0 && <div  >
+                getRecommendData && getRecommendData.getRecommend.length > 0 && <div >
                   <h3 className={s.containerTitle}>
                   ЛУЧШИЕ МЕСТА ДЛЯ АКТИВНОГО ОТДЫХА
                   </h3>
                   <HomeSlider data={getRecommendData.getRecommend} />
                   <SeeAll />
                 </div>
-                
+
               }
 
               {/* {
@@ -196,9 +196,9 @@ class Homepage extends React.Component {
                 </div>
               } */}
               {
-              
+
               }
-            
+
 
               {/* {
                 getImageBannerData.getImageBanner != null && <div className={s.pageContainer}>

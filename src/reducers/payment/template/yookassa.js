@@ -9,65 +9,65 @@ import { payment as config } from '../../config';
 const axios = require('axios');
 
 const yookassaRoutes = (app) => {
-    app.post('/yookassa/reservation', async (req, res) => {
-        const reservationDetails = req.body.reservationDetails;
+  app.post('/yookassa/reservation', async (req, res) => {
+    const reservationDetails = req.body.reservationDetails;
 
-        try {
-            const { data } = await axios.post(
+    try {
+      const { data } = await axios.post(
                 'https://api.yookassa.ru/v3/payments',
                 JSON.stringify({
-                    amount: {
-                        value: reservationDetails.amount,
-                        currency: reservationDetails.currency,
-                    },
-                    confirmation: {
-                        type: 'redirect',
-                        return_url: 'https://goodtrip.ru/trips/current',
-                    },
-                    capture: true,
-                    metadata: {
-                        reservation_id: reservationDetails.reservationId,
-                    },
-                    description: 'Test',
+                  amount: {
+                    value: reservationDetails.amount,
+                    currency: reservationDetails.currency,
+                  },
+                  confirmation: {
+                    type: 'redirect',
+                    return_url: 'https://goodtrip.ru/trips/current',
+                  },
+                  capture: true,
+                  metadata: {
+                    reservation_id: reservationDetails.reservationId,
+                  },
+                  description: 'Test',
                 }),
-                {
-                    headers: {
-                        'Idempotence-Key': Date.now(),
-                        'Content-Type': 'application/json',
-                    },
-                    auth: {
-                        username: config.yookassa.shop_id,
-                        password: config.yookassa.secret_key
-                    }
-                }
+        {
+          headers: {
+            'Idempotence-Key': Date.now(),
+            'Content-Type': 'application/json',
+          },
+          auth: {
+            username: config.yookassa.shop_id,
+            password: config.yookassa.secret_key,
+          },
+        },
             );
 
-            const { status, confirmation } = data;
+      const { status, confirmation } = data;
 
             // console.log(data);
 
-            res.send({ status, confirmation });
-        } catch (e) {
+      res.send({ status, confirmation });
+    } catch (e) {
             // console.log(e);
-            res.status(500).send();
-        }
-    });
+      res.status(500).send();
+    }
+  });
 
-    app.post('/pay', async (req, res) => {
-        const { type, object } = req.body;
-        const { id, status, amount, metadata } = object;
+  app.post('/pay', async (req, res) => {
+    const { type, object } = req.body;
+    const { id, status, amount, metadata } = object;
 
         // console.log(object);
 
-        if (type === 'notification' && metadata.reservation_id && status === 'succeeded') {
-            const { reservation_id } = metadata;
+    if (type === 'notification' && metadata.reservation_id && status === 'succeeded') {
+      const { reservation_id } = metadata;
 
-            const reservation = await Reservation.findById(reservation_id);
-            const payer = await User.findById(reservation.guestId);
-            const receiver = await User.findById(reservation.hostId);
+      const reservation = await Reservation.findById(reservation_id);
+      const payer = await User.findById(reservation.guestId);
+      const receiver = await User.findById(reservation.hostId);
 
-            await updateReservation(reservation_id);
-            await createTransaction(
+      await updateReservation(reservation_id);
+      await createTransaction(
                 reservation_id,
                 payer.email,
                 payer.id,
@@ -77,14 +77,14 @@ const yookassaRoutes = (app) => {
                 amount.value,
                 0.00,
                 amount.currency,
-                ''
+                '',
             );
-            await createThread(reservation_id);
-            await blockDates(reservation_id);
-            await emailBroadcast(reservation_id);
-        }
-        res.send();
-    });
+      await createThread(reservation_id);
+      await blockDates(reservation_id);
+      await emailBroadcast(reservation_id);
+    }
+    res.send();
+  });
 };
 
 export default yookassaRoutes;

@@ -1,4 +1,4 @@
-import { gql } from "react-apollo";
+import { gql } from 'react-apollo';
 
 import {
   READ_MESSAGE_START,

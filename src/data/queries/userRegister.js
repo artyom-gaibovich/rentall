@@ -26,7 +26,7 @@ const userRegister = {
     email: { type: new NonNull(StringType) },
     phoneNumber: { type: new NonNull(StringType) },
     password: { type: new NonNull(StringType) },
-    
+
   },
 
   async resolve({ request, response }, {

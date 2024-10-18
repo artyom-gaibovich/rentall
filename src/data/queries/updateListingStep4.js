@@ -108,9 +108,9 @@ const updateListingStep4 = {
           if (houseRules.length > 0) {
             houseRules.map(async (item, key) => {
               const updateHouseRules = await UserHouseRules.create({
-                  listId: id,
-                  houseRulesId: item,
-                });
+                listId: id,
+                houseRulesId: item,
+              });
             });
           }
         }
@@ -125,9 +125,9 @@ const updateListingStep4 = {
           if (fish.length > 0) {
             fish.map(async (item, key) => {
               const updateFish = await UserFish.create({
-                  listId: id,
-                  fishId: item,
-                });
+                listId: id,
+                fishId: item,
+              });
             });
           }
         }
@@ -140,11 +140,11 @@ const updateListingStep4 = {
             where: {
               listId: id,
               reservationId: {
-                  $eq: null,
-                },
+                $eq: null,
+              },
               calendarId: {
-                  $ne: null,
-                },
+                $ne: null,
+              },
             },
           });
 
@@ -173,50 +173,50 @@ const updateListingStep4 = {
                     blockedDates: item,
                     calendarId: blockedDatesData[blockedItem].calendarId
                   }); */
-                  const createRecord = await ListBlockedDates.findOrCreate({
-                    where: {
-                      listId: id,
-                      blockedDates: item,
-                      calendarId: blockedDatesData[blockedItem].calendarId,
-                    },
-                    defaults: {
+                const createRecord = await ListBlockedDates.findOrCreate({
+                  where: {
+                    listId: id,
+                    blockedDates: item,
+                    calendarId: blockedDatesData[blockedItem].calendarId,
+                  },
+                  defaults: {
                       // properties you want on create
-                      listId: id,
-                      blockedDates: item,
-                      calendarId: blockedDatesData[blockedItem].calendarId,
-                    },
-                  });
-                } else {
+                    listId: id,
+                    blockedDates: item,
+                    calendarId: blockedDatesData[blockedItem].calendarId,
+                  },
+                });
+              } else {
                   /* let createRecord = await ListBlockedDates.create({
                     listId: id,
                     blockedDates: item,
                   }); */
-                  const createRecord = await ListBlockedDates.findOrCreate({
-                    where: {
-                      listId: id,
-                      blockedDates: item,
-                    },
-                    defaults: {
-                      // properties you want on create
-                      listId: id,
-                      blockedDates: item,
-                    },
-                  });
-                }
-            });
-          } else {
-            blockedDates.map(async (item, key) => {
-              const updateBlockedDates = await ListBlockedDates.findOrCreate({
+                const createRecord = await ListBlockedDates.findOrCreate({
                   where: {
                     listId: id,
                     blockedDates: item,
                   },
                   defaults: {
-                    // properties you want on create
+                      // properties you want on create
                     listId: id,
                     blockedDates: item,
                   },
                 });
+              }
+            });
+          } else {
+            blockedDates.map(async (item, key) => {
+              const updateBlockedDates = await ListBlockedDates.findOrCreate({
+                where: {
+                  listId: id,
+                  blockedDates: item,
+                },
+                defaults: {
+                    // properties you want on create
+                  listId: id,
+                  blockedDates: item,
+                },
+              });
             });
           }
             // }

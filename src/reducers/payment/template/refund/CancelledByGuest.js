@@ -65,19 +65,19 @@ class CancelledByGuest extends Component {
                         обновлена до <CurrencyView amount={payoutToHost} currency={currency} />.
 								        	</span>
 										}
-                  {
+                    {
 											payoutToHost === 0 && <span> В соответствии с политикой отмены вы не будете
                       получать какие-либо выплаты по этому бронированию.
 								        	</span>
 										}
-                  <EmptySpace height={10} />
-                  <p>Ваш календарь также был обновлен, чтобы показать, что ранее забронированные даты теперь доступны.</p>
-                </div>
+                    <EmptySpace height={10} />
+                    <p>Ваш календарь также был обновлен, чтобы показать, что ранее забронированные даты теперь доступны.</p>
+                  </div>
                   <EmptySpace height={20} />
                   <div>
 										С уважением, <br />
 										Команда {sitename}
-			        				</div>
+                  </div>
                 </TD>
               </TR>
             </TBody>

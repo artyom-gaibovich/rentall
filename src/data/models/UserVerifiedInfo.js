@@ -45,7 +45,7 @@ const UserVerifiedInfo = Model.define('UserVerifiedInfo', {
     type: DataType.BOOLEAN,
     defaultValue: false,
   },
-  
+
   isYandexConnected: {
     type: DataType.BOOLEAN,
     defaultValue: false,

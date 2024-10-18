@@ -32,66 +32,66 @@ const createAdminUser = {
         const isAlreadyExist = await AdminUser.findOne({
           attributes: ['id', 'email'],
           where: {
-                  email,
-                },
+            email,
+          },
           raw: true,
         });
 
         const isValidRoleId = await AdminRoles.findOne({
           attributes: ['id'],
           where: {
-                  id: roleId,
-                },
+            id: roleId,
+          },
         });
 
         if (!isValidRoleId) {
           return await {
-                  status: 400,
-                  errorMessage: 'Oops, it looks like the chosen role is not valid. Please try with different valid role.',
-                };
+            status: 400,
+            errorMessage: 'Oops, it looks like the chosen role is not valid. Please try with different valid role.',
+          };
         }
 
         if (id) { // Update
           if (isAlreadyExist && isAlreadyExist.id != id) {
-                  return await {
-                      status: 400,
-                      errorMessage: 'Oops! this email address is already exist.',
-                    };
-                }
+            return await {
+              status: 400,
+              errorMessage: 'Oops! this email address is already exist.',
+            };
+          }
           const updateUser = await AdminUser.update({
-                  email,
-                  roleId,
-                }, {
-                    where: {
-                            id,
-                          },
-                  });
+            email,
+            roleId,
+          }, {
+            where: {
+              id,
+            },
+          });
 
           if (password && password.toString().trim() != '') {
-                  const updatePassword = await AdminUser.update({
-                      password: AdminUser.generateHash(password),
-                    }, {
-                            where: {
-                                id,
-                              },
-                          });
-                }
+            const updatePassword = await AdminUser.update({
+              password: AdminUser.generateHash(password),
+            }, {
+              where: {
+                id,
+              },
+            });
+          }
 
           if (updateUser) {
-                  return await {
-                      status: 200,
-                    };
-                }
+            return await {
+              status: 200,
+            };
+          }
           return await {
-                  status: 400,
-                  errorMessage: 'Oops! something went wrong. Please try again.',
-                };
+            status: 400,
+            errorMessage: 'Oops! something went wrong. Please try again.',
+          };
         }  // Create
         if (isAlreadyExist) {
           return await {
-                  status: 400,
-                  errorMessage: 'Oops! this email address is already exist.',
-                };
+            status: 400,
+            errorMessage: 'Oops! this email address is already exist.',
+          };
         }
         const createUser = await AdminUser.create({
           email,
@@ -102,8 +102,8 @@ const createAdminUser = {
 
         if (createUser) {
           return await {
-                  status: 200,
-                };
+            status: 200,
+          };
         }
         return await {
           status: 400,

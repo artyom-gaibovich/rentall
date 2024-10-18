@@ -338,8 +338,8 @@ import checkListing from './queries/checkListing';
 import getAllAdminListSettings from './queries/siteadmin/getAllAdminListSettings';
 import getSideMenu from './queries/siteadmin/getSideMenu';
 import updateSideMenu from './mutations/SiteAdmin/updateSideMenu';
-import YookassaRemoveConnection from './queries/Yookassa/YookassaRemoveConnection'
-import SearchGeo from "./queries/searchGeo";
+import YookassaRemoveConnection from './queries/Yookassa/YookassaRemoveConnection';
+import SearchGeo from './queries/searchGeo';
 
 const schema = new Schema({
   query: new ObjectType({

@@ -63,140 +63,140 @@ class WhyHostFormBlock4 extends Component {
                 {error && <strong>{formatMessage(error)}</strong>}
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionBannerLabel} /></label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Image />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionBannerLabel} /></label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Image />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionTitleLabel} /> 1</label>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionTitleLabel} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionTitle1"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
+                </FormGroup>
+                <FormGroup className={s.space3}>
+                  <Row>
+                    <Col xs={12} sm={12} md={12} lg={6} className={s.noPadding}>
+                      <Col xs={12} sm={12} md={12} lg={12}>
+                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionContentLabel} /> 1</label>
                       </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
+                      <Col xs={12} sm={12} md={12} lg={12}>
                         <Field
-                              name="coverSectionTitle1"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
+                          name="coverSectionContent1"
+                          component={this.renderFormControlTextArea}
+                        />
                       </Col>
-                    </Row>
-                </FormGroup>
-                <FormGroup className={s.space3}>
-                  <Row>
-                      <Col xs={12} sm={12} md={12} lg={6} className={s.noPadding}>
-                        <Col xs={12} sm={12} md={12} lg={12}>
-                              <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionContentLabel} /> 1</label>
-                            </Col>
-                        <Col xs={12} sm={12} md={12} lg={12}>
-                              <Field
-                                  name="coverSectionContent1"
-                                  component={this.renderFormControlTextArea}
-                                />
-                            </Col>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={6} className={s.noPadding}>
+                      <Col xs={12} sm={12} md={12} lg={12}>
+                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionContentLabel} /> 2</label>
                       </Col>
-                      <Col xs={12} sm={12} md={12} lg={6} className={s.noPadding}>
-                        <Col xs={12} sm={12} md={12} lg={12}>
-                              <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionContentLabel} /> 2</label>
-                            </Col>
-                        <Col xs={12} sm={12} md={12} lg={12}>
-                              <Field
-                                  name="coverSectionContent2"
-                                  component={this.renderFormControlTextArea}
-                                />
-                            </Col>
-                      </Col>
-                    </Row>
-                </FormGroup>
-                <FormGroup className={s.space3}>
-                  <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
+                      <Col xs={12} sm={12} md={12} lg={12}>
                         <Field
-                              name="coverSectionFeature1"
-                              component={this.renderFormControlTextArea}
-                            />
+                          name="coverSectionContent2"
+                          component={this.renderFormControlTextArea}
+                        />
                       </Col>
-                    </Row>
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="coverSectionFeature2"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature1"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 3</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="coverSectionFeature3"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature2"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 4</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="coverSectionFeature4"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 3</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature3"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 5</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="coverSectionFeature5"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 4</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature4"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 6</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="coverSectionFeature6"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 5</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature5"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
+                </FormGroup>
+                <FormGroup className={s.space3}>
+                  <Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.coverSectionFeatureLabel} /> 6</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="coverSectionFeature6"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space1}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
-                        <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
-                              <FormattedMessage {...messages.save} />
-                            </Button>
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
+                      <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
+                        <FormattedMessage {...messages.save} />
+                      </Button>
+                    </Col>
+                  </Row>
                 </FormGroup>
               </form>
             </Panel>

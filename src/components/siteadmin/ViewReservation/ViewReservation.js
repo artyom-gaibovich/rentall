@@ -159,62 +159,62 @@ class ViewReservation extends React.Component {
           <div className={s.profileViewMain}>
             {
                             data && data.id && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.reservationId} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            {data.id}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.reservationId} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {data.id}                                </span>
                             </div>
                         }
             {
                             data && data.confirmationCode && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.confirmationCode} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            {data.confirmationCode}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.confirmationCode} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {data.confirmationCode}                                </span>
                             </div>
                         }
             {
                             reservationStatus && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.reservationStatus} />             </span>
-                              <span className={cx(s.profileViewMainContent)}> {reservationStatus}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.reservationStatus} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}> {reservationStatus}                                </span>
                             </div>
                         }
             {
                             data && data.cancellationDetails && data.cancellationDetails.cancellationPolicy && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.cancellationPolicy} />             </span>
-                              <span className={cx(s.profileViewMainContent)}> {data.cancellationDetails.cancellationPolicy}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.cancellationPolicy} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}> {data.cancellationDetails.cancellationPolicy}                                </span>
                             </div>
                         }
             {
                             data && data.cancellationDetails && data.cancellationDetails.cancelledBy && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.cancelledLabel} />             </span>
-                              <span className={cx(s.profileViewMainContent, s.capitalize)}> {data.cancellationDetails.cancelledBy}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.cancelledLabel} />                                 </span>
+                              <span className={cx(s.profileViewMainContent, s.capitalize)}> {data.cancellationDetails.cancelledBy}                                </span>
                             </div>
                         }
             {
                             data && data.listData && data.listData.id && data.listData.title && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.titleLabel} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <a href={`/rooms/${data.listData.id}`} target="_blank"> {data.listData.title}            </a>            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.titleLabel} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <a href={`/rooms/${data.listData.id}`} target="_blank"> {data.listData.title}                                </a>                                </span>
                             </div>
                         }
             {
                             data && data.checkIn && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.checkIn} />             </span>
-                              <span className={cx(s.profileViewMainContent)}> {moment(data.checkIn).format('Do MMMM YYYY')}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.checkIn} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}> {moment(data.checkIn).format('Do MMMM YYYY')}                                </span>
                             </div>
                         }
             {
                             data && data.checkOut && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.checkOut} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            {moment(data.checkOut).format('Do MMMM YYYY')}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.checkOut} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {moment(data.checkOut).format('Do MMMM YYYY')}                                </span>
                             </div>
                         }
             {
                             bookingType && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.bookingType} />            </span>
-                              <span className={cx(s.profileViewMainContent)}>            {bookingType}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.bookingType} />                                </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {bookingType}                                </span>
                             </div>
                         }
             {
                             data && (subTotal == 0 || subTotal > 0) && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.amountPaid} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <CurrencyConverter amount={subTotal} from={data.currency} />            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.amountPaid} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <CurrencyConverter amount={subTotal} from={data.currency} />                                </span>
                             </div>
                         }
             {/* {
@@ -230,13 +230,13 @@ class ViewReservation extends React.Component {
                                  </tr>
                                } */}
             <div className={s.profileViewInner}>
-              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.guestServiceFee} />             </span>
-              <span className={cx(s.profileViewMainContent)}>            <CurrencyConverter amount={guestFee} from={data.currency} />            </span>
+              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.guestServiceFee} />                                 </span>
+              <span className={cx(s.profileViewMainContent)}>                                <CurrencyConverter amount={guestFee} from={data.currency} />                                </span>
             </div>
             {
                             data && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.hostServiceFeeType} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <HostServiceFee
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.hostServiceFeeType} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <HostServiceFee
                                 hostId={data.hostId}
                                 checkIn={data.checkIn}
                                 id={data.id}
@@ -252,68 +252,68 @@ class ViewReservation extends React.Component {
                         }
             {
                             data && data.guestData && data.guestData.profileId && Guestname && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.guestName} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <a href={`/users/show/${data.guestData.profileId}`} target="_blank"> {Guestname}             </a>            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.guestName} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <a href={`/users/show/${data.guestData.profileId}`} target="_blank"> {Guestname}                                 </a>                                </span>
                             </div>
                         }
             {
                             data && data.guestData && data.guestData.phoneNumber && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.guestPhoneNumber} />              </span>
-                              <span className={cx(s.profileViewMainContent)}> {decode(data.guestData.phoneNumber)}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.guestPhoneNumber} />                                  </span>
+                              <span className={cx(s.profileViewMainContent)}> {decode(data.guestData.phoneNumber)}                                </span>
                             </div>
                         }
             {
                             data && data.guestUser && data.guestUser.email && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.guestEmail} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            {data.guestUser.email}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.guestEmail} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {data.guestUser.email}                                </span>
                             </div>
                         }
             {
                             data && data.hostData && data.hostData.profileId && Hostname && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.hostName} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <a href={`/users/show/${data.hostData.profileId}`} target="_blank"> {Hostname}             </a> </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.hostName} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <a href={`/users/show/${data.hostData.profileId}`} target="_blank"> {Hostname}                                 </a> </span>
                             </div>
                         }
             {
                             data && data.hostData && data.hostData.phoneNumber && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.hostPhoneNumber} />             </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}> <FormattedMessage {...messages.hostPhoneNumber} />                                 </span>
                               <span className={cx(s.profileViewMainContent)}> {decode(data.hostData.phoneNumber)} </span>
                             </div>
                         }
             {
                             data && data.hostUser && data.hostUser.email && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.hostEmail} /> </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.hostEmail} /> </span>
                               <span className={cx(s.profileViewMainContent)}> {data.hostUser.email} </span>
                             </div>
                         }
             {
                             data && data.cancellationDetails && data.cancellationDetails.createdAt && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.cancelDate} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            {moment(data.cancellationDetails.createdAt).format('Do MMMM YYYY')}            </span>
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.cancelDate} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                {moment(data.cancellationDetails.createdAt).format('Do MMMM YYYY')}                                </span>
                             </div>
                         }
             {
                             data && cancellationDetails && (cancellationDetails.refundToGuest == 0 || cancellationDetails.refundToGuest > 0) && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.refundAmount} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <CurrencyConverter
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.refundAmount} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <CurrencyConverter
                                 amount={cancellationDetails.refundToGuest}
                                 from={data.currency}
-                              />            </span>
+                              />                                </span>
                             </div>
                         }
             {
                             data && !cancellationDetails && (data.reservationState == 'expired' || data.reservationState == 'declined') && <div className={s.profileViewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.refundAmount} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <CurrencyConverter
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.refundAmount} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <CurrencyConverter
                                 amount={subTotal}
                                 from={data.currency}
-                              />            </span>
+                              />                                </span>
                             </div>
                         }
             {
                             data && (data.reservationState == 'approved' || data.reservationState == 'completed' || data.reservationState == 'cancelled') && <div className={s.lastviewInner}>
-                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>            <FormattedMessage {...messages.payoutLabel} />             </span>
-                              <span className={cx(s.profileViewMainContent)}>            <CurrencyConverter
+                              <span className={cx(s.labelTextNew, s.profileViewlabel)}>                                <FormattedMessage {...messages.payoutLabel} />                                 </span>
+                              <span className={cx(s.profileViewMainContent)}>                                <CurrencyConverter
                                 amount={amountPaytoHost}
                                 from={data.currency}
                               />

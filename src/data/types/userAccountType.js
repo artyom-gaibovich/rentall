@@ -21,7 +21,7 @@ const UserAccountType = new ObjectType({
     gender: { type: StringType },
     dateOfBirth: { type: StringType },
     expiresYookassaToken: {
-      type: StringType
+      type: StringType,
     },
     email: {
       type: StringType,

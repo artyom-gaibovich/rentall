@@ -62,107 +62,107 @@ class WhyHostFormBlock5 extends Component {
                 {error && <strong>{formatMessage(error)}</strong>}
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleHeadingLabel} /></label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentTitleHeading"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleHeadingLabel} /></label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentTitleHeading"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentTitle1"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentTitle1"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentContent1"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentContent1"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentTitle2"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentTitle2"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentContent2"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentContent2"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 3</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentTitle3"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentTitleLabel} /> 3</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentTitle3"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={3}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 3</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={9}>
-                        <Field
-                              name="paymentContent3"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={3}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.paymentContentLabel} /> 3</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={9}>
+                      <Field
+                        name="paymentContent3"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
                 <FormGroup className={s.space1}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
-                        <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
-                              <FormattedMessage {...messages.save} />
-                            </Button>
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
+                      <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
+                        <FormattedMessage {...messages.save} />
+                      </Button>
+                    </Col>
+                  </Row>
                 </FormGroup>
               </form>
             </Panel>

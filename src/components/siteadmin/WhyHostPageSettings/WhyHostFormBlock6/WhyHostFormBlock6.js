@@ -66,88 +66,88 @@ class WhyHostFormBlock6 extends Component {
                 {error && <strong>{formatMessage(error)}</strong>}
                 <Row>
                   <Col xs={12} sm={12} md={6} lg={6} className={cx(s.space3, s.noPadding)}>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionBanner} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Image />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionTitle} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionTitle1"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionContent} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionContent1"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionButton} /> 1</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionButton1"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionBanner} /> 1</label>
                     </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Image />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionTitle} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionTitle1"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionContent} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionContent1"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionButton} /> 1</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionButton1"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Col>
                   <Col xs={12} sm={12} md={6} lg={6} className={cx(s.space3, s.noPadding)}>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionBanner} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Image2 />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionTitle} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionTitle2"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionContent} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionContent2"
-                              component={this.renderFormControlTextArea}
-                            />
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionButton} /> 2</label>
-                      </Col>
-                      <Col xs={12} sm={12} md={12} lg={12}>
-                        <Field
-                              name="quoteSectionButton2"
-                              type="text"
-                              component={this.renderFormControl}
-                            />
-                      </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionBanner} /> 2</label>
                     </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Image2 />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionTitle} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionTitle2"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionContent} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionContent2"
+                        component={this.renderFormControlTextArea}
+                      />
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <label className={s.labelTextNew} ><FormattedMessage {...messages.quoteSectionButton} /> 2</label>
+                    </Col>
+                    <Col xs={12} sm={12} md={12} lg={12}>
+                      <Field
+                        name="quoteSectionButton2"
+                        type="text"
+                        component={this.renderFormControl}
+                      />
+                    </Col>
+                  </Col>
                 </Row>
                 <FormGroup className={s.space3}>
                   <Row>
-                      <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
-                        <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
-                              <FormattedMessage {...messages.save} />
-                            </Button>
-                      </Col>
-                    </Row>
+                    <Col xs={12} sm={12} md={12} lg={12} className={cx(bt.textAlignRight, 'textAlignLeftRtl')}>
+                      <Button className={cx(bt.btnPrimary, bt.btnLarge)} type="submit" disabled={submitting}>
+                        <FormattedMessage {...messages.save} />
+                      </Button>
+                    </Col>
+                  </Row>
                 </FormGroup>
               </form>
             </Col>

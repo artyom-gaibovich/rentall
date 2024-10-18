@@ -8,7 +8,8 @@ import { setPersonalizedValues } from '../../../../actions/personalized';
 
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from '!isomorphic-style-loader/!css-loader!react-geosuggest/module/geosuggest.css';
-import cx from 'classnames'; // Импортируем classnames как cx
+import cx from 'classnames';
+ // Импортируем classnames как cx
 class PlaceGeoSuggest extends Component {
   static propTypes = {
     label: PropTypes.string,
@@ -95,7 +96,7 @@ class PlaceGeoSuggest extends Component {
     if (suggestion) {
       this.setState({
         inputValue: suggestion.value, // Update the input value with the selected suggestion
-        suggestItems: [] // Clear suggestions after selection
+        suggestItems: [], // Clear suggestions after selection
       });
 
       const { onChange } = this.props;
@@ -107,7 +108,7 @@ class PlaceGeoSuggest extends Component {
     const { initialValues } = this.props;
     if (initialValues && initialValues.locationAddress) {
       this.setState({
-        inputValue: initialValues.locationAddress
+        inputValue: initialValues.locationAddress,
       });
     }
   }
@@ -129,7 +130,7 @@ class PlaceGeoSuggest extends Component {
             {suggestItems.map((item, index) => (
               <li
                 key={index}
-                className={cx({ 'active': index === s.activeSuggestion })} // Добавляем класс active для подсветки
+                className={cx({ active: index === s.activeSuggestion })} // Добавляем класс active для подсветки
                 onClick={() => this.onSuggestSelect(item)}
               >
                 {item.displayName}

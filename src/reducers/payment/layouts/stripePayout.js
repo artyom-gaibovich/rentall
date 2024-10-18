@@ -71,8 +71,8 @@ const stripePayout = (app) => {
             } else if (reservation.reservationState == 'cancelled') {
               const cancelData = await CancellationDetails.findOne({
                 where: {
-                    reservationId,
-                  },
+                  reservationId,
+                },
               });
 
               const cancelDataAmount = convert(base.symbol, ratesData, cancelData.payoutToHost, cancelData.currency, currency);

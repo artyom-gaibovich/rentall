@@ -60,16 +60,16 @@ const writeUserReview = {
         if (updateReview) {
           const reviewsCount = await Reviews.count({
             where: {
-                  listId,
-                  userId,
-                },
+              listId,
+              userId,
+            },
           });
 
           const reviewsStarRating = await Reviews.sum('rating', {
             where: {
-                  listId,
-                  userId,
-                },
+              listId,
+              userId,
+            },
           });
 
           await Listing.update({

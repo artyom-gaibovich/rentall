@@ -102,8 +102,8 @@ const autoPayoutToHost = (app) => {
               const refundAmount = await CancellationDetails.findOne({
                 attributes: ['payoutToHost'],
                 where: {
-                    reservationId: item.id,
-                  },
+                  reservationId: item.id,
+                },
                 raw: true,
               });
               convertAmount = convert(base.symbol, ratesData, Number(refundAmount.payoutToHost), item.currency, base.symbol);
@@ -130,35 +130,35 @@ const autoPayoutToHost = (app) => {
                 let updateFailed;
                 checkFailedTransaction = await FailedTransactionHistory.findOne({
                   where: {
-                      reservationId: item.id,
-                    },
+                    reservationId: item.id,
+                  },
                   raw: true,
                 });
                 if (checkFailedTransaction === null) {
                   updateFailed = await FailedTransactionHistory.create({
-                      reservationId: item.id,
-                      userId: item.hostId,
-                      amount: Math.round(amount),
-                      currency: item.currency,
-                      reason: JSON.stringify(errorMessage),
-                      paymentMethodId: getPayout.methodId,
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    });
+                    reservationId: item.id,
+                    userId: item.hostId,
+                    amount: Math.round(amount),
+                    currency: item.currency,
+                    reason: JSON.stringify(errorMessage),
+                    paymentMethodId: getPayout.methodId,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  });
                 } else {
                   updateFailed = await FailedTransactionHistory.update({
-                      userId: item.hostId,
-                      amount: Math.round(amount),
-                      currency: item.currency,
-                      reason: JSON.stringify(errorMessage),
-                      paymentMethodId: getPayout.methodId,
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    }, {
-                          where: {
-                            reservationId: item.id,
-                          },
-                        });
+                    userId: item.hostId,
+                    amount: Math.round(amount),
+                    currency: item.currency,
+                    reason: JSON.stringify(errorMessage),
+                    paymentMethodId: getPayout.methodId,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                  }, {
+                    where: {
+                      reservationId: item.id,
+                    },
+                  });
                 }
               }
             }

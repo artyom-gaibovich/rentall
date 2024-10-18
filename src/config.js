@@ -5,8 +5,8 @@ require('dotenv').config({
 /* eslint-disable max-len */
 
 export const port = process.env.PORT || 3000;
-export const host = process.env.WEBSITE_HOSTNAME || `goodtrip.ru`;
-export const url = process.env.WEBSITE_URL || `https://goodtrip.ru`;
+export const host = process.env.WEBSITE_HOSTNAME || 'goodtrip.ru';
+export const url = process.env.WEBSITE_URL || 'https://goodtrip.ru';
 export const sitename = process.env.SITENAME;
 export const adminEmail = process.env.ADMIN_EMAIL || 'gubanovas@mail.ru';
 
@@ -51,7 +51,7 @@ export const analytics = {
 
 };
 // process.env.GOOGLE_MAP_API || 'AIzaSyCwJbBcuhXezAIb1V8MsfG-5ueGPWa-nwI'
-//Nikita Api-key AIzaSyBkxFb_cYYBa0i3l9-FdaumJFR2b15fStQ
+// Nikita Api-key AIzaSyBkxFb_cYYBa0i3l9-FdaumJFR2b15fStQ
 export const googleMapAPI = 'AIzaSyBEVZOEk1PBcrUur4kpY7DGNqZmIQrbnyI';
 export const googleMapServerAPI = process.env.GOOGLE_MAP_SERVER_API;
 export const yandexMapServerAPI = process.env.YANDEX_MAP_SERVER_API;
@@ -112,15 +112,15 @@ export const sms = {
 // };
 
 export const emailConfig = {
-  host: "goodtrip.ru",
+  host: 'goodtrip.ru',
   port: 587,
-  email: "support@tdirect.hopto.org:3000",
-  sender: "Goodtrip",
+  email: 'support@tdirect.hopto.org:3000',
+  sender: 'Goodtrip',
   senderEmail: 'support@goodtrip.ru',
-  pass: "qDrYhTX9VVDFLRB0",
+  pass: 'qDrYhTX9VVDFLRB0',
   secure: false,
-  tls: false
-}
+  tls: false,
+};
 export const auth = {
 
   jwt: { secret: process.env.JWT_SECRET },
@@ -151,7 +151,7 @@ export const auth = {
     secret: process.env.VK_APP_SECRET,
     returnURL: process.env.VK_CLIENT_URL || `${url}/login/vk/return`,
   },
-  
+
   // https://apiok.ru/
   odnoklassniki: {
     id: process.env.ODNOKLASSNIKI_APP_ID,

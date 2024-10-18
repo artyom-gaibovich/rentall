@@ -34,8 +34,8 @@ const SearchListingMap = {
       // SQL query for results
       const results = await Listing.findAll({
         attributes: ['id', 'title', 'personCapacity', 'lat', 'city', 'street', 'state', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-        where: {isPublished: true},
-        order: [['id', 'DESC'],['reviewsCount', 'DESC']],
+        where: { isPublished: true },
+        order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
       });
 
       return {

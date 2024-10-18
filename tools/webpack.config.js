@@ -246,7 +246,7 @@ const serverConfig = {
 
   devServer: {
     overlay: true,
-    open: true
+    open: true,
   },
 
   output: {

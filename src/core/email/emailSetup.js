@@ -19,11 +19,11 @@ const smtpTransport = require('nodemailer-smtp-transport');
 //   },
 // }));
 const transporter = nodemailer.createTransport({
-  host: "goodtrip.ru",
+  host: 'goodtrip.ru',
   port: 587,
   auth: {
-    user: "support@goodtrip.ru",
-    pass: "qDrYhTX9VVDFLRB0",
+    user: 'support@goodtrip.ru',
+    pass: 'qDrYhTX9VVDFLRB0',
   },
   tls: {
     rejectUnauthorized: false,

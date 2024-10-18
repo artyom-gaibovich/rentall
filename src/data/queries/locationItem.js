@@ -18,19 +18,18 @@ const locationItem = {
   },
 
   async resolve({ request }, { address }) {
-
     // Yandex API
 
-    const URL = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${yandexMapServerAPI}&geocode=${encodeURI(address)}`
+    const URL = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${yandexMapServerAPI}&geocode=${encodeURI(address)}`;
     const resp = await fetch(URL);
     const data = await resp.json();
     if (data) {
       const locationData = {};
-      
-      const geoObject = data.response.GeoObjectCollection.featureMember[0].GeoObject;      
-      const [lng, lat] =  geoObject.Point.pos.split(' ');
-      
-      geoObject.metaDataProperty.GeocoderMetaData.Address.Components.map((item, key) => {  
+
+      const geoObject = data.response.GeoObjectCollection.featureMember[0].GeoObject;
+      const [lng, lat] = geoObject.Point.pos.split(' ');
+
+      geoObject.metaDataProperty.GeocoderMetaData.Address.Components.map((item, key) => {
         locationData[item.kind] = item.name;
       });
 
@@ -48,9 +47,9 @@ const locationItem = {
     return {
       status: 400,
     };
-    
-    // Google API 
-    
+
+    // Google API
+
     // const URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${googleMapServerAPI}`;
     // const resp = await fetch(URL);
     // const data = await resp.json();

@@ -87,7 +87,7 @@ class EditPopularLocationManagement extends React.Component {
 
   render() {
     const { error, handleSubmit, submitting, dispatch, initialValues } = this.props;
-    console.log(initialValues, 'init')
+    console.log(initialValues, 'init');
     const { data } = this.props;
     const { formatMessage } = this.props.intl;
 

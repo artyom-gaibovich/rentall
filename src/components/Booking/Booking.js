@@ -139,6 +139,12 @@ class Booking extends Component {
     super(props);
     this.state = {
       page: 'meetup',
+      rent: 0,
+      transfer: 0,
+      nutrition: 0,
+      huntsman: 0,
+      assistant: 0,
+      addition: '',
     };
     this.nextPage = this.nextPage.bind(this);
   }
@@ -147,23 +153,42 @@ class Booking extends Component {
     this.setState({ page });
   }
 
+  updateValues = (newValues) => {
+    this.setState(prevState => ({
+      ...prevState,
+      ...newValues,
+    }));
+  };
+
   render() {
     const { page } = this.state;
     const { account, bookingData, resendEmailVerification } = this.props;
     const { bookDetails: { guests, startDate, endDate, taxRate } } = this.props;
     const { serviceFees, base, rates, specialPricing } = this.props;
-   
+    const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
+
+
+    console.log('booking', bookingData);
+
     return (
       <div>
         {
 					page === 'meetup' && <Meetup
-          account={account}
+  account={account}
   hostDisplayName={bookingData.user.profile.firstName}
   hostPicture={bookingData.user.profile.picture}
   guestDisplayName={account.firstName}
   guestPicture={account.picture}
   nextPage={this.nextPage}
+  bookingData={bookingData}
   emailVerified={account.verification.isEmailConfirmed}
+  rent={this.state.rent}
+  transfer={this.state.transfer}
+  nutrition={this.state.nutrition}
+  huntsman={this.state.huntsman}
+  assistant={this.state.assistant}
+  addition={this.state.addition}
+  updateValues={this.updateValues}
 					/>
 				}
 
@@ -218,6 +243,12 @@ class Booking extends Component {
   bookingData={bookingData}
   guestPicture={account && account.picture}
   taxRate={bookingData.listingData.taxRate}
+  rent={this.state.rent}
+  transfer={this.state.transfer}
+  nutrition={this.state.nutrition}
+  huntsman={this.state.huntsman}
+  assistant={this.state.assistant}
+  addition={this.state.addition}
 					/>
 				}
 

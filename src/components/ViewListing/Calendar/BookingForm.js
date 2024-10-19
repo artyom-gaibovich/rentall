@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // Redux Form
 import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { change } from "redux-form";
+import { change } from 'redux-form';
 
 // Style
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
@@ -77,7 +77,7 @@ class BookingForm extends Component {
     minimumStay: false,
     startDate: null,
     endDate: null,
-    guests: 0,
+    guests: 1,
     personCapacity: 0,
     country: '',
   };
@@ -93,55 +93,59 @@ class BookingForm extends Component {
   renderGuests(personCapacity) {
     const { formatMessage } = this.props.intl;
     const rows = [];
-    rows.push(<option key='-1' value={0}>Выберите количество</option>)
     for (let i = 1; i <= personCapacity; i++) {
       rows.push(<option key={i} value={i}>{i} {i > 1 ? formatMessage(messages.guests) : formatMessage(messages.guest)}</option>);
     }
     return rows;
   }
-  componentWillUpdate () {
+  componentWillUpdate() {
 
+  }
+  constructor(props) {
+    super(props);
+    this.nextPage = this.nextPage.bind(this);
+  }
+  nextPage(page) {
+    this.setState({ page });
   }
   componentDidMount() {
     // this.setupConnection();
     setInterval(() => {
-      const pathName = location.pathname
+      const pathName = location.pathname;
       if (this.props.guests && this.props.startDate && this.props.endDate) {
         if (pathName.indexOf('rooms') < 0) {
-          return false
+          return false;
         }
-        let obj = {
+        const obj = {
           guests: this.props.guests,
           date: Date.now(),
-          type: 'rent'
-        }
+          type: 'rent',
+        };
         if (this.props.startDate) {
-          obj.startDate = this.props.startDate
+          obj.startDate = this.props.startDate;
         }
         if (this.props.endDate) {
-          obj.endDate = this.props.endDate
+          obj.endDate = this.props.endDate;
         }
-        let authActions = localStorage.getItem('authActions')
+        let authActions = localStorage.getItem('authActions');
         if (!authActions) {
-          authActions = {}
-          console.log('create AuthActions')
+          authActions = {};
+          console.log('create AuthActions');
         } else {
-          authActions = JSON.parse(authActions)
+          authActions = JSON.parse(authActions);
         }
-        
-        obj.url = pathName
-        authActions = obj
-        localStorage.setItem('authActions', JSON.stringify(authActions))
 
+        obj.url = pathName;
+        authActions = obj;
+        localStorage.setItem('authActions', JSON.stringify(authActions));
       }
-
-    },1500)
+    }, 1500);
   }
   render() {
     const { formatMessage } = this.props.intl;
     const { id, personCapacity, basePrice, cleaningPrice, currency, isHost, bookingType, taxRate } = this.props;
     const { monthlyDiscount, weeklyDiscount, minNight, maxNight, maxDaysNotice } = this.props;
-    let { isLoading, availability, maximumStay, guests, startDate, endDate, account, blockedDates, minimumStay, country } = this.props;
+    const { isLoading, availability, maximumStay, guests, startDate, endDate, account, blockedDates, minimumStay, country } = this.props;
     const { bookingProcess, serviceFees, base, rates, bookingLoading, initialValues } = this.props;
     const isDateChosen = startDate != null && endDate != null || false;
     let userBanStatusValue;
@@ -149,23 +153,23 @@ class BookingForm extends Component {
       const { account: { userBanStatus } } = this.props;
       userBanStatusValue = userBanStatus;
     }
-    if (typeof localStorage != 'undefined') {
-      let authActionsDb = localStorage.getItem('authActions')
+    if (typeof localStorage !== 'undefined') {
+      let authActionsDb = localStorage.getItem('authActions');
       if (authActionsDb && this.props.account) {
-        authActionsDb = JSON.parse(authActionsDb)
-        console.log('create AuthActions', authActionsDb)
-        const pathName = location.pathname
-          if (authActionsDb.url == pathName && authActionsDb.type == 'rent') {
+        authActionsDb = JSON.parse(authActionsDb);
+        console.log('create AuthActions', authActionsDb);
+        const pathName = location.pathname;
+        if (authActionsDb.url == pathName && authActionsDb.type == 'rent') {
             // this.onContactPress(data.id, urlParameters)
-            this.props.change('guests', authActionsDb.guests)
-            this.props.change('startDate', authActionsDb.startDate)
+          this.props.change('guests', authActionsDb.guests);
+          this.props.change('startDate', authActionsDb.startDate);
             // this.props.change('startDate', moment(authActionsDb[url].startDate))
-            this.props.change('endDate', authActionsDb.endDate)
+          this.props.change('endDate', authActionsDb.endDate);
             // this.props.change('endDate', moment(authActionsDb[url].endDate))
-          }
+        }
       }
     }
-    
+
     return (
       <Form>
         <FormGroup className={s.formGroup}>
@@ -196,6 +200,7 @@ class BookingForm extends Component {
                 name="guests"
                 component={this.renderFormControlSelect}
                 className={cx(s.formControlSelect, bt.commonControlSelect, 'viewGuestCount')}
+                defaultValue="1"
               >
                 {this.renderGuests(personCapacity)}
               </Field>
@@ -215,7 +220,7 @@ class BookingForm extends Component {
               className={cx(s.bookItMessage, s.spaceTop3)}
             >
               <p className={cx(s.noMargin, s.textCenter, s.textError)}>
-                <FormattedMessage {...messages.minimumNightStay} />            {minNight} {minNight > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}
+                <FormattedMessage {...messages.minimumNightStay} />                                {minNight} {minNight > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}
               </p>
             </div>
           }
@@ -286,10 +291,8 @@ const mapState = state => ({
   rates: state.currency.rates,
   bookingLoading: state.book.bookingLoading,
 });
-const mapDispatch = (dispatch) => {
-  return {
-    bookingProcess,
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  bookingProcess,
+  dispatch,
+});
 export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch())(BookingForm)));

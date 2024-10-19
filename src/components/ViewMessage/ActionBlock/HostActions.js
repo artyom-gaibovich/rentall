@@ -188,6 +188,10 @@ class HostActions extends Component {
     );
   }
 
+  chat() {
+    return null;
+  }
+
   render() {
     const { actionType, guestDisplayName } = this.props;
     if (actionType === 'inquiry') {
@@ -206,7 +210,10 @@ class HostActions extends Component {
       return this.cancelled(guestDisplayName);
     } else if (actionType === 'completed') {
       return this.completed();
+    } else if (actionType === 'chat') {
+      return this.chat();
     }
+    return null;
   }
 }
 

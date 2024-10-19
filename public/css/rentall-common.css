@@ -2001,7 +2001,7 @@ textarea {
 .homeSearchForm .geosuggest__input {
 	width:100%;
 	border-radius: 6px 0px 0px 0px;
-	/* border:0 !important; */
+	border:0;
 	border-right: 1px solid rgba(19,70,64,.75);;
 	box-shadow:none !important;
 	padding:10px !important;

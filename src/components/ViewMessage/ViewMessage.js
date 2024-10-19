@@ -64,6 +64,12 @@ class ViewMessage extends React.Component {
           reservationId: PropTypes.number,
           startDate: PropTypes.string.isRequired,
           endDate: PropTypes.string.isRequired,
+          rent: PropTypes.number,
+          transfer: PropTypes.number,
+          nutrition: PropTypes.number,
+          huntsman: PropTypes.number,
+          assistant: PropTypes.number,
+          addition: PropTypes.string,
           personCapacity: PropTypes.number.isRequired,
           createdAt: PropTypes.string.isRequired,
           cancelData: PropTypes.shape({
@@ -88,6 +94,12 @@ class ViewMessage extends React.Component {
   };
   static defaultProps = {
     threadId: null,
+    rent: 1,
+    transfer: 1,
+    nutrition: 1,
+    huntsman: 1,
+    assistant: 1,
+    addition: 'qwe',
   };
   constructor(props) {
     super(props);
@@ -115,6 +127,8 @@ class ViewMessage extends React.Component {
   }
   render() {
     const { threadItemsData: { loading, getThread }, userType, threadId, isAdminAuthenticated } = this.props;
+    console.log('getThread', getThread);
+    // console.log('getThreadRent', getThread.threadItemForType.rent)
     const { account } = this.props;
     if (loading) {
       return <Loader type={'text'} />;
@@ -191,6 +205,7 @@ class ViewMessage extends React.Component {
                 !isAdminAuthenticated && !guestUserBanStatus && !hostUserBanStatus && <ActionBlock
                   threadType={userType}
                   actionType={getThread.threadItemForType.type}
+                  status={getThread.threadItemForType.status}
                   threadId={threadId}
                   listId={getThread.listId}
                   reservationId={getThread.threadItemForType.reservationId}
@@ -215,6 +230,8 @@ class ViewMessage extends React.Component {
               </div>
               {
                 !isAdminAuthenticated && <SendMessage
+                  actionType={getThread.threadItemForType.type}
+                  threadType={userType}
                   initialValues={initialValues}
                   threadId={threadId}
                   profileId={userType === 'host' ? getThread.hostProfile.profileId : getThread.guestProfile.profileId}

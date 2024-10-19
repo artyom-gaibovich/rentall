@@ -4919,7 +4919,7 @@
   },
   {
     "defaultMessage": "All Messages",
-    "message": "Информация обо мне",
+    "message": "Все сообщения",
     "description": "Dashboard",
     "id": "rentall.allMessages",
     "files": [
@@ -9755,7 +9755,7 @@
   },
   {
     "defaultMessage": "Trips",
-    "message": "Путешествия",
+    "message": "Мои бронирования",
     "description": "Menu item",
     "id": "rentall.trips",
     "files": [

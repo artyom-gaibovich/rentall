@@ -8,6 +8,7 @@ async function submit(values, dispatch) {
   const threadId = values.threadId;
   const threadType = values.threadType;
   const type = values.type;
+  console.log(values);
   const content = values.content;
   dispatch(sendMessageAction(
 		threadId,

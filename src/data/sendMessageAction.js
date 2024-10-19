@@ -12,6 +12,12 @@ query getThread($threadType: String, $threadId: Int){
     id
     listId
     guest
+    rent
+    transfer
+    nutrition
+    huntsman
+    assistant
+    addition
     host
     listData {
       title

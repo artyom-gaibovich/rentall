@@ -26,6 +26,12 @@ const CreateThreadItems = {
     startDate: { type: StringType },
     endDate: { type: StringType },
     personCapacity: { type: IntType },
+    rent: { type: IntType },
+    transfer: { type: IntType },
+    nutrition: { type: IntType },
+    huntsman: { type: IntType },
+    assistant: { type: IntType },
+    addition: { type: StringType },
   },
 
   async resolve({ request, response }, {
@@ -36,6 +42,12 @@ const CreateThreadItems = {
     startDate,
     endDate,
     personCapacity,
+    rent,
+    transfer,
+    nutrition,
+    huntsman,
+    assistant,
+    addition,
   }) {
     // Check if user already logged in
     if (request.user && !request.user.admin) {
@@ -78,6 +90,12 @@ const CreateThreadItems = {
           startDate: convertedStartDate,
           endDate: convertedEndDate,
           personCapacity,
+          rent,
+          transfer,
+          nutrition,
+          huntsman,
+          assistant,
+          addition,
         });
 
         if (threadItems) {

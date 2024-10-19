@@ -31,7 +31,7 @@ import { setRuntimeVariable } from '../../../actions/runtime';
 import { loadAccount } from '../../../actions/account';
 
 import ListBedTypes from './ListBedTypes';
-//how_to_get
+// how_to_get
 export let how_to_get;
 class ListingDetails extends React.Component {
   static propTypes = {
@@ -68,11 +68,27 @@ class ListingDetails extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  componentDidMount() {
+    if (typeof localStorage !== 'undefined') {
+      let authActionsDb = localStorage.getItem('authActions');
+      if (authActionsDb && this.props.account.data) {
+        authActionsDb = JSON.parse(authActionsDb);
+        console.log('create AuthActions', authActionsDb);
+        const pathName = window.location.pathname;
+
+        if (authActionsDb.url === pathName && authActionsDb.type === 'contactHost') {
+          this.onContactPress(this.props.data.id, this.props.urlParameters); // Use the correct props here
+          authActionsDb.url = undefined;
+          localStorage.setItem('authActions', JSON.stringify(authActionsDb));
+        }
+      }
+    }
+  }
+
   handleClick() {
     this.setState({ open: !this.state.open });
   }
   async hiddenRegister() {
-
     const query = `query (
       $firstName:String,
       $lastName:String,
@@ -91,9 +107,9 @@ class ListingDetails extends React.Component {
           status
         }
       }`;
-  
-    const dateOfBirth = `05-1990-$23`;
-  
+
+    const dateOfBirth = '05-1990-$23';
+
     const params = {
       firstName: `anonymousFirstName_${Date.now()}`,
       lastName: `anonymousLastName_${Date.now()}`,
@@ -101,7 +117,7 @@ class ListingDetails extends React.Component {
       password: `anonymousPassword_${Date.now()}`,
       dateOfBirth,
     };
-  
+
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
@@ -114,7 +130,7 @@ class ListingDetails extends React.Component {
       }),
       credentials: 'include',
     });
-  
+
     const { data } = await resp.json();
     // console.log('hidden register response', data)
     this.props.dispatch(loadAccount());
@@ -123,10 +139,9 @@ class ListingDetails extends React.Component {
       value: true,
     }));
   }
-  async onContactPress (id, urlParameters) {
-    // console.log(this.props, id, urlParameters)
+  async onContactPress(id, urlParameters) {
     if (!this.props.account.data) {
-      await this.hiddenRegister()
+      await this.hiddenRegister();
     }
     this.props.dispatch({
       type: 'CONTACT_HOST_OPEN',
@@ -134,7 +149,7 @@ class ListingDetails extends React.Component {
         showContactHostModal: true,
       },
     });
-    contactHostOpen(id, urlParameters)
+    contactHostOpen(id, urlParameters);
     // await this.hiddenRegister()
   }
 
@@ -226,35 +241,23 @@ class ListingDetails extends React.Component {
         isSharedSpaces = true;
       }
     });
-    if (typeof localStorage != 'undefined') {
-      let authActionsDb = localStorage.getItem('authActions')
-      if (authActionsDb && this.props.account.data) {
-        authActionsDb = JSON.parse(authActionsDb)
-        console.log('create AuthActions', authActionsDb)
-        const pathName = location.pathname
-        
-          if (authActionsDb.url == pathName && authActionsDb.type == 'contactHost') {
-            this.onContactPress(data.id, urlParameters)
 
-          }
-      }
-    }
 
     const processAuthAction = () => {
       console.log('AUTH REQ');
-      let authActions = localStorage.getItem('authActions')
-      const pathName = location.pathname
+      let authActions = localStorage.getItem('authActions');
+      const pathName = location.pathname;
       if (!authActions) {
-        authActions = {}
-        console.log('create AuthActions')
+        authActions = {};
+        console.log('create AuthActions');
       } else {
-        authActions = JSON.parse(authActions)
+        authActions = JSON.parse(authActions);
       }
-      
-      authActions = {type: 'contactHost', url: pathName, date: Date.now()}
-      localStorage.setItem('authActions', JSON.stringify(authActions))
-      this.props.dispatch(openLoginModal())
-    }
+
+      authActions = { type: 'contactHost', url: pathName, date: Date.now() };
+      localStorage.setItem('authActions', JSON.stringify(authActions));
+      this.props.dispatch(openLoginModal());
+    };
     return (
       <Row className={cx(s.pageContent)}>
         <div className={cx(s.horizontalLineThrough)}>
@@ -262,10 +265,10 @@ class ListingDetails extends React.Component {
           <div>
             <p className={cx(s.listingFontSize)} >
               {!this.state.open && count >= 150 && dotStringDescription === true &&
-                <span className={cx(s.subText, s.lineBreak)}>            {firstArrayDescription} ...</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                {firstArrayDescription} ...</span>
               }
               {!this.state.open && count >= 150 && dotStringDescription === false &&
-                <span className={cx(s.subText, s.lineBreak)}>            {firstArrayDescription}</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                {firstArrayDescription}</span>
               }
               {
                 restArrayDescription && restArrayDescription.length > 0 &&
@@ -281,8 +284,8 @@ class ListingDetails extends React.Component {
                         <Button
                           bsStyle="link"
                           className={cx(s.button, s.noPadding, s.btnLInk, s.showHideBtn)}
-        
-                          style={{backgroundColor: "#ff7358"}}
+
+                          style={{ backgroundColor: '#ff7358' }}
                           onClick={() => this.handleClick()}
                         >
                           {this.state.open ? <FormattedMessage {...messages.hideDescription} /> : <FormattedMessage {...messages.showDescription} />}
@@ -312,8 +315,8 @@ class ListingDetails extends React.Component {
                 <a href="javascript:void(0)" className={cx(s.sectionCaptionLink, s.sectionLink)} onClick={() => this.props.account.data ? this.onContactPress(data.id, urlParameters) : processAuthAction()} >
                   <FormattedMessage {...messages.contactHost} />
                 </a>
-            </p>
-            <p className={cx(s.listingFontSize)} ><FormattedMessage {...messages.contactHostAboutDown} /></p>
+              </p>
+              <p className={cx(s.listingFontSize)} ><FormattedMessage {...messages.contactHostAboutDown} /></p>
             </div>
           }
           <hr />
@@ -346,7 +349,7 @@ class ListingDetails extends React.Component {
                     <span className={cx(s.text)}>
                       <FormattedMessage {...messages.beds} />: <strong>{beds}</strong>
                     </span>
-                  </p> 
+                  </p>
 
                   <p className={s.splitList}>
                     <span className={cx(s.text)}>
@@ -365,11 +368,11 @@ class ListingDetails extends React.Component {
                     </span>
                   </p>
                 </Col>
-              </Row> 
-            </Col> 
-        </Row> 
+              </Row>
+            </Col>
+        </Row>
         <hr />
-        </div>*/}
+        </div> */}
         {
           listBedTypes && listBedTypes.length > 0 && listBedTypes[0].bedType && <div> <ListBedTypes
             itemList={listBedTypes}
@@ -510,10 +513,10 @@ class ListingDetails extends React.Component {
           <div>
             <p className={cx(s.listingFontSize)} >
               {!this.state.open && count >= 150 && dotStringThingsToDo === true &&
-                <span className={cx(s.subText, s.lineBreak)}>            {firstArrayThingsToDo} ...</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                {firstArrayThingsToDo} ...</span>
               }
               {!this.state.open && count >= 150 && dotStringThingsToDo === false &&
-                <span className={cx(s.subText, s.lineBreak)}>            {firstArrayThingsToDo}</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                {firstArrayThingsToDo}</span>
               }
               {
                 restArrayThingsToDo && restArrayThingsToDo.length > 0 &&
@@ -599,13 +602,11 @@ const mapState = state => ({
   account: state.account,
   settingsData: state.viewListing.settingsData,
 });
-const mapDispatch = (dispatch) => {
-  return {
-    getSpecificSettings,
-    contactHostOpen,
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  getSpecificSettings,
+  contactHostOpen,
+  dispatch,
+});
 // const mapDispatch = {
 //   getSpecificSettings,
 //   contactHostOpen,

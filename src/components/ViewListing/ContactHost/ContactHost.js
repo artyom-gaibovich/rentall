@@ -38,7 +38,9 @@ import InputMask from 'react-input-mask';
 import validator from 'validator';
 
 // Redux Action
-import {contactHostClose} from '../../../actions/message/contactHostModal';
+import { contactHostClose } from '../../../actions/message/contactHostModal';
+
+import { bookingProcess } from '../../../actions/booking/bookingProcess';
 
 // Locale
 import messages from '../../../locale/messages';
@@ -75,7 +77,7 @@ class ContactHost extends React.Component {
     city: null,
     displayName: null,
     picture: null,
-    personCapacity: 0,
+    personCapacity: 1,
     minNight: 0,
     maxNight: 0,
     blockedDates: [],
@@ -87,7 +89,6 @@ class ContactHost extends React.Component {
   };
 
   constructor(props) {
-    
     super(props);
     this.renderGuests = this.renderGuests.bind(this);
     this.renderFormControlSelect = this.renderFormControlSelect.bind(this);
@@ -105,9 +106,14 @@ class ContactHost extends React.Component {
         firstName: false,
         lastName: false,
         phone: false,
-        email: false
-      }
-    }
+        email: false,
+      },
+    };
+  }
+
+  async handleClick() {
+    const { bookingProcess, listId, guests, startDate, endDate, taxRate } = this.props;
+    bookingProcess(listId, guests, startDate, endDate, null, taxRate);
   }
 
   renderGuests(personCapacity) {
@@ -121,6 +127,11 @@ class ContactHost extends React.Component {
   }
 
   renderFormControlSelect({ input, label, meta: { touched, error }, children, className }) {
+    // console.log(input)
+    // console.log(children)
+    // console.log(touched)
+    // console.log(error)
+    // input.value = input.value || '1'
     const { formatMessage } = this.props.intl;
     return (
       <div>
@@ -168,22 +179,22 @@ class ContactHost extends React.Component {
       </div>
     );
   }
-  handleChange (e, type) {
+  handleChange(e, type) {
     this.setState({
       ...this.state,
       disabled: false,
       isChanged: {
         ...this.state.isChanged,
-        [type]: true
+        [type]: true,
       },
-      [type]: e.target.value
+      [type]: e.target.value,
     }, async () => {
        // console.log('handle change', this.state)
-        
-    })
+
+    });
   }
 
-  closeModal () {
+  closeModal() {
     this.props.dispatch({
       type: 'CONTACT_HOST_CLOSE',
       payload: {
@@ -193,10 +204,10 @@ class ContactHost extends React.Component {
   }
   async hiddenUpdate() {
     try {
-      console.log('reachGoal2','question_ok')
-      ym(92387837,'reachGoal2','question_ok')
+      console.log('reachGoal2', 'question_ok');
+      ym(92387837, 'reachGoal2', 'question_ok');
     } catch (e) {
-      console.log('e', e)
+      console.log('e', e);
     }
     const query = `query (
       $profileId:Int!,
@@ -217,7 +228,7 @@ class ContactHost extends React.Component {
           profileId
         }
       }`;
-  
+
     const params = {
       phoneNumber: this.state.phone.replace('+7', '').replace(/\D/g, ''),
       email: this.state.email,
@@ -226,7 +237,7 @@ class ContactHost extends React.Component {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
     };
-  
+
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
@@ -241,8 +252,8 @@ class ContactHost extends React.Component {
     });
     this.setState({
       step: 1,
-      showForm: true
-    }) 
+      showForm: true,
+    });
     const { data } = await resp.json();
     // console.log('hidden register response', data)
     this.props.dispatch(loadAccount());
@@ -252,18 +263,18 @@ class ContactHost extends React.Component {
     }));
   }
 
-  
-  componentDidMount () {
+
+  componentDidMount() {
     this.setState({
-      step: 1
-    })
+      step: 1,
+    });
     if (!this.props.account) {
       // console.log('CH no ACC')
       this.setState({
         ...this.state,
         showForm: false,
-      })
-      return
+      });
+      return;
     }
     if (this.props.account.email.indexOf('anonymousEmail') >= 0 && !this.props.account.phoneNumber) {
       // console.log('CH no ACC fill')
@@ -271,8 +282,8 @@ class ContactHost extends React.Component {
       this.setState({
         ...this.state,
         showForm: false,
-        
-      })
+
+      });
     }
   }
   render() {
@@ -290,7 +301,7 @@ class ContactHost extends React.Component {
     } else {
       disabled = false;
     }
-    
+
     // let loadingStatus = loading || isLoading || false;
     const loadingStatus = isLoading || false;
     return (
@@ -335,7 +346,7 @@ class ContactHost extends React.Component {
                               </li>
                               <li>
                                 <span>
-                                  <FormattedMessage {...messages.contactHostinfo4} /> {city}?            <FormattedMessage {...messages.contactHostinfo5} />?
+                                  <FormattedMessage {...messages.contactHostinfo4} /> {city}?                                <FormattedMessage {...messages.contactHostinfo5} />?
                                 </span>
                               </li>
                               <li>
@@ -351,29 +362,29 @@ class ContactHost extends React.Component {
                         show={loadingStatus}
                         type={'page'}
                       >
-                        <Form 
-                       onSubmit={handleSubmit(submit)}
+                        <Form
+                          onSubmit={handleSubmit(submit)}
                         >
-                        {this.state.step == 1 && <Panel className={cx(s.guestModal, 'guestpanel')}>
-                          {
+                          {this.state.step == 1 && <Panel className={cx(s.guestModal, 'guestpanel')}>
+                            {
                             !isDateChosen && this.renderWarningBlock(<FormattedMessage {...messages.hostErrorMessage1} />)
                           }
-                          {
+                            {
                             !maximumStay && !availability && isDateChosen && this.renderWarningBlock(<p><FormattedMessage {...messages.hostErrorMessage2} /></p>, 'error')
                           }
-                          {
+                            {
                             isDateChosen && maximumStay && this.renderWarningBlock(<p><FormattedMessage {...messages.maximumStay} /> {maxNight} <FormattedMessage {...messages.nights} /></p>, 'error')
                           }
-                          {
+                            {
                             availability && isDateChosen && this.renderWarningBlock(<FormattedMessage {...messages.hostErrorMessage3} />)
                           }
-                          <div className={s.panelBody}>
-                            <h3 className={s.listTitle}><FormattedMessage {...messages.contactHostDate} />?</h3>
-                            <div className={s.space4}>
-                              <Row>
-                                {/* <Form onSubmit={handleSubmit(submit)}> */}
+                            <div className={s.panelBody}>
+                              <h3 className={s.listTitle}><FormattedMessage {...messages.contactHostDate} />?</h3>
+                              <div className={s.space4}>
+                                <Row>
+                                  {/* <Form onSubmit={handleSubmit(submit)}> */}
                                   <Col lg={12} md={12} sm={7} xs={12}>
-                                    <span className={'ContactHost'}>
+                                    <span className={cx('ContactHost')}>
                                       <DateRange
                                         listId={id}
                                         minimumNights={minNight}
@@ -382,14 +393,27 @@ class ContactHost extends React.Component {
                                         formName={'ContactHostForm'}
                                         maxDaysNotice={maxDaysNotice}
                                         country={country}
-                                        
                                       />
                                     </span>
+                                    {/* <span className={'ContactHost'}>
+                                      <DateRange
+                                        listId={id}
+                                        minimumNights={minNight}
+                                        maximumNights={maxNight}
+                                        blockedDates={blockedDates}
+                                        formName={'ContactHostForm'}
+                                        maxDaysNotice={maxDaysNotice}
+                                        country={country}
+
+                                      />
+                                    </span> */}
                                   </Col>
                                   <Col lg={12} md={12} sm={5} xs={12} className={cx(s.spaceTop2, s.smNomarginTop)}>
-                                    <Field name="personCapacity" component={this.renderFormControlSelect} 
-                                    
-                                    className={cx(s.formControlSelect, bt.commonControlSelect, 'contactHostSelect')} >
+                                    <Field
+                                      name="personCapacity"
+                                      component={this.renderFormControlSelect}
+                                      className={cx(s.formControlSelect, bt.commonControlSelect, 'viewGuestCount')}
+                                    >
                                       <option value="">{formatMessage(messages.chooseGuests)}</option>
                                       {this.renderGuests(personCapacity)}
                                     </Field>
@@ -398,7 +422,7 @@ class ContactHost extends React.Component {
                                     <div className={s.messagePanel}>
                                       <Field
                                         name="content"
-                                        
+
                                         component={this.renderFormControlTextArea}
                                         className={s.textBox}
                                         placeholder={formatMessage(messages.textBoxMessage)}
@@ -409,75 +433,79 @@ class ContactHost extends React.Component {
                                     {this.state.showForm && <Button className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth)} type="submit" disabled={submitting || disabled}>
                                       <FormattedMessage {...messages.sendMessage} />
                                     </Button>}
-                                    {!this.state.showForm && <button className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.fields__sub)} disabled={submitting || disabled} onClick={() => { this.setState({step: 2}) }}>
+                                    {!this.state.showForm && <button className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.fields__sub)} disabled={submitting || disabled} onClick={() => { this.setState({ step: 2 }); }}>
                                       <FormattedMessage {...messages.sendMessage} />
                                     </button>}
 
                                   </Col>
-                                {/* </Form> */}
-                              </Row>
+                                  {/* </Form> */}
+                                </Row>
+                              </div>
                             </div>
-                          </div>
-                        </Panel>}
-                        {this.state.step == 2 && <Panel className={cx(s.guestModal, 'guestpanel')}>
-                        <div className={s.fields}>
-                          <label className={s.field}>
-                            <span>Ваше имя</span>
-                            <input onChange={e => {
-                              this.handleChange(e, 'firstName')
-                            }} type="text" className={bt.commonControlInput}></input>
-                            <span className={bt.errorHelper}>{!this.state.firstName && this.state.isChanged.firstName ? 'Поле обязательно для заполнения' : ''}</span>
-                          </label>
+                          </Panel>}
+                          {this.state.step == 2 && <Panel className={cx(s.guestModal, 'guestpanel')}>
+                            <div className={s.fields}>
+                              <label className={s.field}>
+                                <span>Ваше имя</span>
+                                <input
+                                  onChange={(e) => {
+                                    this.handleChange(e, 'firstName');
+                                  }} type="text" className={bt.commonControlInput}
+                                />
+                                <span className={bt.errorHelper}>{!this.state.firstName && this.state.isChanged.firstName ? 'Поле обязательно для заполнения' : ''}</span>
+                              </label>
 
-                          <label className={s.field}>
-                            <span>Ваша фамилия</span>
-                            <input onChange={e => {
-                              this.handleChange(e, 'lastName')
-                            }} type="text" className={bt.commonControlInput}></input>
-                            <span className={bt.errorHelper}>{ !this.state.lastName && this.state.isChanged.lastName ? 'Поле обязательно для заполнения' : '' }</span>
-                          </label>
-                          
-                        
+                              <label className={s.field}>
+                                <span>Ваша фамилия</span>
+                                <input
+                                  onChange={(e) => {
+                                    this.handleChange(e, 'lastName');
+                                  }} type="text" className={bt.commonControlInput}
+                                />
+                                <span className={bt.errorHelper}>{ !this.state.lastName && this.state.isChanged.lastName ? 'Поле обязательно для заполнения' : '' }</span>
+                              </label>
 
-                          <label className={s.field}>
-                            <span>Номер телефона</span>
-                            <InputMask
-                              mask="+7(999)999-99-99"
-                              onChange={e =>  this.handleChange(e, 'phone')} type="text" className={bt.commonControlInput}
-                            >
-                              {(props) => <input  {...props}></input>}
-                            </InputMask>
-                            <span className={bt.errorHelper}>{!validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) && this.state.isChanged.phone ? 'Укажите номер вашего телефона': '' }</span>
-                          </label>
-                          <label className={s.field}>
-                            <span>Email</span>
-                            <input onChange={e => this.handleChange(e, 'email')} type="email" className={bt.commonControlInput}></input>
-                            <span className={bt.errorHelper}>{!validator.isEmail(this.state.email) && this.state.isChanged.email ? 'Поле должно содержать email' : '' }</span> 
-                          </label>
-                         
-                          <Button 
-                            className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth)} 
-                            type="submit" 
-                            disabled={
+
+                              <label className={s.field}>
+                                <span>Номер телефона</span>
+                                <InputMask
+                                  mask="+7(999)999-99-99"
+                                  onChange={e => this.handleChange(e, 'phone')} type="text" className={bt.commonControlInput}
+                                >
+                                  {props => <input {...props} />}
+                                </InputMask>
+                                <span className={bt.errorHelper}>{!validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) && this.state.isChanged.phone ? 'Укажите номер вашего телефона' : '' }</span>
+                              </label>
+                              <label className={s.field}>
+                                <span>Email</span>
+                                <input onChange={e => this.handleChange(e, 'email')} type="email" className={bt.commonControlInput} />
+                                <span className={bt.errorHelper}>{!validator.isEmail(this.state.email) && this.state.isChanged.email ? 'Поле должно содержать email' : '' }</span>
+                              </label>
+
+                              <Button
+                                className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth)}
+                                type="submit"
+                                disabled={
+                              personCapacity < 1 ||
                               submitting ||
                               disabled ||
-                              !this.state.phone || 
-                              !this.state.email || 
-                              !validator.isEmail(this.state.email) || 
-                              !validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) || 
-                              !this.state.firstName || 
+                              !this.state.phone ||
+                              !this.state.email ||
+                              !validator.isEmail(this.state.email) ||
+                              !validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) ||
+                              !this.state.firstName ||
                               !this.state.lastName
                             }
-                            onClick={() => { 
-                             this.hiddenUpdate() 
-                            }}
-                          >
-                            <FormattedMessage {...messages.sendMessage} />
-                          </Button>
-                          {/* <span className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.fields__sub)} onClick={() => { this.hiddenUpdate() }}>Отправить</span> */}
-                        </div>
-                        </Panel>}
-                      </Form>
+                                onClick={() => {
+                                  this.hiddenUpdate();
+                                }}
+                              >
+                                <FormattedMessage {...messages.sendMessage} />
+                              </Button>
+                              {/* <span className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.fields__sub)} onClick={() => { this.hiddenUpdate() }}>Отправить</span> */}
+                            </div>
+                          </Panel>}
+                        </Form>
                       </Loader>
                     </Col>
                   </Row>
@@ -512,11 +540,9 @@ const mapState = state => ({
 // const mapDispatch = {
 //   contactHostClose,
 // };
-const mapDispatch = (dispatch) => {
-  return {
-    contactHostClose: () => dispatch(contactHostClose()),
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  contactHostClose: () => dispatch(contactHostClose()),
+  dispatch,
+});
 export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(ContactHost)));
 

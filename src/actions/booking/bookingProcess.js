@@ -7,18 +7,16 @@ import { makePayment } from './makePayment';
 import { BOOKING_PROCESS_START, BOOKING_PROCESS_SUCCESS, BOOKING_PROCESS_ERROR } from '../../constants';
 
 export function bookingProcess(listId, guests, startDate, endDate, preApprove, taxRate, paynow) {
-    return async (dispatch, getState, { client }) => {
-        
-        dispatch({
-            type: BOOKING_PROCESS_START,
-            payload: {
-                bookingLoading: true,
-            },
-        });
+  return async (dispatch, getState, { client }) => {
+    dispatch({
+      type: BOOKING_PROCESS_START,
+      payload: {
+        bookingLoading: true,
+      },
+    });
 
-        try {
-           
-            const query = gql`
+    try {
+      const query = gql`
                 query UserListing($listId: String!) {
                     UserListing(listId: $listId) {
                         id
@@ -99,158 +97,161 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
                 }
             `;
 
-            const { data } = await client.query({
-                query,
-                variables: {
-                    listId,
-                },
-            });
+      const { data } = await client.query({
+        query,
+        variables: {
+          listId,
+        },
+      });
 
-            if (data && data.UserListing) {
-                const userListing = data.UserListing;
+      if (data && data.UserListing) {
+        const userListing = data.UserListing;
+        console.log('data', data);
+        console.log('userListing', userListing);
 
-                await dispatch({
-                    type: BOOKING_PROCESS_SUCCESS,
-                    payload: {
-                        data: userListing,
-                        bookDetails: {
-                            guests,
-                            startDate,
-                            endDate,
-                            preApprove,
+        await dispatch({
+          type: BOOKING_PROCESS_SUCCESS,
+          payload: {
+            data: userListing,
+            bookDetails: {
+              guests,
+              startDate,
+              endDate,
+              preApprove,
                             // taxRate,
-                        },
-                        bookingLoading: false,
-                    },
-                });
+            },
+            bookingLoading: false,
+          },
+        });
 
-                if (paynow) {
-                    let guestServiceFee = 0,
-                    hostServiceFee = 0,
-                    priceForDays = 0,
-                    hostServiceFeeType = '',
-                    hostServiceFeeValue = 0,
-                    discount = 0,
-                    discountType,
-                    total = 0,
-                    totalWithoutFees = 0,
-                    momentStartDate = moment(startDate),
-                    momentEndDate = moment(endDate),
-                    dayDifference = momentEndDate.diff(momentStartDate, 'days'),
-                    isAverage = 0,
-                    currentDay,
-                    bookingSpecialPricing = [],
-                    isSpecialPriceAssigned = false,
-                    isDayTotal = 0,
-                    taxRateFee = 0,
-                    totalWithoutServiceFee = 0,
-                    discountLessBasePrice = 0,
-                    cleaningPrice = userListing.listingData.cleaningPrice;
+        if (paynow) {
+          let guestServiceFee = 0,
+            hostServiceFee = 0,
+            priceForDays = 0,
+            hostServiceFeeType = '',
+            hostServiceFeeValue = 0,
+            discount = 0,
+            discountType,
+            total = 0,
+            totalWithoutFees = 0,
+            momentStartDate = moment(startDate),
+            momentEndDate = moment(endDate),
+            dayDifference = momentEndDate.diff(momentStartDate, 'days'),
+            isAverage = 0,
+            currentDay,
+            bookingSpecialPricing = [],
+            isSpecialPriceAssigned = false,
+            isDayTotal = 0,
+            taxRateFee = 0,
+            totalWithoutServiceFee = 0,
+            discountLessBasePrice = 0,
+            cleaningPrice = userListing.listingData.cleaningPrice;
 
-                if (dayDifference > 0) {
-                    const stayedNights = [];
+          if (dayDifference > 0) {
+            const stayedNights = [];
                     // Find stayed nights
-                    for (let i = 0; i < dayDifference; i++) {
-                        const currentDate = momentStartDate.add(i, 'day');
-                        stayedNights.push(currentDate);
-                    }
+            for (let i = 0; i < dayDifference; i++) {
+              const currentDate = momentStartDate.add(i, 'day');
+              stayedNights.push(currentDate);
+            }
 
-                    if (stayedNights && stayedNights.length > 0) {
-                        stayedNights.map((item, key) => {
-                            let isSpecialPricing;
-                            if (item) {
-                                let pricingRow, currentPrice;
-                                currentDay = moment(item)
+            if (stayedNights && stayedNights.length > 0) {
+              stayedNights.map((item, key) => {
+                let isSpecialPricing;
+                if (item) {
+                  let pricingRow,
+                    currentPrice;
+                  currentDay = moment(item)
                                     .format('dddd')
                                     .toLowerCase();
                                 // isSpecialPricing = specialPricing.find(o => moment(item).format('MM/DD/YYYY') == moment(o.blockedDates).format('MM/DD/YYYY'));
-                                isSpecialPricing = userListing.listBlockedPrice.find(
-                                    (o) =>
-                                        moment(item).format('MM/DD/YYYY') == moment(o.blockedDates).format('MM/DD/YYYY')
+                  isSpecialPricing = userListing.listBlockedPrice.find(
+                                    o =>
+                                        moment(item).format('MM/DD/YYYY') == moment(o.blockedDates).format('MM/DD/YYYY'),
                                 );
 
-                                if (isSpecialPricing && isSpecialPricing.isSpecialPrice) {
-                                    isSpecialPriceAssigned = true;
-                                    currentPrice = Number(isSpecialPricing.isSpecialPrice);
-                                } else {
-                                    currentPrice = Number(userListing.listingData.basePrice);
-                                }
+                  if (isSpecialPricing && isSpecialPricing.isSpecialPrice) {
+                    isSpecialPriceAssigned = true;
+                    currentPrice = Number(isSpecialPricing.isSpecialPrice);
+                  } else {
+                    currentPrice = Number(userListing.listingData.basePrice);
+                  }
                                 // Price object
-                                pricingRow = {
-                                    blockedDates: item,
-                                    isSpecialPrice: currentPrice,
-                                };
-                                bookingSpecialPricing.push(pricingRow);
-                            }
-                        });
-                    }
+                  pricingRow = {
+                    blockedDates: item,
+                    isSpecialPrice: currentPrice,
+                  };
+                  bookingSpecialPricing.push(pricingRow);
                 }
+              });
+            }
+          }
 
-                if (isSpecialPriceAssigned) {
-                    bookingSpecialPricing.map((item, index) => {
-                        priceForDays += Number(item.isSpecialPrice);
-                    });
-                } else {
-                    bookingSpecialPricing.map((item, index) => {
-                        priceForDays += Number(item.isSpecialPrice);
-                    });
-                }
+          if (isSpecialPriceAssigned) {
+            bookingSpecialPricing.map((item, index) => {
+              priceForDays += Number(item.isSpecialPrice);
+            });
+          } else {
+            bookingSpecialPricing.map((item, index) => {
+              priceForDays += Number(item.isSpecialPrice);
+            });
+          }
 
-                isAverage = Number(priceForDays) / Number(dayDifference);
-                isDayTotal = isAverage.toFixed(2) * dayDifference;
-                priceForDays = isDayTotal;
+          isAverage = Number(priceForDays) / Number(dayDifference);
+          isDayTotal = isAverage.toFixed(2) * dayDifference;
+          priceForDays = isDayTotal;
 
-                if (dayDifference >= 7) {
-                    if (userListing.listingData.monthlyDiscount > 0 && dayDifference >= 28) {
-                        discount = (Number(priceForDays) * Number(userListing.listingData.monthlyDiscount)) / 100;
-                        discountType = `${userListing.listingData.monthlyDiscount}% monthly price discount`;
-                    } else if (userListing.listingData.weeklyDiscount > 0) {
-                        discount = (Number(priceForDays) * Number(userListing.listingData.weeklyDiscount)) / 100;
-                        discountType = `${userListing.listingData.weeklyDiscount}% weekly price discount`;
-                    }
-                }
+          if (dayDifference >= 7) {
+            if (userListing.listingData.monthlyDiscount > 0 && dayDifference >= 28) {
+              discount = (Number(priceForDays) * Number(userListing.listingData.monthlyDiscount)) / 100;
+              discountType = `${userListing.listingData.monthlyDiscount}% monthly price discount`;
+            } else if (userListing.listingData.weeklyDiscount > 0) {
+              discount = (Number(priceForDays) * Number(userListing.listingData.weeklyDiscount)) / 100;
+              discountType = `${userListing.listingData.weeklyDiscount}% weekly price discount`;
+            }
+          }
 
-                discountLessBasePrice = isDayTotal - discount;
-                taxRateFee =
+          discountLessBasePrice = isDayTotal - discount;
+          taxRateFee =
                     taxRate && taxRate > 0 ? (discountLessBasePrice + cleaningPrice) * (Number(taxRate) / 100) : 0;
-                totalWithoutServiceFee = isDayTotal + cleaningPrice - discount;
+          totalWithoutServiceFee = isDayTotal + cleaningPrice - discount;
 
-                const serviceFees = getState().book.serviceFees;
+          const serviceFees = getState().book.serviceFees;
 
-                if (serviceFees) {
-                    if (serviceFees.guest.type === 'percentage') {
-                        guestServiceFee = totalWithoutServiceFee * (Number(serviceFees.guest.value) / 100);
-                    } else {
-                        guestServiceFee = convert(
+          if (serviceFees) {
+            if (serviceFees.guest.type === 'percentage') {
+              guestServiceFee = totalWithoutServiceFee * (Number(serviceFees.guest.value) / 100);
+            } else {
+              guestServiceFee = convert(
                             base,
                             rates,
                             serviceFees.guest.value,
                             serviceFees.guest.currency,
-                            currency
+                            currency,
                         );
-                    }
+            }
 
-                    if (serviceFees.host.type === 'percentage') {
-                        hostServiceFeeType = serviceFees.host.type;
-                        hostServiceFeeValue = serviceFees.host.value;
-                        hostServiceFee = totalWithoutServiceFee * (Number(serviceFees.host.value) / 100);
-                    } else {
-                        hostServiceFeeType = serviceFees.host.type;
-                        hostServiceFeeValue = serviceFees.host.value;
-                        hostServiceFee = convert(
+            if (serviceFees.host.type === 'percentage') {
+              hostServiceFeeType = serviceFees.host.type;
+              hostServiceFeeValue = serviceFees.host.value;
+              hostServiceFee = totalWithoutServiceFee * (Number(serviceFees.host.value) / 100);
+            } else {
+              hostServiceFeeType = serviceFees.host.type;
+              hostServiceFeeValue = serviceFees.host.value;
+              hostServiceFee = convert(
                             base,
                             rates,
                             serviceFees.host.value,
                             serviceFees.host.currency,
-                            currency
+                            currency,
                         );
-                    }
-                }
+            }
+          }
 
-                total = priceForDays + guestServiceFee + cleaningPrice - discount;
-                totalWithoutFees = priceForDays + cleaningPrice - discount;
+          total = priceForDays + guestServiceFee + cleaningPrice - discount;
+          totalWithoutFees = priceForDays + cleaningPrice - discount;
 
-                await dispatch(
+          await dispatch(
                     makePayment(
                         listId,
                         userListing.title,
@@ -281,25 +282,25 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
                         userListing.listingData.checkInStart,
                         userListing.listingData.checkInEnd,
                         getState().book.serviceFees.host.type,
-                        getState().book.serviceFees.host.value
-                    )
+                        getState().book.serviceFees.host.value,
+                    ),
                 );
-                } else {
-                    history.push(`/book/${listId}`)
-                }
-            }
-            
-        } catch (error) {
-            dispatch({
-                type: BOOKING_PROCESS_ERROR,
-                payload: {
-                    error,
-                    bookingLoading: false,
-                },
-            });
-            return false;
+        } else {
+          console.log('12345');
+          history.push(`/book/${listId}`);
         }
+      }
+    } catch (error) {
+      dispatch({
+        type: BOOKING_PROCESS_ERROR,
+        payload: {
+          error,
+          bookingLoading: false,
+        },
+      });
+      return false;
+    }
 
-        return true;
-    };
+    return true;
+  };
 }

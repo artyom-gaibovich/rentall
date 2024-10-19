@@ -130,7 +130,7 @@ class NavigationAfterLogin extends React.Component {
           <FormattedMessage {...messages.saved} />
         </NavLink>
         <NavLink to="/trips/current" >
-          <FormattedMessage {...messages.trips} />
+          Мои бронирования
         </NavLink>
         <Logout className={cx('visible-xs', s.breakPointScreen)} />
         <NavDropdown

@@ -56,43 +56,6 @@ class SendMessage extends Component {
     const { formatMessage } = this.props.intl;
 
     return (
-      // <Row className={cx(s.space6)}>
-      //   <Col xs={12} sm={12} md={9} lg={10}>
-      //     <Panel className={cx(s.panelBubble, s.panelBubbleRight, "messageTextArea")}>
-      //       <form onSubmit={handleSubmit(submit)}>
-      //         <div className={s.textBody}>
-      //           <Field
-      //             name="content"
-      //             className={s.textBox}
-      //             component={this.renderFormControlTextArea}
-      //             placeholder={formatMessage(messages.writeMessage)}
-      //           />
-      //         </div>
-      //         <div className={cx(s.panelDark)}>
-      //           <div className={s.bottomButton}>
-      //             <Button className={bt.btnPrimary} type="submit" disabled={submitting || error}>
-      //               <FormattedMessage {...messages.sendMessage} />
-      //             </Button>
-      //           </div>
-      //         </div>
-      //       </form>
-      //     </Panel>
-      //   </Col>
-      //   <Col md={3} lg={2} className={cx('text-right')}>
-      //     <div className={cx(s.profileAvatarSection, s.hideSm)}>
-      //       <Avatar
-      //         source={picture}
-      //         height={70}
-      //         width={70}
-      //         title={displayName}
-      //         className={s.profileAvatar}
-      //         withLink
-      //         linkClassName={s.profileAvatarLink}
-      //         profileId={profileId}
-      //       />
-      //     </div>
-      //   </Col>
-      // </Row>
       <div >
         <div className={cx(s.space6)}>
           <div className={s.displayTable}>

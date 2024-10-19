@@ -208,10 +208,16 @@ export function sendMessageAction(
       if (data && data.sendMessage && data.sendMessage.status != 'userbanned') {
         if (reservationId != null && reservationId != undefined) {
           dispatch(updateReservation(reservationId, type, threadType, threadId));
+          // dispatch({
+          //   type: SEND_MESSAGE_SUCCESS,
+          // });
+          location.reload();
         }
         dispatch({
           type: SEND_MESSAGE_SUCCESS,
         });
+        location.reload();
+        console.log('1234');
       }
     } catch (error) {
       dispatch({

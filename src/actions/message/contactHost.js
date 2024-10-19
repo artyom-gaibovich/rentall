@@ -13,6 +13,13 @@ export function contactHost(
   startDate,
   endDate,
   personCapacity,
+  status = 0,
+  rent,
+  transfer,
+  nutrition,
+  huntsman,
+  assistant,
+  addition,
   hostEmail,
   firstName,
 ) {
@@ -22,7 +29,10 @@ export function contactHost(
     });
 
     try {
+      console.log(rent, transfer, nutrition, huntsman, assistant, addition);
       const account = getState().account.data;
+
+      const type = status ? 'chat' : 'inquiry';
 
       const mutation = gql`
           mutation CreateThreadItems(
@@ -32,7 +42,13 @@ export function contactHost(
             $type: String,
             $startDate: String,
             $endDate: String,
-            $personCapacity: Int
+            $personCapacity: Int,
+            $rent: Int,
+            $transfer: Int,
+            $nutrition: Int,
+            $huntsman: Int,
+            $assistant: Int,
+            $addition: String
           ){
               CreateThreadItems(
                 listId: $listId,
@@ -41,7 +57,13 @@ export function contactHost(
                 type: $type,
                 startDate: $startDate,
                 endDate: $endDate,
-                personCapacity: $personCapacity
+                personCapacity: $personCapacity,
+                rent: $rent,
+                transfer: $transfer,
+                nutrition: $nutrition,
+                huntsman: $huntsman,
+                assistant: $assistant,
+                addition: $addition
               ) {
                   id
                   threadId
@@ -52,6 +74,12 @@ export function contactHost(
                   endDate
                   personCapacity
                   createdAt
+                  rent
+                  transfer
+                  nutrition
+                  huntsman
+                  assistant
+                  addition
               }
           }
       `;
@@ -63,10 +91,16 @@ export function contactHost(
           listId,
           host,
           content,
-          type: 'inquiry',
+          type,
           startDate,
           endDate,
           personCapacity,
+          rent,
+          transfer,
+          nutrition,
+          huntsman,
+          assistant,
+          addition,
         },
       });
 
@@ -82,6 +116,7 @@ export function contactHost(
           error,
         },
       });
+      console.log(`error: ${error}`);
       return false;
     }
 

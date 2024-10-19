@@ -12,6 +12,7 @@ class ActionBlock extends Component {
   static propTypes = {
     threadType: PropTypes.string.isRequired,
     actionType: PropTypes.string.isRequired,
+    status: PropTypes.number.isRequired,
     threadId: PropTypes.number.isRequired,
     listId: PropTypes.number.isRequired,
     reservationId: PropTypes.number,
@@ -28,8 +29,11 @@ class ActionBlock extends Component {
   }
 
   render() {
-    const { threadType, actionType, threadId, listId, startDate, endDate, personCapacity, createdAt } = this.props;
+    const { threadType, actionType, status, threadId, listId, startDate, endDate, personCapacity, createdAt } = this.props;
     const { hostDisplayName, guestDisplayName, reservationId, guestEmail, title, listPublishStatus } = this.props;
+
+    console.log('actionType', actionType);
+    console.log('threadType', threadType);
 
     if (actionType != null) {
       if (threadType === 'host') {

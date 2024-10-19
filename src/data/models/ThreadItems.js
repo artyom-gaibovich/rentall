@@ -57,6 +57,30 @@ const ThreadItems = Model.define('ThreadItems', {
     type: DataType.INTEGER,
   },
 
+  rent: {
+    type: DataType.INTEGER,
+  },
+
+  transfer: {
+    type: DataType.INTEGER,
+  },
+
+  nutrition: {
+    type: DataType.INTEGER,
+  },
+
+  huntsman: {
+    type: DataType.INTEGER,
+  },
+
+  assistant: {
+    type: DataType.INTEGER,
+  },
+
+  addition: {
+    type: DataType.STRING,
+  },
+
   isApproved: {
     type: DataType.BOOLEAN,
     defaultValue: false,

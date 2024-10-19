@@ -4901,7 +4901,7 @@
     ]
   },
   {
-    "message": "Информация обо мне",
+    "message": "Все сообщения",
     "id": "rentall.allMessages",
     "description": "Dashboard",
     "defaultMessage": "All Messages",
@@ -8094,7 +8094,7 @@
     ]
   },
   {
-    "message": "Подготовьтесь к бронированию с",
+    "message": "Для данного объекта доступны дополнительные услуги, выберите понравившиеся, и мы пришлем Вам актуальные цены",
     "id": "rentall.meetupTitle",
     "description": "Get ready to book with",
     "defaultMessage": "Get ready to book with",
@@ -9687,7 +9687,7 @@
     ]
   },
   {
-    "message": "Путешествия",
+    "message": "Мои бронирования",
     "id": "rentall.trips",
     "description": "Menu item",
     "defaultMessage": "Trips",

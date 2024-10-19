@@ -77,6 +77,12 @@ class Payment extends Component {
     bookingType: PropTypes.string.isRequired,
     policyName: PropTypes.string.isRequired,
     formatMessage: PropTypes.any,
+    rent: PropTypes.number.isRequired,
+    transfer: PropTypes.number.isRequired,
+    nutrition: PropTypes.number.isRequired,
+    huntsman: PropTypes.number.isRequired,
+    assistant: PropTypes.number.isRequired,
+    addition: PropTypes.string.isRequired,
   };
 
   render() {
@@ -86,6 +92,12 @@ class Payment extends Component {
     const { guests, checkIn, checkOut, guestPicture, taxRate } = this.props;
     const { basePrice, cleaningPrice, currency, weeklyDiscount, monthlyDiscount } = this.props;
     const { serviceFees, base, rates, specialPricing, bookingData } = this.props;
+
+    const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
+
+    console.log(rent, transfer, nutrition, huntsman, assistant, addition);
+    console.log('bookingData', bookingData);
+
     let guestServiceFee = 0,
       hostServiceFee = 0,
       priceForDays = 0,
@@ -160,12 +172,12 @@ class Payment extends Component {
       }
     }
 
-    let priceForDaysTmp = priceForDays;
-    priceForDays = priceForDays - (priceForDays * (Number(serviceFees.guest.value) / 100));
+    const priceForDaysTmp = priceForDays;
+    priceForDays -= (priceForDays * (Number(serviceFees.guest.value) / 100));
     isAverage = Number(priceForDays) / Number(dayDifference);
-    let isAverageTmp = Number(priceForDaysTmp) / Number(dayDifference);
+    const isAverageTmp = Number(priceForDaysTmp) / Number(dayDifference);
     isDayTotal = isAverage.toFixed(2) * dayDifference;
-    let isDayTotalTmp = isAverageTmp.toFixed(2) * dayDifference;
+    const isDayTotalTmp = isAverageTmp.toFixed(2) * dayDifference;
     priceForDays = isDayTotal;
 
     if (dayDifference >= 7) {
@@ -240,7 +252,7 @@ class Payment extends Component {
       checkInEnd,
       hostServiceFeeType,
       hostServiceFeeValue,
-      message: listTitle
+      message: listTitle,
     };
 
     return (
@@ -255,6 +267,12 @@ class Payment extends Component {
                 initialValues={initialValues}
                 listId={listId}
                 guestPicture={guestPicture}
+                rent={rent}
+                transfer={transfer}
+                nutrition={nutrition}
+                huntsman={huntsman}
+                assistant={assistant}
+                addition={addition}
               />
             </Elements>
           </Col>

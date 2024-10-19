@@ -16,6 +16,7 @@ import CompletedReservationHost from './CompletedReservationHost';
 import ForgotPasswordEmail from './ForgotPasswordEmail';
 import NewMessage from './NewMessage';
 import NewInquiry from './NewInquiry';
+import NewChat from './NewChat';
 import ConfirmDocumentVerification from './ConfirmDocumentVerification';
 import ContactEmail from './ContactEmail';
 import ReportUserMail from './ReportUserMail';
@@ -83,6 +84,9 @@ class EmailTemplate extends Component {
                 }
         {
                     type === 'inquiry' && <NewInquiry content={content} />
+                }
+        {
+                    type === 'chat' && <NewChat content={content} />
                 }
         {
                     type === 'documentVerification' && <ConfirmDocumentVerification content={content} />

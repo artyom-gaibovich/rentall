@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -19,6 +19,7 @@ import validator from 'validator';
 import { setRuntimeVariable } from '../../../actions/runtime';
 import { loadAccount } from '../../../actions/account';
 import InputMask from 'react-input-mask';
+import SvgLogo from '../../Logo/SvgLogo';
 // Component
 import Avatar from '../../Avatar';
 
@@ -34,6 +35,14 @@ class Meetup extends Component {
     nextPage: PropTypes.any.isRequired,
     emailVerified: PropTypes.bool.isRequired,
     formatMessage: PropTypes.any,
+    bookingData: PropTypes.object.isRequired,
+    rent: PropTypes.number.isRequired,
+    transfer: PropTypes.number.isRequired,
+    nutrition: PropTypes.number.isRequired,
+    huntsman: PropTypes.number.isRequired,
+    assistant: PropTypes.number.isRequired,
+    addition: PropTypes.string.isRequired,
+    updateValues: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -44,20 +53,60 @@ class Meetup extends Component {
       phone: '',
       lastName: '',
       firstName: '',
+      additionChecked: false,
+      addition: '',
+      selectedServices: [],
       isChanged: {
         firstName: false,
         lastName: false,
         phone: false,
         email: false,
-      }
-    }
+      },
+    };
     // state = {
     //   disabled: false
     // }
-   
+
     this.handleClick = this.handleClick.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
-  componentDidMount () {
+
+  handleCheckboxChange = (e, service) => {
+    const status = e.target.checked ? 1 : 0;
+    if (service === 'addition') {
+      this.setState({
+        additionChecked: e.target.checked,
+        addition: e.target.checked ? '' : this.state.addition,
+      });
+    } else {
+      this.setState({ [service]: status }, () => {
+        // Тут используется обновлённое состояние
+        this.props.updateValues({ [service]: status });
+      });
+    }
+  };
+
+  handleInputChange = (e) => {
+    this.setState({ addition: e.target.value });
+  };
+
+
+  async handleClick() {
+    // if (this.state.disabled) {
+
+    //   return false
+    // }
+    console.log('user auth start booking');
+    // await this.hiddenUpdate()
+    // return false
+    const { selectedServices, nextPage, emailVerified, guestPicture } = this.props;
+    this.props.updateValues({ addition: this.state.addition });
+    console.log('selectedServices', selectedServices);
+    nextPage('payment');
+  }
+  componentDidMount() {
+    // this.handleClick()
 
     try {
       ym(92387837, 'reachGoal', 'sale_success_preview');
@@ -66,7 +115,6 @@ class Meetup extends Component {
       console.log('reachGoal', e);
     }
     if (this.props.account.email.indexOf('anonymousEmail') >= 0 && !this.props.account.phoneNumber) {
-     
       this.setState({
         showForm: true,
         disabled: true,
@@ -79,41 +127,26 @@ class Meetup extends Component {
           lastName: false,
           phone: false,
           email: false,
-        }
-      })
+        },
+      });
     }
   }
- async handleClick() {
-    if (this.state.disabled) {
 
-      return false
-    }
-    await this.hiddenUpdate()
-    // return false
-    const { nextPage, emailVerified, guestPicture } = this.props;
-    if (guestPicture === null) {
-      // nextPage('avatar');
-      nextPage('payment');
-    } else {
-      nextPage('payment');
-    }
-  }
-  handleChange (e, type) {
+  handleChange(e, type) {
     this.setState({
       ...this.state,
       disabled: false,
       isChanged: {
         ...this.state.isChanged,
-        [type]: true
+        [type]: true,
       },
-      [type]: e.target.value
+      [type]: e.target.value,
     }, async () => {
 
-        
-    })
+
+    });
   }
   async hiddenUpdate() {
-
     const query = `query (
       $profileId:Int!,
       $phoneNumber: String,
@@ -133,16 +166,16 @@ class Meetup extends Component {
           profileId
         }
       }`;
- 
+
     const params = {
       phoneNumber: this.state.phone.replace('+7', '').replace(/\D/g, ''),
       email: this.state.email,
       profileId: this.props.account.profileId,
       userId: this.props.account.userId,
       firstName: this.state.firstName,
-      lastName: this.state.lastName
+      lastName: this.state.lastName,
     };
-  
+
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
@@ -157,10 +190,6 @@ class Meetup extends Component {
     });
 
 
-
-
-    
-  
     const { data } = await resp.json();
 
     this.props.dispatch(loadAccount());
@@ -170,93 +199,158 @@ class Meetup extends Component {
     }));
   }
   render() {
-    const { hostDisplayName, hostPicture, guestDisplayName } = this.props;
+    const { hostDisplayName, hostPicture, guestDisplayName, bookingData } = this.props;
+    const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
+    const { additionChecked } = this.state;
+
+    console.log(rent, transfer, nutrition, huntsman, assistant, addition);
+
+    console.log('bookingData1', bookingData);
+    console.log('bookingData1Type', typeof bookingData);
+    // bookingData.rent = 1;
+    console.log('bookingData2', bookingData);
 
     return (
       <Grid>
         <Row>
           <div className={s.activationStepPanel}>
             <div className={s.panelBody}>
-              <h2><span><FormattedMessage {...messages.meetupTitle} /> {hostDisplayName}</span></h2>
-              <div className={cx(s.spaceTop5)}>
-                <div className={s.userLeft}>
-                  <Avatar
-                  source={hostPicture}
-                  title={hostDisplayName}
-                  className={cx(s.profileImage, s.mediaPhoto, s.mediaRound)}
-                />
+              <h2 className={s.titleMeetup}><span>Доступны дополнительные услуги!</span></h2>
+              <h3>Выберите понравившиеся!</h3>
+              <div className={s.MeetupContentSection}>
+                <div className={s.MeetupContentSectionLeft}>
+                  <div className={s.MeetupContentSectionLogo}>
+                    <SvgLogo className={s.SvgLogo} />
+                  </div>
+                  <p className={s.MeetupContentSectionLeftText}>GOODTRIP старается сделать ваш отдых максимально комфортным</p>
                 </div>
-                <div className={cx(s.userRight, s.logoIcon)}>
-                  <div className={cx(s.mediaRound, s.highlightedIcon)}>
-                  <img
-                    src={logoUrl}
-                    className={cx(s.logoImage, s.mediaPhoto, s.mediaRound)}
-                  />
+                <div className={s.MeetupContentSectionRight}>
+                  <div className={s.checkboxesMeetup}>
+                    <label className={s.checkboxMeetup}>
+                      <input type="checkbox" checked={rent} onChange={e => this.handleCheckboxChange(e, 'rent')} />
+                        Аренда лодок/снегоходов
+                      </label>
+                    <label className={s.checkboxMeetup}>
+                      <input type="checkbox" checked={transfer} onChange={e => this.handleCheckboxChange(e, 'transfer')} />
+                        Трансфер от аэропорта/вокзала
+                      </label>
+                    <label className={s.checkboxMeetup}>
+                      <input type="checkbox" checked={nutrition} onChange={e => this.handleCheckboxChange(e, 'nutrition')} />
+                        Питание
+                      </label>
+                    <label className={s.checkboxMeetup}>
+                      <input type="checkbox" checked={huntsman} onChange={e => this.handleCheckboxChange(e, 'huntsman')} />
+                        Егерь
+                      </label>
+                    <label className={s.checkboxMeetup}>
+                      <input type="checkbox" checked={assistant} onChange={e => this.handleCheckboxChange(e, 'assistant')} />
+                        Помощник по хозяйтсву
+                      </label>
+                    <label className={s.checkboxMeetup}>
+                      <input
+                        type="checkbox"
+                        checked={additionChecked}
+                        onChange={e => this.handleCheckboxChange(e, 'addition')}
+                      />
+                        Необходимо что ещё?
+                      </label>
+                    {additionChecked && (
+                    <div className={s.additionInputBox}>
+                      <textarea
+                        type="text"
+                        placeholder="Введите дополнитель..."
+                        value={this.state.addition}
+                        onChange={this.handleInputChange}
+                        className={s.additionInput}
+                        maxLength="255"
+                      />
+                      <strong>В текстовом поле кратко опишите необходимую услугу(например, «ГСМ», «Аренда снасти» и т.д.)</strong>
+                    </div>
+                      )}
+                  </div>
                 </div>
-                </div>
-                <div className={s.userRight}>
-                  <Avatar
-                  isUser
-                  title={guestDisplayName}
-                  className={cx(s.profileImage, s.mediaPhoto, s.mediaRound)}
-                />
-                </div>
-                <p className={cx(s.space2, s.spaceTop2, s.textLead)}>
+              </div>
+              <div className={cx(s.space4, s.spaceTop4)}>
+                {/* <p className={cx(s.space2, s.spaceTop2, s.textLead)}>
                   <span><FormattedMessage {...messages.meetupInfo1} /></span>
                 </p>
                 <p className={cx(s.space4, s.textLead)}>
                   <span><FormattedMessage {...messages.meetupInfo2} /></span>
-                </p>
+                </p> */}
+
+
                 {this.state.showForm && <div className={s.fields}>
                   <label className={s.field}>
                     <span>Ваше имя</span>
-                    <input onChange={e => {
-                      this.handleChange(e, 'firstName')
-                    }} type="text" className={bt.commonControlInput}></input>
-                     <span className={bt.errorHelper}>{!this.state.firstName && this.state.isChanged.firstName ? 'Поле обязательно для заполнения' : ''}</span>
+                    <input
+                      onChange={(e) => {
+                        this.handleChange(e, 'firstName');
+                      }} type="text" className={bt.commonControlInput}
+                    />
+                    <span className={bt.errorHelper}>{!this.state.firstName && this.state.isChanged.firstName ? 'Поле обязательно для заполнения' : ''}</span>
                   </label>
 
                   <label className={s.field}>
                     <span>Ваша фамилия</span>
-                    <input onChange={e => {
-                      this.handleChange(e, 'lastName')
-                    }} type="text" className={bt.commonControlInput}></input>
+                    <input
+                      onChange={(e) => {
+                        this.handleChange(e, 'lastName');
+                      }} type="text" className={bt.commonControlInput}
+                    />
                     <span className={bt.errorHelper}>{ !this.state.lastName && this.state.isChanged.lastName ? 'Поле обязательно для заполнения' : '' }</span>
                   </label>
-                  
-                 
+
 
                   <label className={s.field}>
                     <span>Номер телефона</span>
                     <InputMask
                       mask="+7(999)999-99-99"
-                      onChange={e =>  this.handleChange(e, 'phone')} type="text" className={bt.commonControlInput}
+                      onChange={e => this.handleChange(e, 'phone')} type="text" className={bt.commonControlInput}
                     >
-                      {(props) => <input  {...props}></input>}
+                      {props => <input {...props} />}
                     </InputMask>
-                     <span className={bt.errorHelper}>{!validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) && this.state.isChanged.phone ? 'Укажите номер вашего телефона': '' }</span>
+                    <span className={bt.errorHelper}>{!validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) && this.state.isChanged.phone ? 'Укажите номер вашего телефона' : '' }</span>
                   </label>
                   <label className={s.field}>
                     <span>Email</span>
-                    <input onChange={e => this.handleChange(e, 'email')} type="email" className={bt.commonControlInput}></input>
-                    <span className={bt.errorHelper}>{!validator.isEmail(this.state.email) && this.state.isChanged.email ? 'Поле должно содержать email' : '' }</span> 
+                    <input onChange={e => this.handleChange(e, 'email')} type="email" className={bt.commonControlInput} />
+                    <span className={bt.errorHelper}>{!validator.isEmail(this.state.email) && this.state.isChanged.email ? 'Поле должно содержать email' : '' }</span>
                   </label>
-                </div>}
+                  </div>}
                 <Col xs={12} sm={12} md={12} lg={12} className={s.space3}>
-                  <Button disabled={
-                    this.state.showForm && 
-                    (
-                      !this.state.phone || 
-                      !this.state.email || 
-                      !validator.isEmail(this.state.email) || 
-                      !validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) || 
-                      !this.state.firstName || 
-                      !this.state.lastName
-                    )
-                  } className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth)} onClick={this.handleClick}>
-                  <FormattedMessage {...messages.next} />
-                </Button>
-                <p className='ps-footer' style={{color:"red"}}><FormattedMessage {...messages.meetupInfoTip}/></p>
+                  {!this.state.rent && !this.state.transfer && !this.state.nutrition && !this.state.huntsman && !this.state.assistant && !this.state.addition ? (
+                    <Button
+                      disabled={
+                      this.state.showForm &&
+                      (
+                        !this.state.phone ||
+                        !this.state.email ||
+                        !validator.isEmail(this.state.email) ||
+                        !validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) ||
+                        !this.state.firstName ||
+                        !this.state.lastName
+                      )
+                    } className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.btn, s.btnDisabled)} onClick={this.handleClick}
+                    >
+                    Ничего не интересует
+                  </Button>
+                  ) : (
+                    <Button
+                      disabled={
+                      this.state.showForm &&
+                      (
+                        !this.state.phone ||
+                        !this.state.email ||
+                        !validator.isEmail(this.state.email) ||
+                        !validator.isMobilePhone(this.state.phone.replace(/\D/g, '')) ||
+                        !this.state.firstName ||
+                        !this.state.lastName
+                      )
+                    } className={cx(bt.btnPrimary, bt.btnLarge, bt.fullWidth, s.btn)} onClick={this.handleClick}
+                    >
+                      <FormattedMessage {...messages.next} />
+                    </Button>
+                  )}
                 </Col>
               </div>
             </div>
@@ -270,13 +364,11 @@ class Meetup extends Component {
 const mapState = state => ({
 
 });
-const mapDispatch = (dispatch) => {
-  return {
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  dispatch,
+});
 export default withStyles(s, bt)(connect(mapState, mapDispatch)(Meetup));
 
 // export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(BookingButton)));
 // export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(BookingForm)));
-// 
+//

@@ -42,6 +42,24 @@ const ThreadItemsType = new ObjectType({
     personCapacity: {
       type: IntType,
     },
+    rent: {
+      type: IntType,
+    },
+    transfer: {
+      type: IntType,
+    },
+    nutrition: {
+      type: IntType,
+    },
+    huntsman: {
+      type: IntType,
+    },
+    assistant: {
+      type: IntType,
+    },
+    addition: {
+      type: StringType,
+    },
     isRead: {
       type: BooleanType,
     },

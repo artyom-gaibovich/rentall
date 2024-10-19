@@ -58,37 +58,62 @@ class Dashboard extends React.Component {
 
   render() {
     if (typeof localStorage !== 'undefined') {
-      
-      let isRegisterGoalReached = localStorage.getItem('isRegisterGoalReached')
+      const isRegisterGoalReached = localStorage.getItem('isRegisterGoalReached');
       if (!isRegisterGoalReached) {
-        console.log('dashboard isRegisterGoalReach')
+        console.log('dashboard isRegisterGoalReach');
         try {
-          ym(92387837,'reachGoal','registration_ok')
+          ym(92387837, 'reachGoal', 'registration_ok');
         } catch (e) {
-          console.log('reachGoal', e)
+          console.log('reachGoal', e);
         }
-        localStorage.setItem('isRegisterGoalReached', 'true')
+        localStorage.setItem('isRegisterGoalReached', 'true');
       } else {
-        console.log('dashboard isRegisterGoalReached filled')
-  
+        console.log('dashboard isRegisterGoalReached filled');
       }
-      console.log('dashboard render', ym)
+      console.log('dashboard render', ym);
       try {
-        let authActionsDb = localStorage.getItem('authActions')
+        let authActionsDb = localStorage.getItem('authActions');
+        console.log('authActionsDb', authActionsDb);
         if (authActionsDb) {
-          authActionsDb = JSON.parse(authActionsDb)
-          console.log('create AuthActions', authActionsDb)
+          authActionsDb = JSON.parse(authActionsDb);
+          console.log('create AuthActions', authActionsDb);
           // let target = Object.keys(authActionsDb)[0]
-          let target = authActionsDb
+          if (authActionsDb.url) {
+            const target = authActionsDb;
 
-          if (target) {
-            setTimeout(() => {
-              location.pathname = target.url
-            }, 1500)
+            if (target) {
+              setTimeout(() => {
+                location.pathname = target.url;
+              // authActionsDb.url = undefined
+              // localStorage.setItem('authActions', JSON.stringify(authActionsDb))
+              }, 1500);
+            }
           }
         }
       } catch (e) {
-        console.log('err in ls read', e)
+        console.log('err in ls read', e);
+      }
+
+      try {
+        let authActionsDbRegister = localStorage.getItem('authActionsRegister');
+        if (authActionsDbRegister) {
+          authActionsDbRegister = JSON.parse(authActionsDbRegister);
+          console.log('create AuthActions', authActionsDbRegister);
+          // let target = Object.keys(authActionsDb)[0]
+          if (authActionsDbRegister.url) {
+            const target = authActionsDbRegister;
+
+            if (target) {
+              setTimeout(() => {
+                location.pathname = target.url;
+                authActionsDbRegister.url = undefined;
+                localStorage.setItem('authActionsRegister', JSON.stringify(authActionsDbRegister));
+              }, 1500);
+            }
+          }
+        }
+      } catch (e) {
+        console.log('err in ls read', e);
       }
     }
     const { account: { userId, picture }, siteName } = this.props;
@@ -138,7 +163,7 @@ class Dashboard extends React.Component {
                       <ul className={cx(s.listStyle, 'listLayoutArbic')}>
                         <li>
                           <p className={s.space2}><FormattedMessage {...messages.dashBoardInfo1} /></p>
-                          <Link to={'/user/edit'}><FormattedMessage {...messages.completeYourProfile} />{' '}>>></Link>
+                          <Link to={'/user/edit'}><FormattedMessage {...messages.completeYourProfile} />{' '}</Link>
                         </li>
                       </ul>
                     </div>
@@ -153,7 +178,7 @@ class Dashboard extends React.Component {
                     loading={loading}
                     getUnreadThreads={getUnreadThreads}
                   />
-                  <Link to={'/inbox'} className={s.linkText}><FormattedMessage {...messages.allMessages} />{' '}>>></Link>
+                  <Link to={'/inbox'} className={s.linkText}><FormattedMessage {...messages.allMessages} />{' '}</Link>
                 </Panel>
               </div>
             </Col>

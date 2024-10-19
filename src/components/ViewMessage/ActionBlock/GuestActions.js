@@ -226,6 +226,10 @@ class GuestActions extends Component {
     );
   }
 
+  chat() {
+    return null;
+  }
+
   render() {
     const { actionType, hostDisplayName } = this.props;
 
@@ -244,8 +248,11 @@ class GuestActions extends Component {
     } else if (actionType === 'cancelledByHost' || actionType === 'cancelledByGuest') {
       return this.cancelled();
     } else if (actionType === 'completed') {
-        return this.completed();
-      }
+      return this.completed();
+    } else if (actionType === 'chat') {
+      return this.chat();
+    }
+    return null;
   }
 }
 

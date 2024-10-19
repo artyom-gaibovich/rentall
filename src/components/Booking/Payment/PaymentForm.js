@@ -6,8 +6,8 @@ import moment from 'moment';
 // Redux
 import { connect } from 'react-redux';
 
-// Redux Form 
-import { Field, reduxForm, formValueSelector, reset, submit, change  } from 'redux-form';
+// Redux Form
+import { Field, reduxForm, formValueSelector, reset, submit, change } from 'redux-form';
 
 import { Row, FormGroup, Col, FormControl } from 'react-bootstrap';
 
@@ -43,205 +43,217 @@ import AvatarIMage from './logo-small.jpg';
 import { isRTL } from '../../../helpers/formatLocale';
 
 const createOptions = () => ({
-    style: {
-        base: {
-            color: '#484848',
-            fontWeight: 400,
+  style: {
+    base: {
+      color: '#484848',
+      fontWeight: 400,
             // fontFamily: 'Quicksand, Open Sans, Segoe UI, sans-serif',
-            fontFamily: 'inherit',
-            fontSize: '14px',
-            fontSmoothing: 'antialiased',
-            ':focus': {
-                color: '#484848',
-            },
+      fontFamily: 'inherit',
+      fontSize: '14px',
+      fontSmoothing: 'antialiased',
+      ':focus': {
+        color: '#484848',
+      },
 
-            '::placeholder': {
-                color: '#aaa',
-            },
+      '::placeholder': {
+        color: '#aaa',
+      },
 
-            ':focus::placeholder': {
-                color: '#aaa',
-            },
-        },
-        invalid: {
-            color: '#484848',
-            ':focus': {
-                color: '#484848',
-            },
-            '::placeholder': {
-                color: '#aaa',
-            },
-        },
+      ':focus::placeholder': {
+        color: '#aaa',
+      },
     },
+    invalid: {
+      color: '#484848',
+      ':focus': {
+        color: '#484848',
+      },
+      '::placeholder': {
+        color: '#aaa',
+      },
+    },
+  },
 });
 
 class PaymentForm extends Component {
-    static propTypes = {
-        houseRules: PropTypes.arrayOf(
+  static propTypes = {
+    houseRules: PropTypes.arrayOf(
             PropTypes.shape({
-                listsettings: PropTypes.shape({
-                    itemName: PropTypes.string.isRequired,
-                }),
-            })
+              listsettings: PropTypes.shape({
+                itemName: PropTypes.string.isRequired,
+              }),
+            }),
         ),
-        hostDisplayName: PropTypes.string.isRequired,
-        allowedPersonCapacity: PropTypes.number.isRequired,
-        initialValues: PropTypes.shape({
-            listId: PropTypes.number.isRequired,
-            listTitle: PropTypes.string.isRequired,
-            hostId: PropTypes.string.isRequired,
-            guestId: PropTypes.string.isRequired,
-            checkIn: PropTypes.object.isRequired,
-            checkOut: PropTypes.object.isRequired,
-            guests: PropTypes.number.isRequired,
-            basePrice: PropTypes.number.isRequired,
-            cleaningPrice: PropTypes.number.isRequired,
-            currency: PropTypes.string.isRequired,
-            weeklyDiscount: PropTypes.number,
-            monthlyDiscount: PropTypes.number,
-            paymentType: PropTypes.number,
-        }).isRequired,
-        paymentCurrencyList: PropTypes.arrayOf(
+    hostDisplayName: PropTypes.string.isRequired,
+    allowedPersonCapacity: PropTypes.number.isRequired,
+    initialValues: PropTypes.shape({
+      listId: PropTypes.number.isRequired,
+      listTitle: PropTypes.string.isRequired,
+      hostId: PropTypes.string.isRequired,
+      guestId: PropTypes.string.isRequired,
+      checkIn: PropTypes.object.isRequired,
+      checkOut: PropTypes.object.isRequired,
+      guests: PropTypes.number.isRequired,
+      basePrice: PropTypes.number.isRequired,
+      cleaningPrice: PropTypes.number.isRequired,
+      currency: PropTypes.string.isRequired,
+      weeklyDiscount: PropTypes.number,
+      monthlyDiscount: PropTypes.number,
+      paymentType: PropTypes.number,
+    }).isRequired,
+    paymentCurrencyList: PropTypes.arrayOf(
             PropTypes.shape({
-                id: PropTypes.number.isRequired,
-                symbol: PropTypes.string.isRequired,
-                isEnable: PropTypes.bool.isRequired,
-                isPayment: PropTypes.bool.isRequired,
-            })
+              id: PropTypes.number.isRequired,
+              symbol: PropTypes.string.isRequired,
+              isEnable: PropTypes.bool.isRequired,
+              isPayment: PropTypes.bool.isRequired,
+            }),
         ),
-        paymentLoading: PropTypes.bool,
-        formatMessage: PropTypes.any,
-    };
+    paymentLoading: PropTypes.bool,
+    formatMessage: PropTypes.any,
+    rent: PropTypes.number.isRequired,
+    transfer: PropTypes.number.isRequired,
+    nutrition: PropTypes.number.isRequired,
+    huntsman: PropTypes.number.isRequired,
+    assistant: PropTypes.number.isRequired,
+    addition: PropTypes.string.isRequired,
 
-    static defaultProps = {
-        paymentCurrencyList: [],
-        paymentLoading: false,
-    };
+  };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            paymentStatus: 2,
-            load: true,
-            message: props.initialValues.message
-        };
-        this.renderpaymentCurrencies = this.renderpaymentCurrencies.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handlePayment = this.handlePayment.bind(this);
-        change('message', this.state.message)
+  static defaultProps = {
+    paymentCurrencyList: [],
+    paymentLoading: false,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      paymentStatus: 2,
+      load: true,
+      message: props.initialValues.message,
+    };
+    this.renderpaymentCurrencies = this.renderpaymentCurrencies.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePayment = this.handlePayment.bind(this);
+    change('message', this.state.message);
         // setTimeout(async () => {
-     
- 
-            props.dispatch(contactHost(
+
+    console.log(props.rent, props.transfer, props.nutrition, props.huntsman, props.assistant, props.addition);
+    props.dispatch(contactHost(
                 props.initialValues.listId,
                 props.initialValues.hostId,
                 props.initialValues.message,
                 props.initialValues.checkIn,
                 props.initialValues.checkOut,
-                props.initialValues.guests,  
+                props.initialValues.guests,
+                0,
+                props.rent,
+                props.transfer,
+                props.nutrition,
+                props.huntsman,
+                props.assistant,
+                props.addition
             ));
-            
-            window.location = 'https://goodtrip.ru/inbox';
 
-            // await this.props.handleSubmit(this.handleSubmit)   
-       
+    window.location = 'https://goodtrip.ru/inbox';
+
+            // await this.props.handleSubmit(this.handleSubmit)
+
         // }, 500)
         // this.props.dispatch(submit('PaymentForm'))
+  }
 
-    } 
+  componentDidUpdate(prevProps) {
+    const { locale } = this.props.intl;
+    const { locale: prevLocale } = prevProps.intl;
 
-    componentDidUpdate(prevProps) {
-        const { locale } = this.props.intl;
-        const { locale: prevLocale } = prevProps.intl;
-
-        if (locale !== prevLocale) {
-            this.setState({ load: false });
-            clearTimeout(this.loadSync);
-            this.loadSync = null;
-            this.loadSync = setTimeout(() => this.setState({ load: true }), 1);
-        }
+    if (locale !== prevLocale) {
+      this.setState({ load: false });
+      clearTimeout(this.loadSync);
+      this.loadSync = null;
+      this.loadSync = setTimeout(() => this.setState({ load: true }), 1);
     }
+  }
 
-    renderFormControlSelect = ({ input, label, meta: { touched, error }, children, className, disabled }) => {
-        const { formatMessage } = this.props.intl;
-        return (
-            <div>
-                <FormControl disabled={disabled} componentClass="select" {...input} className={className}>
-                    {children}
-                </FormControl>
-                {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
-            </div>
-        );
-    };
+  renderFormControlSelect = ({ input, label, meta: { touched, error }, children, className, disabled }) => {
+    const { formatMessage } = this.props.intl;
+    return (
+      <div>
+        <FormControl disabled={disabled} componentClass="select" {...input} className={className}>
+          {children}
+        </FormControl>
+        {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
+      </div>
+    );
+  };
 
-    renderFormControlTextArea = ({ input, label, meta: { touched, error }, children, className }) => {
-        const { formatMessage } = this.props.intl;
-        return (
-            <FormGroup>
-                <FormControl {...input} className={className} componentClass="textarea" placeholder={label}>
-                    {children}
-                </FormControl>
-                {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
-            </FormGroup>
-        );
-    };
+  renderFormControlTextArea = ({ input, label, meta: { touched, error }, children, className }) => {
+    const { formatMessage } = this.props.intl;
+    return (
+      <FormGroup>
+        <FormControl {...input} className={className} componentClass="textarea" placeholder={label}>
+          {children}
+        </FormControl>
+        {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
+      </FormGroup>
+    );
+  };
 
-    renderGuests(personCapacity) {
-        const { formatMessage } = this.props.intl;
+  renderGuests(personCapacity) {
+    const { formatMessage } = this.props.intl;
 
-        const rows = [];
-        for (let i = 1; i <= personCapacity; i++) {
-            rows.push(
-                <option key={i} value={i}>
-                    {i} {i > 1 ? formatMessage(messages.guests) : formatMessage(messages.guest)}
-                </option>
+    const rows = [];
+    for (let i = 1; i <= personCapacity; i++) {
+      rows.push(
+        <option key={i} value={i}>
+          {i} {i > 1 ? formatMessage(messages.guests) : formatMessage(messages.guest)}
+        </option>,
             );
-        }
-        return rows;
     }
+    return rows;
+  }
 
-    renderpaymentCurrencies() {
-        const { paymentCurrencyList } = this.props;
-        const rows = [];
+  renderpaymentCurrencies() {
+    const { paymentCurrencyList } = this.props;
+    const rows = [];
 
-        if (paymentCurrencyList != null && paymentCurrencyList.length > 0) {
-            paymentCurrencyList.map((item, index) => {
-                if (item.isEnable && item.isPayment) {
-                    rows.push(
-                        <option key={index} value={item.symbol}>
-                            {item.symbol}
-                        </option>
+    if (paymentCurrencyList != null && paymentCurrencyList.length > 0) {
+      paymentCurrencyList.map((item, index) => {
+        if (item.isEnable && item.isPayment) {
+          rows.push(
+            <option key={index} value={item.symbol}>
+              {item.symbol}
+            </option>,
                     );
-                }
-            });
         }
-        return rows;
+      });
     }
+    return rows;
+  }
 
-    renderFormControl = ({ input, label, type, placeholder, meta: { touched, error }, className }) => {
-        const { formatMessage } = this.props.intl;
-        return (
-            <div>
-                <FormControl {...input} placeholder={placeholder} type={type} className={className} maxLength={11} />
-                {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
-            </div>
-        );
-    };
+  renderFormControl = ({ input, label, type, placeholder, meta: { touched, error }, className }) => {
+    const { formatMessage } = this.props.intl;
+    return (
+      <div>
+        <FormControl {...input} placeholder={placeholder} type={type} className={className} maxLength={11} />
+        {touched && error && <span className={s.errorMessage}>{formatMessage(error)}</span>}
+      </div>
+    );
+  };
 
-    handleClick() {
-        const { dispatch } = this.props;
-        dispatch(reset('BookingForm'));
-    }
+  handleClick() {
+    const { dispatch } = this.props;
+    dispatch(reset('BookingForm'));
+  }
 
-    async handleSubmit(values, dispatch) {
+  async handleSubmit(values, dispatch) {
+    const { stripe, processCardAction, preApprove } = this.props;
 
-        const { stripe, processCardAction, preApprove } = this.props;
+    const paymentType = values.paymentType;
+    const paymentCurrency = values.paymentType == 1 ? values.paymentCurrency : null;
 
-        const paymentType = values.paymentType;
-        const paymentCurrency = values.paymentType == 1 ? values.paymentCurrency : null;
-
-        const query = `query checkReservation ($checkIn: String,$checkOut: String,$listId: Int ){
+    const query = `query checkReservation ($checkIn: String,$checkOut: String,$listId: Int ){
             checkReservation(checkIn: $checkIn, checkOut:$checkOut, listId:$listId ){
                 id
                 listId
@@ -253,66 +265,65 @@ class PaymentForm extends Component {
             }
         }`;
 
-        values.checkIn = moment(values.checkIn).format('YYYY-MM-DD');
-        values.checkOut = moment(values.checkOut).format('YYYY-MM-DD');
+    values.checkIn = moment(values.checkIn).format('YYYY-MM-DD');
+    values.checkOut = moment(values.checkOut).format('YYYY-MM-DD');
 
-        const params = {
-            listId: values.listId,
-            checkIn: values.checkIn,
-            checkOut: values.checkOut,
-        };
+    const params = {
+      listId: values.listId,
+      checkIn: values.checkIn,
+      checkOut: values.checkOut,
+    };
 
-        const resp = await fetch('/graphql', {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+    const resp = await fetch('/graphql', {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+        variables: params,
+      }),
+      credentials: 'include',
+    });
+
+    const { data } = await resp.json();
+
+    if (data && data.checkReservation && data.checkReservation.status == '200') {
+      let msg = '',
+        paymentMethodId,
+        createPaymentMethod;
+
+      if (paymentType == 2) {
+        createPaymentMethod = await stripe.createPaymentMethod('card', {
+          card: <CardElement />,
+          billing_details: {
+            address: {
+              postal_code: values.zipcode,
             },
-            body: JSON.stringify({
-                query,
-                variables: params,
-            }),
-            credentials: 'include',
+          },
         });
 
-        const { data } = await resp.json();
-
-        if (data && data.checkReservation && data.checkReservation.status == '200') {
-            let msg = '',
-                paymentMethodId,
-                createPaymentMethod;
-
-            if (paymentType == 2) {
-                createPaymentMethod = await stripe.createPaymentMethod('card', {
-                    card: <CardElement />,
-                    billing_details: {
-                        address: {
-                            postal_code: values.zipcode,
-                        },
-                    },
-                });
-
-                if (createPaymentMethod && createPaymentMethod.paymentMethod) {
-                    paymentMethodId = createPaymentMethod.paymentMethod.id;
-                }
-            }
-            if (
+        if (createPaymentMethod && createPaymentMethod.paymentMethod) {
+          paymentMethodId = createPaymentMethod.paymentMethod.id;
+        }
+      }
+      if (
                 createPaymentMethod &&
                 createPaymentMethod.error &&
                 createPaymentMethod.error.message &&
                 paymentType == 2
             ) {
-                msg = createPaymentMethod.error.message;
-                toastr.error('Oops!', msg);
-            } else {
-                if (Number(values.paymentType) == 2 && !values.zipcode) {
-                    toastr.error('Oops!', 'Your Zip code is incomplete.');
-                    return;
-                }
+        msg = createPaymentMethod.error.message;
+        toastr.error('Oops!', msg);
+      } else {
+        if (Number(values.paymentType) == 2 && !values.zipcode) {
+          toastr.error('Oops!', 'Your Zip code is incomplete.');
+          return;
+        }
 
-                if (preApprove) {
-
-                    const { status, paymentIntentSecret, reservationId } = await dispatch(
+        if (preApprove) {
+          const { status, paymentIntentSecret, reservationId } = await dispatch(
                         makePayment(
                             values.listId,
                             values.listTitle,
@@ -343,33 +354,39 @@ class PaymentForm extends Component {
                             values.checkInStart,
                             values.checkInEnd,
                             values.hostServiceFeeType,
-                            values.hostServiceFeeValue
-                        )
+                            values.hostServiceFeeValue,
+                        ),
                     );
-
-                } else { 
-
-                    await dispatch(contactHost(
+        } else {
+          console.log(this.props.rent, this.props.transfer, this.props.nutrition, this.props.huntsman, this.props.assistant, this.props.addition);
+          await dispatch(contactHost(
                         values.listId,
                         values.hostId,
                         values.message,
                         values.checkIn,
                         values.checkOut,
                         values.guests,
+                        0,
+                        this.props.rent,
+                        this.props.transfer,
+                        this.props.nutrition,
+                        this.props.huntsman,
+                        this.props.assistant,
+                        this.props.addition,
                     ));
-                    
+
                     window.location = 'https://goodtrip.ru/inbox';
-                }
+        }
 
-                if (status == 400 && paymentType == 2) {
-                    const cardAction = await stripe.handleCardAction(paymentIntentSecret);
-                    const amount = values.total + values.guestServiceFee;
-                    let confirmPaymentIntentId;
+        if (status == 400 && paymentType == 2) {
+          const cardAction = await stripe.handleCardAction(paymentIntentSecret);
+          const amount = values.total + values.guestServiceFee;
+          let confirmPaymentIntentId;
 
-                    if (cardAction && cardAction.paymentIntent && cardAction.paymentIntent.id) {
-                        confirmPaymentIntentId = cardAction.paymentIntent.id;
+          if (cardAction && cardAction.paymentIntent && cardAction.paymentIntent.id) {
+            confirmPaymentIntentId = cardAction.paymentIntent.id;
 
-                        const { handleCardActionStatus, errorMessage } = await processCardAction(
+            const { handleCardActionStatus, errorMessage } = await processCardAction(
                             reservationId,
                             values.listId,
                             values.hostId,
@@ -378,124 +395,128 @@ class PaymentForm extends Component {
                             values.guestEmail,
                             amount,
                             values.currency,
-                            confirmPaymentIntentId
+                            confirmPaymentIntentId,
                         );
-                    } else if (cardAction && cardAction.error && cardAction.error.message) {
-                        msg = cardAction.error.message;
-                        toastr.error('Oops!', msg);
-                    }
-                }
-            }
-        } else {
-            toastr.error('Oops!', 'Those dates are not available.');
+          } else if (cardAction && cardAction.error && cardAction.error.message) {
+            msg = cardAction.error.message;
+            toastr.error('Oops!', msg);
+          }
         }
+      }
+    } else {
+      toastr.error('Oops!', 'Those dates are not available.');
     }
+  }
 
-    handlePayment(e) {
-        const paymentType = e.target.value;
+  handlePayment(e) {
+    const paymentType = e.target.value;
 
-        if (paymentType == 2) {
-            this.setState({ paymentStatus: 2 });
-        } else {
-            this.setState({ paymentStatus: 1 });
-        }
+    if (paymentType == 2) {
+      this.setState({ paymentStatus: 2 });
+    } else {
+      this.setState({ paymentStatus: 1 });
     }
+  }
 
-    render() {
-        const {
+  render() {
+    const {
             hostDisplayName,
             houseRules,
             allowedPersonCapacity,
             paymentLoading,
             intl: { locale },
         } = this.props;
-        const { handleSubmit, submitting, error, pristine, paymentType, stripe, preApprove } = this.props;
-        const { listId, guestPicture } = this.props;
-        const { paymentStatus, load } = this.state;
-        const { formatMessage } = this.props.intl;
+    const { handleSubmit, submitting, error, pristine, paymentType, stripe, preApprove } = this.props;
+    const { listId, guestPicture } = this.props;
+    const { paymentStatus, load } = this.state;
+    const { formatMessage } = this.props.intl;
+    const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
+    console.log(rent);
 
-        const elementClasses = {
-            focus: 'focused',
-            empty: 'empty',
-            invalid: 'invalid',
-        };
+    const elementClasses = {
+      focus: 'focused',
+      empty: 'empty',
+      invalid: 'invalid',
+    };
 
-        return (
-            <div className={cx(s.bookItPanel, s.spaceTop2, s.aboutNoMargin)}>
-                { false && <form onSubmit={(a, b) => {
-                }}>
-                    <Row>
-                        <Col md={12} className={cx(s.textLeft, 'textAlignRightRtl')}>
-                            <div className={s.h3}>
-                                <FormattedMessage {...messages.aboutYourTrip} />
-                            </div>
-                            <div className={s.aboutPaymentDesc}>
-                                <FormattedMessage {...messages.aboutDescPayment} />
-                            </div>
-                            <div className={cx(s.bookItDetails, s.spaceTop2, s.space4)}>
-                                <span>
-                                    <FormattedMessage {...messages.whoComing} />
-                                </span>
-                                <Row className={s.spaceTop2}>
-                                    <Col md={12} lg={5}>
-                                        <Field
-                                            name="guests"
-                                            component={this.renderFormControlSelect}
-                                            className={cx(
+    return (
+      <div className={cx(s.bookItPanel, s.spaceTop2, s.aboutNoMargin)}>
+        { false && <form
+          onSubmit={(a, b) => {
+          }}
+        >
+          <Row>
+            <Col md={12} className={cx(s.textLeft, 'textAlignRightRtl')}>
+              <div className={s.h3}>
+                <FormattedMessage {...messages.aboutYourTrip} />
+              </div>
+              <div className={s.aboutPaymentDesc}>
+                <FormattedMessage {...messages.aboutDescPayment} />
+              </div>
+              <div className={cx(s.bookItDetails, s.spaceTop2, s.space4)}>
+                <span>
+                  <FormattedMessage {...messages.whoComing} />
+                </span>
+                <Row className={s.spaceTop2}>
+                  <Col md={12} lg={5}>
+                    <Field
+                      name="guests"
+                      component={this.renderFormControlSelect}
+                      className={cx(
                                                 s.formControlSelect,
                                                 bt.commonControlSelect,
-                                                'paymentSelectAR'
+                                                'paymentSelectAR',
                                             )}
-                                        >
-                                            {this.renderGuests(allowedPersonCapacity)}
-                                        </Field>
-                                    </Col>
-                                </Row>
-                            </div>
-                            <div className={s.displayTable}>
-                                <div className={s.displayTableRow}>
-                                    <div className={cx(s.displayTableCell, s.avatarSection, s.vtrTop)}>
-                                        <img src={`/images/avatar/medium_${guestPicture}`} className={s.avatarImage} />
-                                    </div>
-                                    <div className={cx(s.displayTableCell, s.messageSection, s.vtrTop)}>
-                                        <div>
-                                            <span>
-                                                <FormattedMessage {...messages.sayHello} />:
+                    >
+                      {this.renderGuests(allowedPersonCapacity)}
+                    </Field>
+                  </Col>
+                </Row>
+              </div>
+              <div className={s.displayTable}>
+                <div className={s.displayTableRow}>
+                  <div className={cx(s.displayTableCell, s.avatarSection, s.vtrTop)}>
+                    <img src={`/images/avatar/medium_${guestPicture}`} className={s.avatarImage} />
+                  </div>
+                  <div className={cx(s.displayTableCell, s.messageSection, s.vtrTop)}>
+                    <div>
+                      <span>
+                        <FormattedMessage {...messages.sayHello} />:
                                             </span>
-                                        </div>
-                                        <div>
-                                            <Field
-                                                className={s.textArea}
-                                                name="message"
-                                                value={this.state.message} 
-                                                component={this.renderFormControlTextArea}
-                                                label={formatMessage(messages.descriptionInfo)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/*houseRules.length > 0 && (
+                    </div>
+                    <div>
+                      <Field
+                        className={s.textArea}
+                        name="message"
+                        value={this.state.message}
+                        component={this.renderFormControlTextArea}
+                        label={formatMessage(messages.descriptionInfo)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* houseRules.length > 0 && (
                                 <div className={s.space4}>
                                     <HouseRules hostDisplayName={hostDisplayName} houseRules={houseRules} />
                                 </div>
-                            )*/}
-                        </Col>
-                        <Col md={10} className={cx(s.textLeft, 'textAlignRightRtl')}>
-                            <section>
-                                <header className={s.paymentHeader}>
-                                    <Row>
-                                        <Col md={10} className={cx(s.textLeft, s.paymentPadding, 'textAlignRightRtl')}>
-                                            <h3 className={cx(s.pullLeft, s.h3, s.space2, 'pullRightBooking')}>
-                                                {preApprove ? <FormattedMessage {...messages.billing} />: 
-                                                <FormattedMessage {...messages.verification} />}
-                                            </h3>
-                                            <p><FormattedMessage {...messages.changedPriceNotif}/></p>
-                                        </Col>
-                                    </Row>
-                                </header>
-                            </section>
-                            {/* <Field
+                            ) */}
+            </Col>
+            <Col md={10} className={cx(s.textLeft, 'textAlignRightRtl')}>
+              <section>
+                <header className={s.paymentHeader}>
+                  <Row>
+                    <Col md={10} className={cx(s.textLeft, s.paymentPadding, 'textAlignRightRtl')}>
+                      <h3 className={cx(s.pullLeft, s.h3, s.space2, 'pullRightBooking')}>
+                        {preApprove ? <FormattedMessage {...messages.billing} /> :
+                        <FormattedMessage {...messages.verification} />}
+                      </h3>
+                      <p><FormattedMessage {...messages.changedPriceNotif} /></p>
+                    </Col>
+                  </Row>
+                </header>
+              </section>
+              {/* <Field
                                 name="paymentType"
                                 type="text"
                                 className={cx(s.formControlSelect, s.fullWithSelect, bt.commonControlSelect, 'selectPaymentDropdown')}
@@ -505,7 +526,7 @@ class PaymentForm extends Component {
                                 <option value={2}>{formatMessage(messages.creditCard)}</option>
                                 <option value={1}>{formatMessage(messages.paypal)}</option>
                             </Field> */}
-                            {/* {!load ? (
+              {/* {!load ? (
                                 <Loader />
                             ) : (
                                 <Row className={cx(s.space4, s.spaceTop2, s.responsivecardSection)}>
@@ -542,7 +563,7 @@ class PaymentForm extends Component {
                                     </Col>
                                 </Row>
                             )} */}
-                            {/* {
+              {/* {
                                 paymentStatus == 2 ? (!load ? <Loader /> : <Row className={cx(s.space4, s.spaceTop2, s.responsivecardSection)}>
                                 <Col lg={10} md={11} sm={8} xs={12} className={cx(s.noPadding, s.spaceTop2, s.cardSection)}>
                                     <div className={'placeHolderFont'}>
@@ -620,65 +641,65 @@ class PaymentForm extends Component {
                                 </Col>
                                 </Row>
                             } */}
-                            <Row className={s.space4}>
-                                <Col xs={12} sm={12} md={12} lg={12}>
-                                    <div className={s.cancelBtn}>
-                                        <Loader
-                                            type={'button'}
-                                            buttonType={'submit'}
-                                            className={cx(bt.btnPrimary, 'arButtonLoader')}
+              <Row className={s.space4}>
+                <Col xs={12} sm={12} md={12} lg={12}>
+                  <div className={s.cancelBtn}>
+                    <Loader
+                      type={'button'}
+                      buttonType={'submit'}
+                      className={cx(bt.btnPrimary, 'arButtonLoader')}
                                             // disabled={pristine || submitting || error}
-                                            show={paymentLoading}
-                                            label={formatMessage(preApprove ? messages.payNow : messages.bookSubmit)}
-                                        />
-                                    </div>
-                                    {!paymentLoading && (
-                                        <div className={s.spaceTop1}>
-                                            <Link
-                                                to={`/rooms/${listId}`}
-                                                className={cx(s.cancelLinkText)}
-                                                onClick={this.handleClick}
-                                            >
-                                                <FormattedMessage {...messages.cancel} />
-                                            </Link>
-                                        </div>
+                      show={paymentLoading}
+                      label={formatMessage(preApprove ? messages.payNow : messages.bookSubmit)}
+                    />
+                  </div>
+                  {!paymentLoading && (
+                    <div className={s.spaceTop1}>
+                      <Link
+                        to={`/rooms/${listId}`}
+                        className={cx(s.cancelLinkText)}
+                        onClick={this.handleClick}
+                      >
+                        <FormattedMessage {...messages.cancel} />
+                      </Link>
+                    </div>
                                     )}
-                                    {paymentLoading && (
-                                        <div className={s.spaceTop1}>
-                                            <a href="javascript:void(0)" className={cx(s.cancelLinkText)}>
-                                                <FormattedMessage {...messages.cancel} />
-                                            </a>
-                                        </div>
+                  {paymentLoading && (
+                    <div className={s.spaceTop1}>
+                      <a href="javascript:void(0)" className={cx(s.cancelLinkText)}>
+                        <FormattedMessage {...messages.cancel} />
+                      </a>
+                    </div>
                                     )}
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </form> }  
-            </div>
-        );
-    }
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </form> }
+      </div>
+    );
+  }
 }
 
 PaymentForm = reduxForm({
-    form: 'PaymentForm', // a unique name for this form
-    validate,
-    // onSubmit: this.props.handleSubmit(this.handleSubmit) 
+  form: 'PaymentForm', // a unique name for this form
+  validate,
+    // onSubmit: this.props.handleSubmit(this.handleSubmit)
 })(PaymentForm);
 
 // Decorate with connect to read form values
 const selector = formValueSelector('PaymentForm'); // <-- same as form name
 
-const mapState = (state) => ({
-    paymentCurrencyList: state.currency.availableCurrencies,
-    paymentLoading: state.book.paymentLoading,
-    paymentType: selector(state, 'paymentType'),
-    preApprove: state.book.bookDetails.preApprove
+const mapState = state => ({
+  paymentCurrencyList: state.currency.availableCurrencies,
+  paymentLoading: state.book.paymentLoading,
+  paymentType: selector(state, 'paymentType'),
+  preApprove: state.book.bookDetails.preApprove,
 });
 
 const mapDispatch = {
     // makePayment,
-    processCardAction,
+  processCardAction,
 };
 
 export default injectStripe(injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(PaymentForm))));

@@ -2,13 +2,18 @@
 @import '../common.css';
 @import '../../helpers.css';
 .activationStepPanel {
-	max-width: 530px;
+	max-width: 1024px;
 	margin: 0 auto;
 	height: 100%;
 	min-height: 520px;
 	text-align: center;
 	border: none;
 }
+
+.titleMeetup {
+	padding-inline: 10%;
+}
+
 .fields {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -25,6 +30,34 @@
 	padding-bottom: 35px;
 	padding-left: 60px;
 	padding-right: 60px;
+}
+.MeetupContentSection {
+	width: 100%;
+	display: flex;
+	gap: 20px
+}
+.MeetupContentSectionLeft{
+	margin-top: 30px;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.MeetupContentSectionLogo{
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	background-color: rgb(19, 70, 64);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.MeetupContentSectionLeftText{
+	padding-inline: 10px;
+}
+.MeetupContentSectionRight{
+	width: 50%;
 }
 .userLeft {
 	display: inline-block;
@@ -56,6 +89,34 @@
 	height: 130px;
 	width: 130px;
 }
+.checkboxesMeetup {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 5px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	text-align: start;
+	padding-left: 10%;
+	/* padding-inline: 20px; */
+}
+.checkboxMeetup{
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	/* white-space: nowrap; */
+}
+.additionInputBox{
+	width: 100%;
+	height: 100px;
+	margin-bottom: 20px;
+	font-size: 12px;
+}
+.additionInput{
+	width: 100%;
+	height: 100%;
+	padding: 10px !important;
+	font-size: 16px;
+}
 .mediaPhoto {
 	backface-visibility: hidden;
 	position: relative;
@@ -73,6 +134,20 @@
 .ps-footer{
 	color: red;
 }
+.btn {
+	max-width: 530px;
+}
+.btnDisabled{
+	background-color: #fff;
+	border-color: black !important;
+	color: black !important;
+}
+.btnDisabled:hover{
+	background-color: #fff !important;
+	border-color: black !important;
+	color: black !important;
+}
+
 @media screen and (max-width: 640px) {
 	.profileImage {
 		height: 92px;
@@ -81,5 +156,24 @@
 	.logoImage {
 		height: 41px;
 		width: 41px;
+	}
+	.titleMeetup {
+		padding-inline: 0;
+	}
+	.MeetupContentSectionLeftText{
+		padding-inline: 0;
+	}
+	.MeetupContentSectionLogo{
+		width: 150px;
+		height: 150px;
+	}
+	.MeetupContentSectionRight{
+		width: 60%;
+	}
+}
+@media screen and (max-width: 500px) {
+	.panelBody {
+		padding-left: 10px;
+		padding-right: 10px;
 	}
 }

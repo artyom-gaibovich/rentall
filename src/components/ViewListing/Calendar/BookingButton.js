@@ -51,23 +51,14 @@ class BookingButton extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.hanldeChange = this.hanldeChange.bind(this);
   }
-   async handleClick() {
-    const { bookingProcess, listId, guests, startDate, endDate, taxRate } = this.props;
-    // if (!this.props.account) {
-    //   await this.hiddenRegister()
-    // }
-    // console.log('user auth start booking');
-    // console.log(this.props);
-     bookingProcess(listId, guests, startDate, endDate, null, taxRate);
-    // // console.log({bookingProcessHandler});
-    // const result = await bookingProcessHandler();
-    // // console.log({result});
-    // console.log('user auth end booking');
+  async handleClick() {
+    const { bookingProcess, listId, startDate, endDate, taxRate } = this.props;
+    let { guests } = this.props;
 
-   
+    guests = guests || 1;
+    bookingProcess(listId, guests, startDate, endDate, null, taxRate);
   }
   async hiddenRegister() {
-
     const query = `query (
       $firstName:String,
       $lastName:String,
@@ -86,9 +77,9 @@ class BookingButton extends Component {
           status
         }
       }`;
-  
-    const dateOfBirth = `05-1990-$23`;
-  
+
+    const dateOfBirth = '05-1990-$23';
+
     const params = {
       firstName: `anonymousFirstName_${Date.now()}`,
       lastName: `anonymousLastName_${Date.now()}`,
@@ -96,7 +87,7 @@ class BookingButton extends Component {
       password: `anonymousPassword_${Date.now()}`,
       dateOfBirth,
     };
-  
+
     const resp = await fetch('/graphql', {
       method: 'post',
       headers: {
@@ -109,7 +100,7 @@ class BookingButton extends Component {
       }),
       credentials: 'include',
     });
-  
+
     const { data } = await resp.json();
     // console.log('hidden register response', data)
     this.props.dispatch(loadAccount());
@@ -122,13 +113,29 @@ class BookingButton extends Component {
     history.push('/s');
   }
   render() {
-    const { basePrice, userBanStatus, isDateChosen, availability, isHost, bookingType, bookingLoading, taxRate, guests  } = this.props;
+    const { basePrice, userBanStatus, isDateChosen, availability, isHost, bookingType, bookingLoading, taxRate, guests } = this.props;
     const { formatMessage } = this.props.intl;
     const { maximumStay, minimumStay } = this.props;
+
+    const processAuthAction = () => {
+      console.log('AUTH REQ');
+      let authActions = localStorage.getItem('authActionsRegister');
+      const pathName = location.pathname;
+      if (!authActions) {
+        authActions = {};
+      } else {
+        authActions = JSON.parse(authActions);
+      }
+
+      authActions = { type: 'contactHost', url: pathName, date: Date.now() };
+      localStorage.setItem('authActionsRegister', JSON.stringify(authActions));
+      this.props.dispatch(openLoginModal());
+    };
+
     let disabled,
       buttonLabel;
     // if (!isDateChosen || basePrice < 1 || isHost || maximumStay || userBanStatus || minimumStay) {
-      if (!isDateChosen || basePrice < 1 || isHost || maximumStay || minimumStay || !guests) {
+    if (!isDateChosen || basePrice < 1 || isHost || maximumStay || minimumStay || guests < 1) {
       disabled = true;
     } else {
       disabled = false;
@@ -154,7 +161,7 @@ class BookingButton extends Component {
         <Loader
           type={'button'}
           className={cx(s.btn, s.btnBlock, bt.btnLarge, bt.btnPrimary, 'arButtonLoader')}
-          handleClick={() => this.props.account ? this.handleClick() : this.props.dispatch(openLoginModal())}
+          handleClick={() => this.props.account ? this.handleClick() : processAuthAction()}
           disabled={disabled}
           show={bookingLoading}
           label={formatMessage(buttonLabel)}
@@ -166,11 +173,9 @@ class BookingButton extends Component {
 const mapState = state => ({
 
 });
-const mapDispatch = (dispatch) => {
-  return {
-    dispatch
-  }
-};
+const mapDispatch = dispatch => ({
+  dispatch,
+});
 export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(BookingButton)));
 // export default injectIntl(withStyles(s, bt)(connect(mapState, mapDispatch)(BookingForm)));
-// 
+//

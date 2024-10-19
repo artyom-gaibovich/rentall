@@ -84,7 +84,9 @@ export function loadAccount(loginScreen, refer) {
         });
         if (loginScreen) {
           if (refer) {
-            history.push(refer);
+            // history.push(refer);
+            // history.push('/dashboard');
+            location.reload();
           } else {
             history.push('/dashboard');
           }

@@ -4901,7 +4901,7 @@
     ]
   },
   {
-    "message": "Информация обо мне",
+    "message": "Все сообщения",
     "id": "rentall.allMessages",
     "description": "Dashboard",
     "defaultMessage": "All Messages",

@@ -1369,14 +1369,20 @@ DROP TABLE IF EXISTS `ThreadItems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ThreadItems` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT
   `threadId` int(11) NOT NULL,
   `sentBy` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` mediumtext COLLATE utf8mb4_unicode_ci,
   `isRead` tinyint(1) DEFAULT NULL,
-  `type` enum('message','inquiry','preApproved','declined','approved','pending','cancelledByHost','cancelledByGuest','intantBooking','requestToBook','confirmed','expired','completed') COLLATE utf8mb4_unicode_ci DEFAULT 'message',
+  `type` enum('message','inquiry','chat','preApproved','declined','approved','pending','cancelledByHost','cancelledByGuest','intantBooking','requestToBook','confirmed','expired','completed') COLLATE utf8mb4_unicode_ci DEFAULT 'message',
   `startDate` date DEFAULT NULL,
   `endDate` date DEFAULT NULL,
+  `rent` int(11) DEFAULT NULL,
+  `transfer` int(11) DEFAULT NULL,
+  `nutrition` int(11) DEFAULT NULL,
+  `huntsman` int(11) DEFAULT NULL,
+  `assistant` int(11) DEFAULT NULL,
+  `addition` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `personCapacity` int(11) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,

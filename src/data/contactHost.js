@@ -17,6 +17,7 @@ export function contactHost(
   firstName,
 ) {
   return async (dispatch, getState, { client }) => {
+    console.log('brone');
     dispatch({
       type: CONTACT_HOST_START,
     });
@@ -71,6 +72,7 @@ export function contactHost(
       });
 
       if (data && data.CreateThreadItems) {
+        console.log('345');
         dispatch({
           type: CONTACT_HOST_SUCCESS,
         });

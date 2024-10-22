@@ -64,13 +64,6 @@ class ViewMessage extends React.Component {
           reservationId: PropTypes.number,
           startDate: PropTypes.string.isRequired,
           endDate: PropTypes.string.isRequired,
-          rent: PropTypes.number,
-          transfer: PropTypes.number,
-          nutrition: PropTypes.number,
-          huntsman: PropTypes.number,
-          assistant: PropTypes.number,
-          addition: PropTypes.string,
-          personCapacity: PropTypes.number.isRequired,
           createdAt: PropTypes.string.isRequired,
           cancelData: PropTypes.shape({
             guestServiceFee: PropTypes.number,
@@ -94,12 +87,6 @@ class ViewMessage extends React.Component {
   };
   static defaultProps = {
     threadId: null,
-    rent: 1,
-    transfer: 1,
-    nutrition: 1,
-    huntsman: 1,
-    assistant: 1,
-    addition: 'qwe',
   };
   constructor(props) {
     super(props);
@@ -107,6 +94,7 @@ class ViewMessage extends React.Component {
   }
   loadMore() {
     const { threadItemsData: { loading, getThread: { threadItems }, fetchMore }, threadId } = this.props;
+    console.log(threadItems, 'threadItems');
 
     fetchMore({
       query: GetMoreThreadItemsQuery,
@@ -128,6 +116,7 @@ class ViewMessage extends React.Component {
   render() {
     const { threadItemsData: { loading, getThread }, userType, threadId, isAdminAuthenticated } = this.props;
     console.log('getThread', getThread);
+    console.log(this.props.threadItemsData) 
     // console.log('getThreadRent', getThread.threadItemForType.rent)
     const { account } = this.props;
     if (loading) {

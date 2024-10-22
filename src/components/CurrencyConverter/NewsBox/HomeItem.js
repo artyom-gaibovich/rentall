@@ -148,10 +148,10 @@ class HomeSlider extends React.Component {
                 md={12}
                 className={cx(s.textEllipsis, s.infoReview, s.infoText, 'small-star-rating')}
               >
-                <StarRating className={cx(s.reviewStar, 'floatRight')} value={starRatingValue} name={'review'} />
+                {/* <StarRating className={cx(s.reviewStar, 'floatRight')} value={starRatingValue} name={'review'} />
                 <span className={s.reviewText}>
                   {reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}
-                </span>
+                </span> */}
               </Col>
             </Row>
           </a>

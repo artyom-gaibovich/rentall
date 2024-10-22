@@ -15,6 +15,16 @@
 .noBorder {
 	border: 0px none !important;
 }
+.captionText {
+	font-size: 14px;
+	color: #484848;
+}
+.approvedPanel{
+	padding-bottom: 0 !important;
+}
+.btnApproved{
+	margin-bottom: 20px !important;
+}
 /*************************Common Styles end******************************************/
 /*************************Sidenavigation Styles start******************************************/
 .sidebarDesign {

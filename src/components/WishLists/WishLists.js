@@ -71,7 +71,7 @@ class WishListComponent extends React.Component {
                 className={cx(s.button, bt.btnPrimary, bt.btnLarge, s.pullRight, s.noMargin, s.smPosition, 'shareIconRtl')}
                 onClick={() => openAddWishListGroupModal({}, 'AddWishListGroupForm')}
               >
-                <FormattedMessage {...messages.createWishList} />
+                Добавить избранное
               </Button>
             </Col>
             {

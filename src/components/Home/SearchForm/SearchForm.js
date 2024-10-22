@@ -109,6 +109,9 @@ class SearchForm extends React.Component {
             this.handleResize();
             window.addEventListener('resize', this.handleResize);
         }
+
+        // const {personalized} = this.props;
+        // personalized.location = ''
     }
 
     componentWillReceiveProps(nextProps) {
@@ -176,6 +179,11 @@ class SearchForm extends React.Component {
             uri = `${uri}&address=${personalized.location}&chosen=${personalized.chosen}`;
         } else if (personalized.location != null) {
             uri = `${uri}&address=${personalized.location}`;
+        }
+
+        if (personalized.location == null && this.state.suggestItems) {
+            const location = this.state.suggestItems[0].displayName
+            uri = `${uri}&address=${location}`;
         }
 
         if (personalized.startDate != null && personalized.endDate != null) {
@@ -341,6 +349,7 @@ class SearchForm extends React.Component {
 
     render() {
         const {location, dates, settingsData, setPersonalizedValues, personalized, listingFields} = this.props;
+        console.log(personalized)
         const {formatMessage} = this.props.intl;
         const {personCapacity, smallDevice, verySmallDevice} = this.state;
         const rows = [];

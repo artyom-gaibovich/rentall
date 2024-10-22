@@ -119,16 +119,17 @@ class BookingButton extends Component {
 
     const processAuthAction = () => {
       console.log('AUTH REQ');
-      let authActions = localStorage.getItem('authActionsRegister');
+      let authActions = localStorage.getItem('authActions');
       const pathName = location.pathname;
       if (!authActions) {
         authActions = {};
+        console.log('create AuthActions');
       } else {
         authActions = JSON.parse(authActions);
       }
 
-      authActions = { type: 'contactHost', url: pathName, date: Date.now() };
-      localStorage.setItem('authActionsRegister', JSON.stringify(authActions));
+      authActions = { type: 'rentObject', url: pathName, date: Date.now() };
+      localStorage.setItem('authActions', JSON.stringify(authActions));
       this.props.dispatch(openLoginModal());
     };
 

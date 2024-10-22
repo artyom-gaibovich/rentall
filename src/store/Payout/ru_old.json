@@ -7869,7 +7869,7 @@
     ]
   },
   {
-    "message": "Перейти ко всем спискам",
+    "message": "Перейти ко всем объектам",
     "id": "rentall.goToAllLists",
     "description": "Go to All Lists",
     "defaultMessage": "Go to All Lists",

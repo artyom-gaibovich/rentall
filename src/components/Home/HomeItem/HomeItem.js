@@ -142,17 +142,6 @@ class HomeSlider extends React.Component {
                 </span>
                 {/* <span className={'textReversing'}>{title}</span> */}
               </Col>
-              <Col
-                xs={12}
-                sm={12}
-                md={12}
-                className={cx(s.textEllipsis, s.infoReview, s.infoText, 'small-star-rating')}
-              >
-                <StarRating className={cx(s.reviewStar, 'floatRight')} value={starRatingValue} name={'review'} />
-                {/* <span className={s.reviewText}>
-                  {reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}
-                </span> */}
-              </Col>
             </Row>
           </a>
         </div>

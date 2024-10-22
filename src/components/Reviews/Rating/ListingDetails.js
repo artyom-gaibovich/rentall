@@ -70,10 +70,10 @@ class ListingDetails extends React.Component {
         <div>
           <span className={s.textMuted}>{city}, {state}, {country}</span>
         </div>
-        <div>
+        {/* <div>
           <span><StarRating name={'listRating'} value={starRatingValue} className={s.starReview} /></span>
           <span className={s.textMuted}>&nbsp;{reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}</span>
-        </div>
+        </div> */}
       </div>
     );
   }

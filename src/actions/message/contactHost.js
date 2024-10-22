@@ -48,7 +48,7 @@ export function contactHost(
             $nutrition: Int,
             $huntsman: Int,
             $assistant: Int,
-            $addition: String
+            $addition: String,
           ){
               CreateThreadItems(
                 listId: $listId,
@@ -63,7 +63,7 @@ export function contactHost(
                 nutrition: $nutrition,
                 huntsman: $huntsman,
                 assistant: $assistant,
-                addition: $addition
+                addition: $addition,
               ) {
                   id
                   threadId

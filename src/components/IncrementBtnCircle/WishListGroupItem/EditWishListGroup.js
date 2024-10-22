@@ -100,7 +100,7 @@ class EditWishListComponent extends React.Component {
                             <Col xs={12} sm={6} md={4} lg={4} className={s.space2}>
                               <div className={s.innerPadding}>
                                 <Link to={'/wishlists'} className={cx(s.button, bt.btnPrimaryBorder, bt.btnLarge, s.resposiveBtn)}>
-                                  {formatMessage(messages.goToAllLists)}
+                                  Перейти ко всем объектам
                                 </Link>
                               </div>
                             </Col>
@@ -126,7 +126,7 @@ class EditWishListComponent extends React.Component {
                                     href="javascript:void(0)"
                                     className={cx(s.button, s.modalCaptionLink, s.pullRight, s.noMargin, bt.btnLarge, s.resposiveBtn, s.responsiveDeleteBtn, s.deleteBtnMargin)}
                                   >
-                                    <FormattedMessage {...messages.deleteWishList} />
+                                    Удалить этот объект
                                   </a>
                                 </Confirm>
                               </div>

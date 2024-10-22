@@ -148,18 +148,24 @@ class GuestActions extends Component {
       return this.expired();
     }
     return (
-      <Panel className={cx(s.space6, s.contextPadding)}>
+      <Panel className={cx(s.space6, s.contextPadding, s.approvedPanel)}>
         {/* <h4><strong><FormattedMessage {...messages.requestApprovedAction1} /> {hostDisplayName} <FormattedMessage {...messages.messageAction4} /></strong></h4> */}
         <h4><strong><FormattedMessage {...messages.requestApprovedAction1} /></strong></h4>
 
         <p className={s.spaceTop2}>
-          <FormattedMessage {...messages.requestTimeInfo1} /> <CountDown options={options} /> <FormattedMessage {...messages.requestTimeInfo2} />
+          Пожалуйста подтвердите бронирование и внесите предоплату в течение <CountDown options={options} /> <FormattedMessage {...messages.requestTimeInfo2} />
         </p>
-        <Col xs={12} sm={12} md={12} lg={12} className={cx(s.spaceTop2, s.noPadding)}>
+        <Col xs={12} sm={12} md={12} lg={12} className={cx(s.spaceTop2, s.noPadding, s.btnApproved)}>
           <Button className={bt.btnPrimary} onClick={() => this.preBook()}>
-            <FormattedMessage {...messages.book} />
+            Подтвердить и внести предоплату
           </Button>
         </Col>
+        <p>
+          <small className={s.captionText}>
+            Нажимая кнопку, Вы соглашаетесь c
+            <span>&nbsp;<a target="_blank" href='/privacy'>Условиями предоставления услуг</a></span>
+          </small>
+        </p>
       </Panel>
     );
   }

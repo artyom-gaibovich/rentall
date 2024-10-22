@@ -105,13 +105,14 @@ class Reviews extends React.Component {
         </div>
       );
     }
+    const lastDigit = reviewsCount % 10
 
     return (
       <div>
         <Row className={cx(s.pageContent)}>
           <div className={cx(s.space2, s.spaceTop4)}>
             <h2 className={cx(s.sectionTitleText)}>
-              <span className={s.textLeft}>{reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}</span>
+              <span className={s.textLeft}>{reviewsCount} {lastDigit == 1 ? 'Отзыв' : lastDigit >= 2 && lastDigit <= 4 ? 'Отзыва' : 'Отзывов'}</span>
               <span> <StarRating value={starRatingValue} className={cx(s.starReview, 'reviewSectionRTL')} /> </span>
             </h2>
             {

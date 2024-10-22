@@ -113,19 +113,6 @@ class ListingItem extends React.Component {
                   {title}
                 </div>
               </Col>
-              <Col
-                xs={12} sm={12} md={12}
-                className={cx(s.textEllipsis, s.infoReview, s.infoText)}
-              >
-                <div className={s.reviewStar}>
-                  <span className={cx(s.displayInlineBlock)}>
-                    <StarRating value={starRatingValue} name={'review'} />
-                  </span>
-                  <span className={cx(s.reviewText, s.displayInlineBlock)}>
-                    &nbsp; {reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}
-                  </span>
-                </div>
-              </Col>
             </Row>
           </a>
         </div>

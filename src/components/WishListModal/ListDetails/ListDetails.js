@@ -56,7 +56,6 @@ class ListDetails extends Component {
     const isProfile = UserListing && UserListing.user && UserListing.user.profile && UserListing.user.profile.picture;
     const isProfileId = UserListing && UserListing.user && UserListing.user.profile && UserListing.user.profile.profileId;
 
-
     return (
       <div>
         {
@@ -84,12 +83,12 @@ class ListDetails extends Component {
                         <div className={cx(s.textBottom, s.subTexContainer)}>
                           <div className={s.textOverflow}>{UserListing.street}, {UserListing.city}</div>
                         </div>
-                        <span className={cx(s.reviewText, s.pullRight)}>
-                          {UserListing.reviewsCount} {UserListing.reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}
+                        {/* <span className={cx(s.reviewText, s.pullRight)}>
+                          {UserListing.reviewsCount} {lastDigit == 1 ? 'Отзыв' : lastDigit >= 2 && lastDigit <= 4 ? 'Отзыва' : 'Отзывов'}
                         </span>
                         <span className={cx(s.reviewStar, s.pullRight)}>
                           <StarRating value={UserListing.reviewsStarRating} name={'review'} />
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                 }

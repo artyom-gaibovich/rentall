@@ -83,31 +83,11 @@ class Dashboard extends React.Component {
 
             if (target) {
               setTimeout(() => {
-                location.pathname = target.url;
-              // authActionsDb.url = undefined
-              // localStorage.setItem('authActions', JSON.stringify(authActionsDb))
-              }, 1500);
-            }
-          }
-        }
-      } catch (e) {
-        console.log('err in ls read', e);
-      }
-
-      try {
-        let authActionsDbRegister = localStorage.getItem('authActionsRegister');
-        if (authActionsDbRegister) {
-          authActionsDbRegister = JSON.parse(authActionsDbRegister);
-          console.log('create AuthActions', authActionsDbRegister);
-          // let target = Object.keys(authActionsDb)[0]
-          if (authActionsDbRegister.url) {
-            const target = authActionsDbRegister;
-
-            if (target) {
-              setTimeout(() => {
-                location.pathname = target.url;
-                authActionsDbRegister.url = undefined;
-                localStorage.setItem('authActionsRegister', JSON.stringify(authActionsDbRegister));
+                location.pathname = target.url
+                if (target.type == 'rentObject') {
+                  authActionsDb.url = undefined
+                  localStorage.setItem('authActions', JSON.stringify(authActionsDb))
+                }
               }, 1500);
             }
           }

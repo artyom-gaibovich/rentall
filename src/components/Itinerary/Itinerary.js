@@ -316,10 +316,10 @@ class Itinerary extends React.Component {
                 <div className={cx(s.space1)}>
                   <a className={s.textMuted}>{city}, {state}, {country}</a>
                 </div>
-                <div className={cx(s.space5)}>
+                {/* <div className={cx(s.space5)}>
                   <span><StarRating value={starRatingValue} name={"Itinerary"} className={cx(s.starReview, 'startViewAR')} /></span>
                   <span className={s.textMuted}>&nbsp;{reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}</span>
-                </div>
+                </div> */}
               </Col>
             </Row>
           </div>

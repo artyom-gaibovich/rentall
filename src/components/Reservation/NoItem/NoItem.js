@@ -55,14 +55,6 @@ class NoItem extends React.Component {
             <Row className={cx(s.noResults)}>
               <span><FormattedMessage {...messages.noTripTitle2} /></span>
             </Row>
-            <Row className={cx(s.spaceTop2, s.space1)}>
-              <Button
-                className={cx(bt.btnPrimary, bt.btnLarge)}
-                onClick={this.handleClick}
-              >
-                <FormattedMessage {...messages.noTripsButton} />
-              </Button>
-            </Row>
           </div>
         }
       </div>

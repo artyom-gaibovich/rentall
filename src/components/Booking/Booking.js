@@ -163,10 +163,9 @@ class Booking extends Component {
   render() {
     const { page } = this.state;
     const { account, bookingData, resendEmailVerification } = this.props;
-    const { bookDetails: { guests, startDate, endDate, taxRate } } = this.props;
+    const { bookDetails: { guests, startDate, endDate } } = this.props;
     const { serviceFees, base, rates, specialPricing } = this.props;
     const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
-
 
     console.log('booking', bookingData);
 

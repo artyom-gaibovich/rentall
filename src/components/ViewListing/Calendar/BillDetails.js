@@ -52,6 +52,7 @@ class BillDetails extends Component {
     rates: PropTypes.object.isRequired,
     formatMessage: PropTypes.any,
     specialPricing: PropTypes.array,
+    updateValues: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -67,6 +68,7 @@ class BillDetails extends Component {
   render() {
     const { basePrice, cleaningPrice, currency, monthlyDiscount, weeklyDiscount, endDate } = this.props;
     const { serviceFees, base, rates, specialPricing, taxRate } = this.props;
+    console.log(serviceFees, 'serviceFees');
     let { startDate } = this.props;
     const { formatMessage } = this.props.intl;
     let serviceFee = 0,
@@ -176,6 +178,10 @@ class BillDetails extends Component {
         // total = (priceForDays + serviceFee + cleaningPrice + taxRateFee) - discount;
 
     total = (priceForDays + serviceFee + cleaningPrice) - discount;
+    this.props.updateValues({ totalPayment: total })
+
+    console.log(serviceFee, 'serviceFee');
+    console.log(serviceFees, 'serviceFees');
 
     function LinkWithTooltip({ id, children, href, tooltip }) {
       return (

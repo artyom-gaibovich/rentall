@@ -117,7 +117,6 @@ class PaymentForm extends Component {
     huntsman: PropTypes.number.isRequired,
     assistant: PropTypes.number.isRequired,
     addition: PropTypes.string.isRequired,
-
   };
 
   static defaultProps = {
@@ -153,7 +152,7 @@ class PaymentForm extends Component {
                 props.nutrition,
                 props.huntsman,
                 props.assistant,
-                props.addition
+                props.addition,
             ));
 
     window.location = 'https://goodtrip.ru/inbox';
@@ -375,7 +374,7 @@ class PaymentForm extends Component {
                         this.props.addition,
                     ));
 
-                    window.location = 'https://goodtrip.ru/inbox';
+          window.location = 'https://goodtrip.ru/inbox';
         }
 
         if (status == 400 && paymentType == 2) {

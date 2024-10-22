@@ -110,10 +110,10 @@ class Calendar extends React.Component {
             <div className={cx(s.noPadding, 'text-right', 'hidden-xs', s.calendarTableCell)}>
               <span className="hidden-xs"><FormattedMessage {...messages.perNight} /></span>
             </div>
-            <div className={cx(s.space2)}>
+            {/* <div className={cx(s.space2)}>
               <div className={cx(s.reviewSection, 'reviewSectionRTL')}><StarRating name={'review'} value={starRatingValue} /></div>
               <div>{reviewsCount > 0 && <span>{reviewsCount}{' '}{reviewsCount > 1 ? <FormattedMessage {...messages.reviews} /> : <FormattedMessage {...messages.review} />}</span>}</div>
-            </div>
+            </div> */}
 
 
           </div>

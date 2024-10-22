@@ -135,7 +135,7 @@ class SignupModal extends Component {
                 <p className={s.captionText}>
                   <small>
                     <FormattedMessage {...messages.terms1} />
-                    <span>&nbsp;<Link to={'/privacy'} onClick={closeSignupModal}><FormattedMessage {...messages.termsOfService} /></Link></span>
+                    <span>&nbsp;<a target="_blank" to={'/privacy'}>Условиями предоставления услуг</a></span>
                   </small>
                 </p>
 

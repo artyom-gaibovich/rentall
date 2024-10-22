@@ -127,7 +127,7 @@ class CreateWishList extends Component {
         <form onSubmit={handleSubmit(this.submitForm)} autoComplete="off" className={s.formContainer}>
           {
                         shown && <div className={s.btnSection}><a className={cx(s.btnText, s.labelText, s.pullRight, s.noMargin, s.paddingRight, bt.btnPrimary, bt.btnLarge)} onClick={this.toggle}>
-                          <FormattedMessage {...messages.createWishList} />
+                          Добавить в избранное
                         </a></div>
                     }
           {

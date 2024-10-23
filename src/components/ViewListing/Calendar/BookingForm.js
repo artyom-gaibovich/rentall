@@ -227,7 +227,7 @@ class BookingForm extends Component {
               className={cx(s.bookItMessage, s.spaceTop3)}
             >
               <p className={cx(s.noMargin, s.textCenter, s.textError)}>
-                <FormattedMessage {...messages.minimumNightStay} />                                                    {minNight} {minNight > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}
+                <FormattedMessage {...messages.minimumNightStay} />                                                                                            {minNight} {minNight > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}
               </p>
             </div>
           }

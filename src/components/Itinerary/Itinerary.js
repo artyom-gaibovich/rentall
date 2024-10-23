@@ -5,7 +5,7 @@ import moment from 'moment';
 import {
   Row,
   Col,
-  Panel
+  Panel,
 }
   from 'react-bootstrap';
 import cx from 'classnames';
@@ -26,6 +26,7 @@ import { generateTime } from '../Receipt/helper';
 // Locale
 import messages from '../../locale/messages';
 import ListNotFound from '../../routes/listNotFound/ListNotFound';
+
 class Itinerary extends React.Component {
   static propTypes = {
     formatMessage: PropTypes.any,
@@ -50,27 +51,27 @@ class Itinerary extends React.Component {
         reviewsStarRating: PropTypes.number.isRequired,
         listingData: PropTypes.shape({
           checkInStart: PropTypes.string.isRequired,
-          checkInEnd: PropTypes.string.isRequired
+          checkInEnd: PropTypes.string.isRequired,
         }),
         coverPhoto: PropTypes.number,
         listPhotos: PropTypes.arrayOf({
           id: PropTypes.number.isRequired,
-          name: PropTypes.string.isRequired
+          name: PropTypes.string.isRequired,
         }),
       }),
       messageData: PropTypes.shape({
-        id: PropTypes.number.isRequired
+        id: PropTypes.number.isRequired,
       }),
       hostData: PropTypes.shape({
         profileId: PropTypes.number.isRequired,
         displayName: PropTypes.string.isRequired,
-        picture: PropTypes.string.isRequired
-      })
-    })
+        picture: PropTypes.string.isRequired,
+      }),
+    }),
   };
 
   static defaultProps = {
-    data: null
+    data: null,
   };
 
   render() {
@@ -82,255 +83,256 @@ class Itinerary extends React.Component {
       return <div> <FormattedMessage {...messages.errorMessage} /> </div>;
     } else if (data.listData === null) {
       return <div><ListNotFound /></div>;
-    } else {
-      const { data, data: { id, listId, checkIn, checkOut, total, guestServiceFee, currency, confirmationCode, reservationState, hostId, guestId } } = this.props;
-      const { data: { hostData: { profileId, displayName, picture } } } = this.props;
-      const { data: { listData: { title, street, city, state, country, zipcode } } } = this.props;
-      const { data: { listData: { coverPhoto, listPhotos, reviewsCount, reviewsStarRating } } } = this.props;
+    }
+    const { data: { id, listId, checkIn, checkOut, total, guestServiceFee, currency, confirmationCode, reservationState, hostId, guestId } } = this.props;
+    const { data: { hostData: { profileId, displayName, picture } } } = this.props;
+    const { data: { listData: { title, street, city, state, country, zipcode } } } = this.props;
+    const { data: { listData: { coverPhoto, listPhotos, reviewsCount, reviewsStarRating } } } = this.props;
       // const { data: { listData: { listingData: { checkInStart, checkInEnd } } } } = this.props;
-      const { data: { messageData } } = this.props;
-      let checkInTimeFormat;
-      let {data: { checkInStart, checkInEnd }} = this.props;
+    const { data: { messageData } } = this.props;
+    let checkInTimeFormat;
+    const { data: { checkInStart, checkInEnd } } = this.props;
 
-      let checkInDate = checkIn ? moment(checkIn).format('ddd, Do MMM') : '';
-      let checkOutDate = checkOut ? moment(checkOut).format('ddd, Do MMM') : '';
-      let momentStartDate, momentEndDate, dayDifference, checkInTime, checkOutTime;
-      if (checkIn != null && checkOut != null) {
-        momentStartDate = moment(checkIn);
-        momentEndDate = moment(checkOut);
-        dayDifference = momentEndDate.diff(momentStartDate, 'days');
-      }
-      if (checkInStart !== 'Flexible') {
-        checkInTime = generateTime(checkInStart);
+    const checkInDate = checkIn ? moment(checkIn).format('ddd, Do MMM') : '';
+    const checkOutDate = checkOut ? moment(checkOut).format('ddd, Do MMM') : '';
+    let momentStartDate,
+      momentEndDate,
+      dayDifference,
+      checkInTime,
+      checkOutTime;
+    if (checkIn != null && checkOut != null) {
+      momentStartDate = moment(checkIn);
+      momentEndDate = moment(checkOut);
+      dayDifference = momentEndDate.diff(momentStartDate, 'days');
+    }
+    if (checkInStart !== 'Flexible') {
+      checkInTime = generateTime(checkInStart);
     }
 
     if (checkInEnd !== 'Flexible') {
-        checkOutTime = generateTime(checkInEnd);
+      checkOutTime = generateTime(checkInEnd);
     }
 
     if (checkInStart === 'Flexible' && checkInEnd === 'Flexible') {
-        checkInTimeFormat = formatMessage(messages.flexibleCheckIn);   
+      checkInTimeFormat = formatMessage(messages.flexibleCheckIn);
     } else if (checkInStart !== 'Flexible' && checkInEnd === 'Flexible') {
-        checkInTimeFormat = 'From ' + checkInTime;
+      checkInTimeFormat = `From ${checkInTime}`;
     } else if (checkInStart === 'Flexible' && checkInEnd !== 'Flexible') {
-        checkInTimeFormat = 'Upto ' + checkOutTime;
+      checkInTimeFormat = `Upto ${checkOutTime}`;
     } else if (checkInStart !== 'Flexible' && checkInEnd !== 'Flexible') {
-        checkInTimeFormat = checkInTime + ' - ' + checkOutTime;
+      checkInTimeFormat = `${checkInTime} - ${checkOutTime}`;
     }
-      
-      let subTotal = total + guestServiceFee;
-      let starRatingValue = 0;
-      if (reviewsCount > 0 && reviewsStarRating > 0) {
-        starRatingValue = Math.round(reviewsStarRating / reviewsCount)
-      }
 
-      let isHost = false;
-      if (userId === hostId) {
-        isHost = true;
-      }
+    const subTotal = total + guestServiceFee;
+    let starRatingValue = 0;
+    if (reviewsCount > 0 && reviewsStarRating > 0) {
+      starRatingValue = Math.round(reviewsStarRating / reviewsCount);
+    }
 
-      return (
-        <div className={cx(s.Container, s.spaceTop4, 'ViewProfile')}>
-          <div className={s.containerResponsive}>
-            <section className={cx(s.spaceTop8, s.space4)}>
-              <Row className={s.landingContainer}>
-                <Col xs={12} sm={12} md={9} lg={9}>
-                  {
-                    reservationState === "approved" && <h2 className={s.textCenter}>
+    let isHost = false;
+    if (userId === hostId) {
+      isHost = true;
+    }
+
+    return (
+      <div className={cx(s.Container, s.spaceTop4, 'ViewProfile')}>
+        <div className={s.containerResponsive}>
+          <section className={cx(s.spaceTop8, s.space4)}>
+            <Row className={s.landingContainer}>
+              <Col xs={12} sm={12} md={9} lg={9}>
+                {
+                    reservationState === 'approved' && <h2 className={s.textCenter}>
                       <FormattedMessage {...messages.itinerayTitle} /> {city}!
                     </h2>
                   }
 
-                  <div className={s.textCenter}>
-                    <span><FormattedMessage {...messages.reservationCode} /></span>
-                    <span>&nbsp;</span>
-                    <span>{confirmationCode}</span>
-                    <span>.&nbsp;</span>
-                    <Link to={"/users/trips/receipt/" + id}>
-                      <FormattedMessage {...messages.viewReceipt} />
-                    </Link>
-                  </div>
-                </Col>
-              </Row>
-            </section>
-            <Row>
-              <Col md={7} lg={7}>
-                <Panel className={s.cardPanel}>
-                  <div className={s.paneBody}>
-                    <Row className={cx(s.rowTable, s.dateRange)}>
-                      <div className={s.hideSm}>
-                        <Col sm={3} md={3} lg={3}>
-                          <span className={s.textBold}>
-                            <FormattedMessage {...messages.checkIn} />
-                          </span>
-                        </Col>
-                        <Col sm={3} md={3} lg={3}>
-                          <span>{checkInDate}</span><br />
-                          <span>{checkInTimeFormat}</span>
-                        </Col>
-                        <Col sm={3} md={3} lg={3}>
-                          <span className={s.textBold}>
-                            <FormattedMessage {...messages.checkOut} />
-                          </span>
-                        </Col>
-                        <Col sm={3} md={3} lg={3}>
-                          <span>{checkOutDate}</span><br />
-                          
-                        </Col>
-                      </div>
-                      <div className={cx(s.textCenter, s.showSm)}>
-                        <Col sm={6} xs={6}>
-                          <span className={s.textBold}>
-                            <FormattedMessage {...messages.checkIn} />
-                          </span><br />
-                          <span>{checkInDate}</span><br />
-                          <span>{checkInTimeFormat}</span>
-                        </Col>
-                        <Col sm={6} xs={6}>
-                          <span className={s.textBold}>
-                            <FormattedMessage {...messages.checkOut} />
-                          </span><br />
-                          <span>{checkOutDate}</span><br />
-                          
-                        </Col>
-                      </div>
-                    </Row>
-                    <hr />
-                  </div>
-                  <div className={cx(s.textCenter, s.panelBody)}>
-                    <Row className={cx(s.rowTable)}>
-                      <Col md={3} lg={3} className={s.space1}>
+                <div className={s.textCenter}>
+                  <span><FormattedMessage {...messages.reservationCode} /></span>
+                  <span>&nbsp;</span>
+                  <span>{confirmationCode}</span>
+                  <span>.&nbsp;</span>
+                  <Link to={`/users/trips/receipt/${id}`}>
+                    <FormattedMessage {...messages.viewReceipt} />
+                  </Link>
+                </div>
+              </Col>
+            </Row>
+          </section>
+          <Row>
+            <Col md={7} lg={7}>
+              <Panel className={s.cardPanel}>
+                <div className={s.paneBody}>
+                  <Row className={cx(s.rowTable, s.dateRange)}>
+                    <div className={s.hideSm}>
+                      <Col sm={3} md={3} lg={3}>
                         <span className={s.textBold}>
-                          <FormattedMessage {...messages.address} />
+                          <FormattedMessage {...messages.checkIn} />
                         </span>
                       </Col>
-                      <Col md={9} lg={9}>
-                        <div>
-                          <span>{street}</span> <br />
-                          <span>{city}, {state} {zipcode}</span> <br />
-                          <span>{country}</span> <br />
-                        </div>
-                        <div className={s.spaceTop2}>
-                          <a href={"/rooms/" + listId} target={'_blank'}>
-                            {/* <Link to={"/rooms/" + listId}>  */}
-                            <FormattedMessage {...messages.viewListing} />
-                            {/* </Link> */}
-                          </a>
-                        </div>
+                      <Col sm={3} md={3} lg={3}>
+                        <span>{checkInDate}</span><br />
+                        <span>{checkInTimeFormat}</span>
                       </Col>
-                    </Row>
-                    <hr />
-                  </div>
-                  <div className={cx(s.textCenter, s.panelBody)}>
-                    <Row className={cx(s.rowTable)}>
-                      <Col md={3} lg={3} className={s.space1}>
-                        <span className={s.textBold}><FormattedMessage {...messages.host} /></span>
+                      <Col sm={3} md={3} lg={3}>
+                        <span className={s.textBold}>
+                          <FormattedMessage {...messages.checkOut} />
+                        </span>
                       </Col>
-                      <Col md={3} lg={3} className={s.showSm}>
-                        <div className={cx(s.profileAvatarSection, s.profileAvatarLink)}>
-                          <Avatar
-                            source={picture}
-                            height={115}
-                            width={115}
-                            className={s.profileAvatar}
-                            withLink
-                            profileId={profileId}
-                          />
-                        </div>
+                      <Col sm={3} md={3} lg={3}>
+                        <span>{checkOutDate}</span><br />
+
                       </Col>
-                      {
+                    </div>
+                    <div className={cx(s.textCenter, s.showSm)}>
+                      <Col sm={6} xs={6}>
+                        <span className={s.textBold}>
+                          <FormattedMessage {...messages.checkIn} />
+                        </span><br />
+                        <span>{checkInDate}</span><br />
+                        <span>{checkInTimeFormat}</span>
+                      </Col>
+                      <Col sm={6} xs={6}>
+                        <span className={s.textBold}>
+                          <FormattedMessage {...messages.checkOut} />
+                        </span><br />
+                        <span>{checkOutDate}</span><br />
+
+                      </Col>
+                    </div>
+                  </Row>
+                  <hr />
+                </div>
+                <div className={cx(s.textCenter, s.panelBody)}>
+                  <Row className={cx(s.rowTable)}>
+                    <Col md={3} lg={3} className={s.space1}>
+                      <span className={s.textBold}>
+                        <FormattedMessage {...messages.address} />
+                      </span>
+                    </Col>
+                    <Col md={9} lg={9}>
+                      <div>
+                        <span>{street}</span> <br />
+                        <span>{city}, {state} {zipcode}</span> <br />
+                        <span>{country}</span> <br />
+                      </div>
+                      <div className={s.spaceTop2}>
+                        <a href={`/rooms/${listId}`} target={'_blank'}>
+                          {/* <Link to={"/rooms/" + listId}>  */}
+                          <FormattedMessage {...messages.viewListing} />
+                          {/* </Link> */}
+                        </a>
+                      </div>
+                    </Col>
+                  </Row>
+                  <hr />
+                </div>
+                <div className={cx(s.textCenter, s.panelBody)}>
+                  <Row className={cx(s.rowTable)}>
+                    <Col md={3} lg={3} className={s.space1}>
+                      <span className={s.textBold}><FormattedMessage {...messages.host} /></span>
+                    </Col>
+                    <Col md={3} lg={3} className={s.showSm}>
+                      <div className={cx(s.profileAvatarSection, s.profileAvatarLink)}>
+                        <Avatar
+                          source={picture}
+                          height={115}
+                          width={115}
+                          className={s.profileAvatar}
+                          withLink
+                          profileId={profileId}
+                        />
+                      </div>
+                    </Col>
+                    {
                         !isHost && <Col md={6} lg={6}>
                           <span>{displayName}</span> <br />
                           <div className={s.spaceTop1}>
-                            <Link to={"/message/" + messageData.id + "/guest"}>
+                            <Link to={`/message/${messageData.id}/guest`}>
                               <FormattedMessage {...messages.messageHost} />
                             </Link>
                           </div>
                         </Col>
                       }
-                      <Col md={3} lg={3} className={s.hideSm}>
-                        <div className={cx(s.profileAvatarSection, s.profileAvatarLink)}>
-                          <Avatar
-                            source={picture}
-                            height={115}
-                            width={115}
-                            className={s.profileAvatar}
-                            withLink
-                            profileId={profileId}
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-                    <hr />
-                  </div>
-                  <div className={cx(s.textCenter, s.panelBody)}>
-                    <Row className={cx(s.rowTable)}>
-                      <Col md={3} lg={3}>
-                        <span className={s.textBold}><FormattedMessage {...messages.billing} /></span>
-                      </Col>
-                      <Col md={9} lg={9}>
-                        <table className={cx('table')}>
-                          <tbody>
-                            <tr className={s.tableText}>
-                              <td className={cx(s.noBorder, s.noPadding, s.tableWidth)}>{dayDifference} {dayDifference > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}</td>
-                              <td className={cx(s.noBorder, s.noPadding)}>
-                                <CurrencyConverter
-                                  amount={subTotal}
-                                  from={currency}
-                                  
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </Col>
-                    </Row>
-                  </div>
-                </Panel>
-              </Col>
-              <Col lg={5} md={5}>
-                <div className={cx(s.imgContainer)}>
-                  <div className={cx(s.parent)}>
-                    <div className={cx(s.children)}>
-                      <div className={cx(s.content)}>
-                        <Link to={"/rooms/" + listId}>
-                          <ListCoverPhoto
-                            className={cx(s.imageContent)}
-                            coverPhoto={coverPhoto}
-                            listPhotos={listPhotos}
-                            photoType={"x_medium"}
-                            bgImage
-                          />
-                        </Link>
+                    <Col md={3} lg={3} className={s.hideSm}>
+                      <div className={cx(s.profileAvatarSection, s.profileAvatarLink)}>
+                        <Avatar
+                          source={picture}
+                          height={115}
+                          width={115}
+                          className={s.profileAvatar}
+                          withLink
+                          profileId={profileId}
+                        />
                       </div>
+                    </Col>
+                  </Row>
+                  <hr />
+                </div>
+                <div className={cx(s.textCenter, s.panelBody)}>
+                  <Row className={cx(s.rowTable)}>
+                    <Col md={3} lg={3}>
+                      <span className={s.textBold}><FormattedMessage {...messages.billing} /></span>
+                    </Col>
+                    <Col md={9} lg={9}>
+                      <table className={cx('table')}>
+                        <tbody>
+                          <tr className={s.tableText}>
+                            <td className={cx(s.noBorder, s.noPadding, s.tableWidth)}>{dayDifference} {dayDifference > 1 ? formatMessage(messages.nights) : formatMessage(messages.night)}</td>
+                            <td className={cx(s.noBorder, s.noPadding)}>
+                              <CurrencyConverter
+                                amount={subTotal}
+                                from={currency}
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </Col>
+                  </Row>
+                </div>
+              </Panel>
+            </Col>
+            <Col lg={5} md={5}>
+              <div className={cx(s.imgContainer)}>
+                <div className={cx(s.parent)}>
+                  <div className={cx(s.children)}>
+                    <div className={cx(s.content)}>
+                      <Link to={`/rooms/${listId}`}>
+                        <ListCoverPhoto
+                          className={cx(s.imageContent)}
+                          coverPhoto={coverPhoto}
+                          listPhotos={listPhotos}
+                          photoType={'x_medium'}
+                          bgImage
+                        />
+                      </Link>
                     </div>
                   </div>
                 </div>
-              </Col>
-              <Col lg={5} md={5}>
-                <h1 className={cx(s.spaceTop2, s.space1, s.textWidth)}>
-                  <Link to={"/rooms/" + listId} className={s.titleText}>
-                    {title}
-                  </Link>
-                </h1>
-                <div className={cx(s.space1)}>
-                  <a className={s.textMuted}>{city}, {state}, {country}</a>
-                </div>
-                {/* <div className={cx(s.space5)}>
+              </div>
+            </Col>
+            <Col lg={5} md={5}>
+              <h1 className={cx(s.spaceTop2, s.space1, s.textWidth)}>
+                <Link to={`/rooms/${listId}`} className={s.titleText}>
+                  {title}
+                </Link>
+              </h1>
+              <div className={cx(s.space1)}>
+                <a className={s.textMuted}>{city}, {state}, {country}</a>
+              </div>
+              {/* <div className={cx(s.space5)}>
                   <span><StarRating value={starRatingValue} name={"Itinerary"} className={cx(s.starReview, 'startViewAR')} /></span>
                   <span className={s.textMuted}>&nbsp;{reviewsCount} {reviewsCount > 1 ? formatMessage(messages.reviews) : formatMessage(messages.review)}</span>
                 </div> */}
-              </Col>
-            </Row>
-          </div>
+            </Col>
+          </Row>
         </div>
-      );
-    }
-
+      </div>
+    );
   }
 }
 
-const mapState = (state) => ({
+const mapState = state => ({
   userId: state.account.data.userId,
 });
 

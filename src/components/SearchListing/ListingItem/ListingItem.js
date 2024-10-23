@@ -30,6 +30,7 @@ import messages from '../../../locale/messages';
 
 import { formatURL } from '../../../helpers/formatURL';
 import { isRTL } from '../../../helpers/formatLocale';
+
 export let exportedPersonalizedUrl;
 
 class ListingItem extends React.Component {
@@ -62,7 +63,7 @@ class ListingItem extends React.Component {
     const { change } = this.props;
     const isBrowser = typeof window !== 'undefined';
     if (isBrowser) {
-      let event = new CustomEvent("ymap_hover", {bubbles: true, detail: { id: this.props.id }});
+      const event = new CustomEvent('ymap_hover', { bubbles: true, detail: { id: this.props.id } });
       window.dispatchEvent(event);
     }
     // console.log()

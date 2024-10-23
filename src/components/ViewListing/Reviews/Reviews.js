@@ -105,7 +105,7 @@ class Reviews extends React.Component {
         </div>
       );
     }
-    const lastDigit = reviewsCount % 10
+    const lastDigit = reviewsCount % 10;
 
     return (
       <div>

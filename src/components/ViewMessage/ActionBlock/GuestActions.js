@@ -163,7 +163,7 @@ class GuestActions extends Component {
         <p>
           <small className={s.captionText}>
             Нажимая кнопку, Вы соглашаетесь c
-            <span>&nbsp;<a target="_blank" href='/privacy'>Условиями предоставления услуг</a></span>
+            <span>&nbsp;<a target="_blank" href="/privacy">Условиями предоставления услуг</a></span>
           </small>
         </p>
       </Panel>

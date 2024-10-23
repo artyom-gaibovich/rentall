@@ -265,10 +265,10 @@ class ListingDetails extends React.Component {
           <div>
             <p className={cx(s.listingFontSize)} >
               {!this.state.open && count >= 150 && dotStringDescription === true &&
-                <span className={cx(s.subText, s.lineBreak)}>                                                    {firstArrayDescription} ...</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                                                                            {firstArrayDescription} ...</span>
               }
               {!this.state.open && count >= 150 && dotStringDescription === false &&
-                <span className={cx(s.subText, s.lineBreak)}>                                                    {firstArrayDescription}</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                                                                            {firstArrayDescription}</span>
               }
               {
                 restArrayDescription && restArrayDescription.length > 0 &&
@@ -513,10 +513,10 @@ class ListingDetails extends React.Component {
           <div>
             <p className={cx(s.listingFontSize)} >
               {!this.state.open && count >= 150 && dotStringThingsToDo === true &&
-                <span className={cx(s.subText, s.lineBreak)}>                                                    {firstArrayThingsToDo} ...</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                                                                            {firstArrayThingsToDo} ...</span>
               }
               {!this.state.open && count >= 150 && dotStringThingsToDo === false &&
-                <span className={cx(s.subText, s.lineBreak)}>                                                    {firstArrayThingsToDo}</span>
+                <span className={cx(s.subText, s.lineBreak)}>                                                                                            {firstArrayThingsToDo}</span>
               }
               {
                 restArrayThingsToDo && restArrayThingsToDo.length > 0 &&

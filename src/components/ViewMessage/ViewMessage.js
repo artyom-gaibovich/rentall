@@ -116,7 +116,7 @@ class ViewMessage extends React.Component {
   render() {
     const { threadItemsData: { loading, getThread }, userType, threadId, isAdminAuthenticated } = this.props;
     console.log('getThread', getThread);
-    console.log(this.props.threadItemsData) 
+    console.log(this.props.threadItemsData);
     // console.log('getThreadRent', getThread.threadItemForType.rent)
     const { account } = this.props;
     if (loading) {

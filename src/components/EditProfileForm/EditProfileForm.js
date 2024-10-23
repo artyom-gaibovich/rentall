@@ -216,8 +216,8 @@ class EditProfileForm extends Component {
               setTimeout(() => {
                 location.pathname = target.url;
                 if (target.type == 'rentObject') {
-                  authActionsDb.url = undefined
-                  localStorage.setItem('authActions', JSON.stringify(authActionsDb))
+                  authActionsDb.url = undefined;
+                  localStorage.setItem('authActions', JSON.stringify(authActionsDb));
                 }
                 // authActionsDb.url = undefined
                 // localStorage.setItem('authActions', JSON.stringify(authActionsDb))

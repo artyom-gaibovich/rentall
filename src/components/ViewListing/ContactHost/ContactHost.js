@@ -346,7 +346,7 @@ class ContactHost extends React.Component {
                               </li>
                               <li>
                                 <span>
-                                  <FormattedMessage {...messages.contactHostinfo4} /> {city}?                                                    <FormattedMessage {...messages.contactHostinfo5} />?
+                                  <FormattedMessage {...messages.contactHostinfo4} /> {city}?                                                                                            <FormattedMessage {...messages.contactHostinfo5} />?
                                 </span>
                               </li>
                               <li>

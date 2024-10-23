@@ -144,12 +144,12 @@ class BillDetails extends Component {
       total = 0;
     }
 
-    let priceForDaysTmp = priceForDays;
-    priceForDays = priceForDays - (priceForDays * (Number(serviceFees.guest.value) / 100));
+    const priceForDaysTmp = priceForDays;
+    priceForDays -= (priceForDays * (Number(serviceFees.guest.value) / 100));
     isAverage = Number(priceForDays) / Number(dayDifference);
-    let isAverageTmp = Number(priceForDaysTmp) / Number(dayDifference);
+    const isAverageTmp = Number(priceForDaysTmp) / Number(dayDifference);
     isDayTotal = isAverage.toFixed(2) * dayDifference;
-    let isDayTotalTmp = isAverageTmp.toFixed(2) * dayDifference;
+    const isDayTotalTmp = isAverageTmp.toFixed(2) * dayDifference;
     priceForDays = isDayTotal;
 
     if (dayDifference >= 7) {
@@ -178,7 +178,7 @@ class BillDetails extends Component {
         // total = (priceForDays + serviceFee + cleaningPrice + taxRateFee) - discount;
 
     total = (priceForDays + serviceFee + cleaningPrice) - discount;
-    this.props.updateValues({ totalPayment: total })
+    this.props.updateValues({ totalPayment: total });
 
     console.log(serviceFee, 'serviceFee');
     console.log(serviceFees, 'serviceFees');
@@ -202,18 +202,18 @@ class BillDetails extends Component {
           <Col xs={12} sm={12} md={12} lg={12}>
             <table className={cx('table')}>
               <tbody>
-              <tr>
+                <tr>
                   <td><FormattedMessage {...messages.total} /></td>
                   <td className={cx('text-right')}>
-                      <CurrencyConverter
-                        amount={total}
-                        from={currency}
-                      />
-                    </td>
+                    <CurrencyConverter
+                      amount={total}
+                      from={currency}
+                    />
+                  </td>
                 </tr>
                 <tr className={cx(s.positionR)}>
                   <td className={cx(s.noBorder)}>
-                      {
+                    {
                                             isSpecialPriceAssigned && <div className={cx(s.specialPriceIcon, 'specialpriceRtl')}>
                                               <span>
                                                 <img src={Faq} className={cx(s.faqImage, 'specialpriceRtl')} />
@@ -223,7 +223,7 @@ class BillDetails extends Component {
                                               </div>
                                             </div>
                                         }
-                      {
+                    {
                                             isSpecialPriceAssigned &&
                                             <div className={cx(s.specialPriceText, s.paddingLeft, 'paddingLeftRtl', 'directionLtr')}>
                                               {/*
@@ -237,7 +237,7 @@ class BillDetails extends Component {
                                               <FormattedMessage {...messages.paymentUponArrival} />
                                             </div>
                                         }
-                      {
+                    {
                                             !isSpecialPriceAssigned && <div className={cx(s.specialPriceText, 'directionLtr')}>
                                               {/*
                                               <CurrencyConverter
@@ -250,13 +250,13 @@ class BillDetails extends Component {
                                               <FormattedMessage {...messages.paymentUponArrival} />
                                             </div>
                                         }
-                    </td>
+                  </td>
                   <td className={cx(s.noBorder, 'text-right')}>
-                      <CurrencyConverter
-                        amount={isDayTotal}
-                        from={currency}
-                      />
-                    </td>
+                    <CurrencyConverter
+                      amount={isDayTotal}
+                      from={currency}
+                    />
+                  </td>
                 </tr>
                 {
                                     discount > 0 && <tr>

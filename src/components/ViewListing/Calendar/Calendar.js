@@ -147,8 +147,8 @@ class Calendar extends React.Component {
                 />
                 <div>
                   <FormGroup className={cx(s.formGroup, s.textMuted, 'text-center')}>
-                      <small><FormattedMessage {...messages.bookingInfo} /></small>
-                    </FormGroup>
+                    <small><FormattedMessage {...messages.bookingInfo} /></small>
+                  </FormGroup>
                 </div>
                 <ViewCount
                   listId={id}

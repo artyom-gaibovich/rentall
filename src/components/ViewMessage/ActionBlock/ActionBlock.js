@@ -29,7 +29,7 @@ class ActionBlock extends Component {
   }
 
   render() {
-    const { threadType, actionType, status, threadId, listId, startDate, endDate, personCapacity, createdAt} = this.props;
+    const { threadType, actionType, status, threadId, listId, startDate, endDate, personCapacity, createdAt } = this.props;
     const { hostDisplayName, guestDisplayName, reservationId, guestEmail, title, listPublishStatus } = this.props;
 
     console.log('actionType', actionType);

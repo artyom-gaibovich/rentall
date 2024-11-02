@@ -81,6 +81,14 @@ const ThreadItems = Model.define('ThreadItems', {
     type: DataType.STRING,
   },
 
+  prePayment: {
+    type: DataType.INTEGER,
+  },
+
+  totalPayment: {
+    type: DataType.INTEGER,
+  },
+
   isApproved: {
     type: DataType.BOOLEAN,
     defaultValue: false,

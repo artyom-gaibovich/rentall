@@ -37,6 +37,8 @@ class GuestActions extends Component {
     listId: PropTypes.number.isRequired,
     reservationId: PropTypes.number,
     formatMessage: PropTypes.any,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
 
   constructor(props) {
@@ -45,7 +47,7 @@ class GuestActions extends Component {
   }
 
   async preBook() {
-    const { bookingProcess, listId, startDate, endDate, personCapacity, listPublishStatus } = this.props;
+    const { bookingProcess, listId, startDate, endDate, personCapacity, listPublishStatus, prePayment, totalPayment } = this.props;
     const preApprove = true;
     const query = `query checkReservation ($checkIn: String,$checkOut: String,$listId: Int ){
             checkReservation(checkIn: $checkIn, checkOut:$checkOut, listId:$listId ){
@@ -82,7 +84,7 @@ class GuestActions extends Component {
     if (data && data.checkReservation) {
       if (data.checkReservation.status == '200') {
         if (listPublishStatus) {
-          bookingProcess(listId, personCapacity, startDate, endDate, preApprove, null, true);
+          bookingProcess(listId, personCapacity, startDate, endDate, preApprove, null, true, prePayment, totalPayment);
         } else {
           toastr.error('Sorry!', 'The listing had unpublished or deleted by Host/Admin. Please try another.');
         }

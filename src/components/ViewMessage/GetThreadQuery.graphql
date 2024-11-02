@@ -67,6 +67,8 @@ query getThread($threadType: String, $threadId: Int){
         }
         taxRate
       }
+      prePayment
+      totalPayment
     }
     threadItems {
       id
@@ -79,6 +81,8 @@ query getThread($threadType: String, $threadId: Int){
       endDate
       createdAt
       isApproved
+      prePayment
+      totalPayment
     }
     threadItemsCount
     guestProfile {

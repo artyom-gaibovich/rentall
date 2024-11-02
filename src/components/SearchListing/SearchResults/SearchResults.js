@@ -77,6 +77,7 @@ class SearchResults extends React.Component {
 
   async handlePagination(currenctPage, size) {
     const { change, submitForm } = this.props;
+    console.log(currenctPage)
     await change('currentPage', currenctPage);
     await submitForm('SearchForm');
     await this.refreshYmaps();
@@ -87,7 +88,7 @@ class SearchResults extends React.Component {
   render() {
     const { page } = this.state;
     const { results, total, isResultLoading, showMap, showMapLoader, guests } = this.props;
-    // // console.log(results)
+    console.log(results)
     if (results != null && results.length > 0) {
       return (
         <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
@@ -141,7 +142,6 @@ class SearchResults extends React.Component {
                   </div>
                 </div>
               </div>
-
             </Row>
           }
         </div>

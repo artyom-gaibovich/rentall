@@ -60,6 +60,12 @@ const ThreadItemsType = new ObjectType({
     addition: {
       type: StringType,
     },
+    prePayment: {
+      type: IntType,
+    },
+    totalPayment: {
+      type: IntType,
+    },
     isRead: {
       type: BooleanType,
     },

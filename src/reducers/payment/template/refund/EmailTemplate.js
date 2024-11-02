@@ -69,9 +69,9 @@ class EmailTemplate extends Component {
         {
                     type === 'cancelledByGuest' && <CancelledByGuest content={content} />
                 }
-        {
+        {/* {
                     type === 'completedGuest' && <CompletedReservationGuest content={content} />
-                }
+                } */}
         {
                     type === 'completedHost' && <CompletedReservationHost content={content} />
                 }

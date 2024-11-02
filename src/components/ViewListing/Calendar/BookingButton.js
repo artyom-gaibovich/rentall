@@ -39,6 +39,8 @@ class BookingButton extends Component {
     formatMessage: PropTypes.any,
     maximumStay: PropTypes.bool,
     userBanStatus: PropTypes.number,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
   static defaultProps = {
     availability: true,
@@ -52,11 +54,12 @@ class BookingButton extends Component {
     this.hanldeChange = this.hanldeChange.bind(this);
   }
   async handleClick() {
-    const { bookingProcess, listId, startDate, endDate, taxRate } = this.props;
+    const { bookingProcess, listId, startDate, endDate, taxRate, prePayment, totalPayment } = this.props;
     let { guests } = this.props;
+    console.log('qwe', prePayment, totalPayment);
 
     guests = guests || 1;
-    bookingProcess(listId, guests, startDate, endDate, null, taxRate);
+    bookingProcess(listId, guests, startDate, endDate, null, taxRate, null, prePayment, totalPayment);
   }
   async hiddenRegister() {
     const query = `query (
@@ -109,6 +112,7 @@ class BookingButton extends Component {
       value: true,
     }));
   }
+
   hanldeChange() {
     history.push('/s');
   }
@@ -116,6 +120,7 @@ class BookingButton extends Component {
     const { basePrice, userBanStatus, isDateChosen, availability, isHost, bookingType, bookingLoading, taxRate, guests } = this.props;
     const { formatMessage } = this.props.intl;
     const { maximumStay, minimumStay } = this.props;
+    console.log('qwe', this.props.prePayment, this.props.totalPayment);
 
     const processAuthAction = () => {
       console.log('AUTH REQ');
@@ -136,6 +141,7 @@ class BookingButton extends Component {
     let disabled,
       buttonLabel;
     // if (!isDateChosen || basePrice < 1 || isHost || maximumStay || userBanStatus || minimumStay) {
+    console.log('zxc', isDateChosen, basePrice, isHost, maximumStay, userBanStatus, minimumStay, guests);
     if (!isDateChosen || basePrice < 1 || isHost || maximumStay || minimumStay || guests < 1) {
       disabled = true;
     } else {

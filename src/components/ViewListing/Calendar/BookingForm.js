@@ -104,6 +104,10 @@ class BookingForm extends Component {
   constructor(props) {
     super(props);
     this.nextPage = this.nextPage.bind(this);
+    this.state = {
+      prePayment: 0,
+      totalPayment: 0,
+    };
   }
   nextPage(page) {
     this.setState({ page });
@@ -142,7 +146,7 @@ class BookingForm extends Component {
           authActions = JSON.parse(authActions);
         }
 
-        obj.url = pathName;
+        // obj.url = pathName;
         authActions = obj;
         localStorage.setItem('authActions', JSON.stringify(authActions));
       }
@@ -273,6 +277,8 @@ class BookingForm extends Component {
           maximumStay={maximumStay}
           taxRate={taxRate}
           minimumStay={minimumStay}
+          prePayment={this.state.prePayment}
+          totalPayment={this.state.totalPayment}
         />
       </Form>
     );

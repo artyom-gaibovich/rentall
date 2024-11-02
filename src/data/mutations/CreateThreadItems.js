@@ -32,6 +32,8 @@ const CreateThreadItems = {
     huntsman: { type: IntType },
     assistant: { type: IntType },
     addition: { type: StringType },
+    prePayment: { type: IntType },
+    totalPayment: { type: IntType },
   },
 
   async resolve({ request, response }, {
@@ -48,6 +50,8 @@ const CreateThreadItems = {
     huntsman,
     assistant,
     addition,
+    prePayment,
+    totalPayment,
   }) {
     // Check if user already logged in
     if (request.user && !request.user.admin) {
@@ -96,6 +100,8 @@ const CreateThreadItems = {
           huntsman,
           assistant,
           addition,
+          prePayment,
+          totalPayment,
         });
 
         if (threadItems) {

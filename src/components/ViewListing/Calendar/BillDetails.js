@@ -53,6 +53,8 @@ class BillDetails extends Component {
     formatMessage: PropTypes.any,
     specialPricing: PropTypes.array,
     updateValues: PropTypes.func.isRequired,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
 
   static defaultProps = {
@@ -179,6 +181,7 @@ class BillDetails extends Component {
 
     total = (priceForDays + serviceFee + cleaningPrice) - discount;
     this.props.updateValues({ totalPayment: total });
+    this.props.updateValues({ prePayment: serviceFee });
 
     console.log(serviceFee, 'serviceFee');
     console.log(serviceFees, 'serviceFees');

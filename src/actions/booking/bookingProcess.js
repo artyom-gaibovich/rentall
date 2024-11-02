@@ -6,7 +6,7 @@ import { makePayment } from './makePayment';
 
 import { BOOKING_PROCESS_START, BOOKING_PROCESS_SUCCESS, BOOKING_PROCESS_ERROR } from '../../constants';
 
-export function bookingProcess(listId, guests, startDate, endDate, preApprove, taxRate, paynow) {
+export function bookingProcess(listId, guests, startDate, endDate, preApprove, taxRate, paynow, prePayment, totalPayment) {
   return async (dispatch, getState, { client }) => {
     dispatch({
       type: BOOKING_PROCESS_START,
@@ -118,6 +118,8 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
               startDate,
               endDate,
               preApprove,
+              prePayment,
+              totalPayment,
                             // taxRate,
             },
             bookingLoading: false,
@@ -125,7 +127,9 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
         });
 
         if (paynow) {
-          let guestServiceFee = 0,
+          console.log('prePayment', prePayment);
+          console.log('totalPayment', totalPayment);
+          let guestServiceFee = prePayment,
             hostServiceFee = 0,
             priceForDays = 0,
             hostServiceFeeType = '',
@@ -143,7 +147,7 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
             isSpecialPriceAssigned = false,
             isDayTotal = 0,
             taxRateFee = 0,
-            totalWithoutServiceFee = 0,
+            totalWithoutServiceFee = totalPayment,
             discountLessBasePrice = 0,
             cleaningPrice = userListing.listingData.cleaningPrice;
 
@@ -219,18 +223,6 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
           const serviceFees = getState().book.serviceFees;
 
           if (serviceFees) {
-            if (serviceFees.guest.type === 'percentage') {
-              guestServiceFee = totalWithoutServiceFee * (Number(serviceFees.guest.value) / 100);
-            } else {
-              guestServiceFee = convert(
-                            base,
-                            rates,
-                            serviceFees.guest.value,
-                            serviceFees.guest.currency,
-                            currency,
-                        );
-            }
-
             if (serviceFees.host.type === 'percentage') {
               hostServiceFeeType = serviceFees.host.type;
               hostServiceFeeValue = serviceFees.host.value;
@@ -249,7 +241,12 @@ export function bookingProcess(listId, guests, startDate, endDate, preApprove, t
           }
 
           total = priceForDays + guestServiceFee + cleaningPrice - discount;
-          totalWithoutFees = priceForDays + cleaningPrice - discount;
+
+          console.log('guestServiceFee', guestServiceFee);
+          console.log('hostServiceFee', hostServiceFee);
+
+          console.log('total', total);
+          console.log('totalWithoutFees', totalWithoutFees);
 
           await dispatch(
                     makePayment(

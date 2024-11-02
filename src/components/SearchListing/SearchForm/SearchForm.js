@@ -383,6 +383,8 @@ class SearchForm extends React.Component {
     const minPriceRange = priceRangeLabel != undefined ? priceRangeLabel[0] : minPrice;
     const maxPriceRange = priceRangeLabel != undefined ? priceRangeLabel[1] : maxPrice;
 
+    console.log('123')
+
     return (
       <div className={cx(s.filters, 'SearchPageForm')}>
         <form onSubmit={handleSubmit}>

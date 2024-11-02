@@ -80,6 +80,8 @@ class Booking extends Component {
       startDate: PropTypes.object.isRequired,
       endDate: PropTypes.object.isRequired,
       guests: PropTypes.number.isRequired,
+      prePayment: PropTypes.number,
+      totalPayment: PropTypes.number,
     }),
     serviceFees: PropTypes.object.isRequired,
     base: PropTypes.string.isRequired,
@@ -163,10 +165,11 @@ class Booking extends Component {
   render() {
     const { page } = this.state;
     const { account, bookingData, resendEmailVerification } = this.props;
-    const { bookDetails: { guests, startDate, endDate } } = this.props;
+    const { bookDetails: { guests, startDate, endDate, prePayment, totalPayment } } = this.props;
     const { serviceFees, base, rates, specialPricing } = this.props;
     const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
 
+    console.log(prePayment, totalPayment);
     console.log('booking', bookingData);
 
     return (
@@ -248,6 +251,8 @@ class Booking extends Component {
   huntsman={this.state.huntsman}
   assistant={this.state.assistant}
   addition={this.state.addition}
+  prePayment={prePayment}
+  totalPayment={totalPayment}
 					/>
 				}
 

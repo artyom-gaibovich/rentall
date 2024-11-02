@@ -97,6 +97,7 @@ class PlacesSuggest extends React.Component {
 
   render() {
     const { label, className, containerClassName, personalized } = this.props;
+    console.log('qwe')
 
     return (
       <div>

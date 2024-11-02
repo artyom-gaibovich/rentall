@@ -18,6 +18,8 @@ query getThread($threadType: String, $threadId: Int){
     huntsman
     assistant
     addition
+    prePayment
+    totalPayment
     host
     listData {
       title
@@ -91,6 +93,8 @@ query getThread($threadType: String, $threadId: Int){
       startDate
       endDate
       createdAt
+      prePayment
+      totalPayment
     }
     threadItemsCount
     guestProfile {

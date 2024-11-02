@@ -85,8 +85,11 @@ const GoogleMapPlace =
     >
       {
         props.markers.map((marker, key) => {
+          console.log(props.markers)
           const icon = props.getMarkerIcon(marker);
           const pixelOffset = new google.maps.Size(-140, 0);
+          console.log(marker)
+          console.log('1234')
 
           return (
             <div key={key}>
@@ -261,6 +264,7 @@ iconCaption: "123",
     // // <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=<ваш API-ключ>" type="text/javascript"></script>
     // script.async = true;
     // document.body.appendChild(script);
+    console.log('hi')
 
     let ymapsInitInterval = setInterval(() => {
       if (ymaps) {
@@ -282,6 +286,7 @@ iconCaption: "123",
       }
     }, 200)
     const { results, initialFilter, searchSettings, personalized, markerHighlight } = this.props;
+    console.log('results', results)
     const { hover, center } = this.state;
     const bounds = new google.maps.LatLngBounds();
     let southWest,

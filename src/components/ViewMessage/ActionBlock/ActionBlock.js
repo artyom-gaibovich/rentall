@@ -22,6 +22,9 @@ class ActionBlock extends Component {
     createdAt: PropTypes.string.isRequired,
     hostDisplayName: PropTypes.string.isRequired,
     guestDisplayName: PropTypes.string.isRequired,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
+
   };
 
   static defaultProps = {
@@ -30,7 +33,7 @@ class ActionBlock extends Component {
 
   render() {
     const { threadType, actionType, status, threadId, listId, startDate, endDate, personCapacity, createdAt } = this.props;
-    const { hostDisplayName, guestDisplayName, reservationId, guestEmail, title, listPublishStatus } = this.props;
+    const { hostDisplayName, guestDisplayName, reservationId, guestEmail, title, listPublishStatus, prePayment, totalPayment } = this.props;
 
     console.log('actionType', actionType);
     console.log('threadType', threadType);
@@ -64,6 +67,8 @@ class ActionBlock extends Component {
         hostDisplayName={hostDisplayName}
         createdAt={createdAt}
         listPublishStatus={listPublishStatus}
+        prePayment={prePayment}
+        totalPayment={totalPayment}
       />);
     }
     return <div />;

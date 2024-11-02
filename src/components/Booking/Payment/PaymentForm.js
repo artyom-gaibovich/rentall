@@ -117,6 +117,8 @@ class PaymentForm extends Component {
     huntsman: PropTypes.number.isRequired,
     assistant: PropTypes.number.isRequired,
     addition: PropTypes.string.isRequired,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
 
   static defaultProps = {
@@ -153,6 +155,8 @@ class PaymentForm extends Component {
                 props.huntsman,
                 props.assistant,
                 props.addition,
+                props.prePayment,
+                props.totalPayment,
             ));
 
     window.location = 'https://goodtrip.ru/inbox';
@@ -372,6 +376,8 @@ class PaymentForm extends Component {
                         this.props.huntsman,
                         this.props.assistant,
                         this.props.addition,
+                        this.props.prePayment,
+                        this.props.totalPayment
                     ));
 
           window.location = 'https://goodtrip.ru/inbox';

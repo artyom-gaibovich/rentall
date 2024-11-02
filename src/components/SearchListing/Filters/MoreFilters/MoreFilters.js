@@ -196,17 +196,6 @@ class MoreFilters extends Component {
             />
             <CheckboxListItems
               // className={s.filters}
-              fieldName={'fish'}
-              options={fish}
-              captionTitle={formatMessage(messages.fish)}
-              // showLabel='showLabel'
-              // hideLabel='hideLabel'
-              showLabel={formatMessage(messages.showFish)}
-              hideLabel={formatMessage(messages.closeFish)}
-              isActive={formValues && formValues.fish && formValues.fish.length > 0}
-            />
-            <CheckboxListItems
-              // className={s.filters}
               fieldName={'safetyAmenities'}
               options={safetyAmenities}
               captionTitle={formatMessage(messages.safetyFeatures)}

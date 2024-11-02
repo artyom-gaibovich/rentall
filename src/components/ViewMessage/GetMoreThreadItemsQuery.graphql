@@ -11,12 +11,8 @@ query getMoreThreadItems($offset: Int, $threadId: Int!){
     createdAt
     status
     isRead
-    rent
-    transfer
-    nutrition
-    huntsman
-    assistant
-    addition
     isApproved
+    prePayment
+    totalPayment
   }
 }

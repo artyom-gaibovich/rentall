@@ -91,6 +91,37 @@ async function submit(values, dispatch) {
           wishListStatus
           isListOwner
         }
+        resultsSearch {
+          id
+          title
+          personCapacity
+          lat
+          lng
+          beds
+          coverPhoto
+          bookingType
+          reviewsCount,
+          reviewsStarRating,
+          listPhotos {
+            id
+            name
+            type
+            status
+          }
+          listingData {
+            basePrice
+            currency
+          }
+          settingsData {
+            listsettings {
+              id
+              itemName
+              itemDescription
+            }
+          }
+          wishListStatus
+          isListOwner
+        }
       }
     }
   `;

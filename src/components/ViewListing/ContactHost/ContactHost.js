@@ -113,7 +113,7 @@ class ContactHost extends React.Component {
 
   async handleClick() {
     const { bookingProcess, listId, guests, startDate, endDate, taxRate } = this.props;
-    bookingProcess(listId, guests, startDate, endDate, null, taxRate);
+    bookingProcess(listId, guests, startDate, endDate, null, taxRate, null, 0, 0);
   }
 
   renderGuests(personCapacity) {

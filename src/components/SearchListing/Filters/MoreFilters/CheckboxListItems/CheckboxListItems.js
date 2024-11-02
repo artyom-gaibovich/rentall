@@ -131,7 +131,7 @@ class CheckboxListItems extends Component {
   }
 
   checkboxGroup = ({ label, name, options, input, isOpen }) => {
-    let count = 4,
+    let count = 6,
       firstArray = [],
       restArray = [];
     const itemList = options && options.length > 0 ? options.filter(o => o.isEnable == '1') : [];

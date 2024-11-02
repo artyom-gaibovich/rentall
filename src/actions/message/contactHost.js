@@ -20,6 +20,8 @@ export function contactHost(
   huntsman,
   assistant,
   addition,
+  prePayment,
+  totalPayment,
   hostEmail,
   firstName,
 ) {
@@ -49,6 +51,8 @@ export function contactHost(
             $huntsman: Int,
             $assistant: Int,
             $addition: String,
+            $prePayment: Int,
+            $totalPayment: Int
           ){
               CreateThreadItems(
                 listId: $listId,
@@ -64,6 +68,8 @@ export function contactHost(
                 huntsman: $huntsman,
                 assistant: $assistant,
                 addition: $addition,
+                prePayment: $prePayment,
+                totalPayment: $totalPayment
               ) {
                   id
                   threadId
@@ -80,6 +86,8 @@ export function contactHost(
                   huntsman
                   assistant
                   addition
+                  prePayment
+                  totalPayment
               }
           }
       `;
@@ -101,6 +109,8 @@ export function contactHost(
           huntsman,
           assistant,
           addition,
+          prePayment,
+          totalPayment,
         },
       });
 

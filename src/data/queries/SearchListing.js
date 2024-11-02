@@ -13,6 +13,10 @@ import {
 } from 'graphql';
 import moment, {unix} from 'moment';
 
+import {Search} from "../../routes/search/Search.js"
+
+// import Search from '../../routes/search/Search';
+
 import fetch from 'node-fetch';
 
 const SearchListing = {
@@ -75,7 +79,7 @@ const SearchListing = {
         ne_lng,
     }) {
         try {
-            let limit = 12,
+            let limit = 12000,
                 offset = 0;
             const publishedFilter = {isPublished: true};
             const unAvailableFilter = {
@@ -392,6 +396,7 @@ const SearchListing = {
             }
 
             let where,
+                whereNot,
                 filters = [
                     bookingTypeFilter,
                     bedRoomCountFilter,
@@ -421,9 +426,20 @@ const SearchListing = {
                     ],
                     $and: filters,
                 };
+                whereNot = {
+                    $or: [
+                        {},
+                        {},
+                    ],
+                    $and: filters,
+                };
             } else {
                 where = {$and: filters};
+                whereNot = {$and: filters};
             }
+
+            console.log(whereNot)
+
 
             // SQL query for count
             const count = await Listing.count({where});
@@ -432,6 +448,14 @@ const SearchListing = {
             const results = await Listing.findAll({
                 attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
                 where,
+                limit,
+                offset,
+                order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
+            });
+
+            const resultsSearch = await Listing.findAll({
+                attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
+                where: whereNot,
                 limit,
                 offset,
                 order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
@@ -453,6 +477,7 @@ const SearchListing = {
                 count,
                 results,
                 allFound,
+                resultsSearch
             };
         } catch (e) {
             console.error(e);
@@ -460,6 +485,7 @@ const SearchListing = {
                 count: 0,
                 results: [],
                 allFound: [],
+                resultsSearch: []
             };
         }
     },

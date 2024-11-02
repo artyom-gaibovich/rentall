@@ -26,6 +26,8 @@ async function submit(values, dispatch) {
   const huntsman = 0;
   const assistant = 0;
   const addition = '';
+  const prePayment = 0;
+  const totalPayment = 0;
   dispatch(contactHost(
     listId,
     host,
@@ -40,6 +42,8 @@ async function submit(values, dispatch) {
     huntsman,
     assistant,
     addition,
+    prePayment,
+    totalPayment,
     values.hostEmail,
     values.firstName,
   ));

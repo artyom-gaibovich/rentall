@@ -73,6 +73,8 @@ class ViewMessage extends React.Component {
             total: PropTypes.number,
             currency: PropTypes.string,
           }),
+          prePayment: PropTypes.number,
+          totalPayment: PropTypes.number,
         }),
         listData: PropTypes.shape({
           title: PropTypes.string.isRequired,
@@ -117,6 +119,17 @@ class ViewMessage extends React.Component {
     const { threadItemsData: { loading, getThread }, userType, threadId, isAdminAuthenticated } = this.props;
     console.log('getThread', getThread);
     console.log(this.props.threadItemsData);
+    let prePayment = 0
+    let totalPayment = 0
+    
+    if (getThread && getThread.threadItems.find(item => item.type === 'inquiry').prePayment && getThread.threadItems.find(item => item.type === 'inquiry').totalPayment) {
+      prePayment = getThread.threadItems.find(item => item.type === 'inquiry').prePayment
+      totalPayment = getThread.threadItems.find(item => item.type === 'inquiry').totalPayment
+      console.log('totalPayment', totalPayment)
+      console.log('prePayment', prePayment)
+      console.log('threadItems', getThread.threadItems);
+    }
+
     // console.log('getThreadRent', getThread.threadItemForType.rent)
     const { account } = this.props;
     if (loading) {
@@ -183,6 +196,8 @@ class ViewMessage extends React.Component {
                   personCapacity={getThread.threadItemForType.personCapacity}
                   cancelData={getThread.threadItemForType.cancelData}
                   reservationData={getThread.threadItemForType.reservation || undefined}
+                  prePayment={prePayment}
+                  totalPayment={totalPayment}
                 />
               }
               {
@@ -207,6 +222,8 @@ class ViewMessage extends React.Component {
                   guestEmail={getThread.guestUserData.email}
                   title={getThread.listData.title}
                   listPublishStatus={listPublishStatus}
+                  prePayment={prePayment}
+                  totalPayment={totalPayment}
                 />
               }
               <div className="hidden-xs">

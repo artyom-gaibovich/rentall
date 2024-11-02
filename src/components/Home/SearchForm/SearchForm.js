@@ -112,6 +112,8 @@ class SearchForm extends React.Component {
 
         // const {personalized} = this.props;
         // personalized.location = ''
+
+        this.props.personalized.location = null
   }
 
   componentWillReceiveProps(nextProps) {

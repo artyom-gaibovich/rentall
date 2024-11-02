@@ -83,6 +83,8 @@ class Payment extends Component {
     huntsman: PropTypes.number.isRequired,
     assistant: PropTypes.number.isRequired,
     addition: PropTypes.string.isRequired,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
 
   render() {
@@ -93,7 +95,7 @@ class Payment extends Component {
     const { basePrice, cleaningPrice, currency, weeklyDiscount, monthlyDiscount } = this.props;
     const { serviceFees, base, rates, specialPricing, bookingData } = this.props;
 
-    const { rent, transfer, nutrition, huntsman, assistant, addition } = this.props;
+    const { rent, transfer, nutrition, huntsman, assistant, addition, prePayment, totalPayment } = this.props;
 
     console.log(rent, transfer, nutrition, huntsman, assistant, addition);
     console.log('bookingData', bookingData);
@@ -273,6 +275,8 @@ class Payment extends Component {
                 huntsman={huntsman}
                 assistant={assistant}
                 addition={addition}
+                prePayment={prePayment}
+                totalPayment={totalPayment}
               />
             </Elements>
           </Col>

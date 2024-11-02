@@ -43,6 +43,8 @@ class TripDetails extends Component {
       currency: PropTypes.string,
     }),
     reservationData: PropTypes.any,
+    prePayment: PropTypes.number,
+    totalPayment: PropTypes.number,
   };
 
   static defaultProps = {
@@ -57,7 +59,7 @@ class TripDetails extends Component {
   render() {
     const { title, endDate, personCapacity, listId, reservationData, specialPricing } = this.props;
     const { formatMessage } = this.props.intl;
-    const { basePrice, cleaningPrice, weeklyDiscount, monthlyDiscount, userType, currency, cancelData } = this.props;
+    const { basePrice, cleaningPrice, weeklyDiscount, monthlyDiscount, userType, currency, cancelData, prePayment, totalPayment } = this.props;
     let { startDate } = this.props;
     const serviceFees = { guest: { currency: 'RUB', type: 'percentage', value: 20 } };
     moment.locale('ru');
@@ -217,20 +219,28 @@ class TripDetails extends Component {
             <span>{personCapacity} {personCapacity > 1 ? formatMessage(messages.guestsCapcity) : formatMessage(messages.guestCapcity)}</span>
           </div>
           <hr className={s.horizondalLine} />
-          <div className={cx(s.textGray, s.space1)}>
-            <span>Предоплата</span>
+          {prePayment ? (
+          <div>
+            <div className={cx(s.textGray, s.space1)}>
+              <span>Предоплата</span>
+            </div>
+            <div className={s.space3}>
+              <span>{prePayment}р</span>
+            </div>
+            <hr className={s.horizondalLine} />
           </div>
-          <div className={s.space3}>
-            <span>{serviceFee.toFixed(0)}р</span>
+          ) : null}
+          {totalPayment ? (
+          <div>
+            <div className={cx(s.textGray, s.space1)}>
+              <span>Полная цена</span>
+            </div>
+            <div className={s.space3}>
+              <span>{totalPayment}р</span>
+            </div>
+            <hr className={s.horizondalLine} />
           </div>
-          <hr className={s.horizondalLine} />
-          <div className={cx(s.textGray, s.space1)}>
-            <span>Полная цена</span>
-          </div>
-          <div className={s.space3}>
-            <span>{total.toFixed(0)}р</span>
-          </div>
-          <hr className={s.horizondalLine} />
+          ) : null}
           {
 						!isCancelled && reservationData && <PaymentDetails
   userType={userType}

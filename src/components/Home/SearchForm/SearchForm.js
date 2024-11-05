@@ -182,7 +182,7 @@ class SearchForm extends React.Component {
       uri = `${uri}&address=${personalized.location}`;
     }
 
-    if (personalized.location == null && this.state.suggestItems) {
+    if (personalized.location == null && this.state.suggestItems.length > 0) {
       const location = this.state.suggestItems[0].displayName;
       uri = `${uri}&address=${location}`;
     }

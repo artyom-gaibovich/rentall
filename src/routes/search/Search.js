@@ -9,7 +9,7 @@ import {gql} from 'react-apollo';
 import {graphql} from 'react-apollo';
 
 // Redux Form
-import {formValueSelector} from 'redux-form';
+import {formValueSelector, getFormValues, change, submit as submitForm, reduxForm} from 'redux-form';
 
 // Locale
 import messages from '../../locale/messages';
@@ -40,6 +40,7 @@ import {googleMapAPI} from '../../config';
 //yandex maps data
 import {searchResultsData} from "../../actions/getSearchResults.js"
 import {submitData} from "../../components/SearchListing/SearchForm/submit.js"
+import submit from "../../components/SearchListing/SearchForm/submit.js"
 
 export class Search extends React.Component {
     // static resultData = searchResultsData;
@@ -82,11 +83,21 @@ export class Search extends React.Component {
             count: 0,
             load: false,
             visibleMapItems: [],
-            mapBounds: []
+            mapBounds: [],
+            filter: 0,
+            sw_lat: 0,
+            sw_lng: 0, 
+            ne_lat: 0, 
+            ne_lng: 0,
         };
 
         this.handleResize = this.handleResize.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    setFilters = (newFilters) => {
+        this.setState({ filter: newFilters });
+    };
 
     static async sleep(ms) {
         return new Promise((resolve) => {
@@ -111,6 +122,19 @@ export class Search extends React.Component {
         return {lng: centerLng, lat: centerLat};
     }
 
+    async handleSubmit() {
+        console.log('hahah');
+        console.log(this.state);
+        const { change, submitForm } = this.props;
+        await change('currentPage', 1);
+        await change('sw_lat', this.state.sw_lat);
+        await change('sw_lng', this.state.sw_lng);
+        await change('ne_lat', this.state.ne_lat);
+        await change('ne_lng', this.state.ne_lng);
+        await submitForm('SearchForm');
+        console.log('good')
+        // handleTabToggle('guests', !isExpand);
+      }
 
     static async initYmaps(componentInstance) {
         await Search.sleep(1000)
@@ -155,7 +179,7 @@ export class Search extends React.Component {
             };
         }
 
-        console.log(searchResultsData, 'searchResultsData')
+        console.log('submitData', 'searchResultsData')
 
         if (submitData) {
             searchedHouses = submitData.results
@@ -191,9 +215,8 @@ export class Search extends React.Component {
         const mapSection = document.querySelector("#map")
         Search.yandexMapMobile = !Search.yandexMapMobile;
         const mapItems = await Search.getMapItems();
-        console.log('mapItems', mapItems)
         console.log(searchResultsData, 'searchResultsData')
-        if (searchResultsData && mapSection.children.length === 0) {
+        if (mapSection && mapSection.children.length === 0) {
             console.log(searchedHouses, 'searchedHouses')
             console.log(globalZoom, 'globalZoom')
             Search.map = new ymaps.Map(mapSection, {
@@ -212,29 +235,30 @@ export class Search extends React.Component {
             
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
-    
-                const isInView = (item) => {
-                    const [southWest, northEast] = mapBounds;
-                    return (
-                        item.lat >= southWest[0] && item.lat <= northEast[0] &&
-                        item.lng >= southWest[1] && item.lng <= northEast[1]
-                    );
-                };
-                console.log(searchResultsData)
-    
-                const visibleMapItems = searchResultsData.results.filter(isInView);
-                componentInstance.setState({ visibleMapItems });
-                componentInstance.setState({ mapBounds });
-                console.log('Visible items on the map:', visibleMapItems);
-                };
+
+                const sw_lat = mapBounds[0][0] 
+                const sw_lng = mapBounds[0][0] 
+                const ne_lat = mapBounds[0][0] 
+                const ne_lng = mapBounds[0][0] 
+
+                componentInstance.setState({ sw_lat })
+                componentInstance.setState({ sw_lng })
+                componentInstance.setState({ ne_lat })
+                componentInstance.setState({ ne_lng })
+                
+                console.log('mapBounds ', mapBounds)
+                componentInstance.handleSubmit()
+            };
     
             Search.map.events.add('boundschange', updateVisibleItems);
     
-            updateVisibleItems();
+            // updateVisibleItems();
         }
+        // if (clusterer) {
+        //     clusterer.removeAll();
+        // }    
 
-
-        mapPoints = searchResultsData.results.map(el => {
+        mapPoints = mapItems.map(el => {
             return [el.lat, el.lng]
         })
         housePoints = searchedHouses.map(el => {
@@ -242,13 +266,13 @@ export class Search extends React.Component {
         })
 
 
-        for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
-            geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name), getPointOptions());
+        for (var i = 0, len = mapItems.length; i < len; i++) {
+            geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
         }
         for (var i = 0, len = searchedHouses.length; i < len; i++) {
             geoObjects[i] = new ymaps.Placemark(
                 housePoints[i],
-                getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name),
+                getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name),
                 getPointOptions()
             );
         }
@@ -265,17 +289,28 @@ export class Search extends React.Component {
         });
         clusterer.events.add('click', function (e) {
             const cluster = e.get('target'); 
-            const coordinates = cluster.geometry.getCoordinates();
-            const currentZoom = Search.map.getZoom();
+            // Увеличиваем зум при клике на класт
+            if (cluster.getGeoObjects && cluster.getGeoObjects().length > 1) {
+                const coordinates = cluster.geometry.getCoordinates();
+                const currentZoom = Search.map.getZoom();
         
-            // Увеличиваем зум при клике на кластер
-            Search.map.setCenter(coordinates, currentZoom + 1);
+                // Увеличиваем зум только при клике на кластер
+                Search.map.setCenter(coordinates, currentZoom + 1);
+            }
         });
         Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);
 
         Search.map && Search.map.geoObjects.add(clusterer);
 
     }
+
+    // componentDidUpdate(prevProps) {
+    //     console.log('zaq')
+    //     // Проверяем, изменились ли данные searchResultsData
+    //     if (prevProps.searchResultsData !== searchResultsData) {
+    //         Search.initYmaps(this)
+    //     }
+    // }
 
     componentWillMount() {
         const {getListingFields} = this.props;
@@ -453,7 +488,7 @@ export class Search extends React.Component {
             showResults,
         } = this.props;
 
-        const {smallDevice, load, visibleMapItems, mapBounds} = this.state;
+        const {smallDevice, load, visibleMapItems, mapBounds, filter} = this.state;
 
         console.log(isMapShow)
 
@@ -479,11 +514,11 @@ export class Search extends React.Component {
             <div className={cx(s.root, 'searchPage')}>
                 <div className={s.container}>
                     {
-                        !smallDevice && <SearchHeader searchSettings={searchSettings}/>
+                        !smallDevice && <SearchHeader searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds}/>
                     }
                     {
                         smallDevice && !searchMap && <SearchHeader showFilter={showFilter} showResults={showResults}
-                                                                   searchSettings={searchSettings}/>
+                                                                   searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds}/>
                     }
                     <div className={cx(s.searchResultContainer, {[s.listItemOnly]: isMapShow == false})}>
 
@@ -493,7 +528,8 @@ export class Search extends React.Component {
                                 <SearchResults
                                 visibleMapItems={visibleMapItems}
                                 isMapShow={isMapShow}
-                                mapBounds={mapBounds}/>
+                                mapBounds={mapBounds}
+                                smallDevice={smallDevice}/>
                             </div>
                         }
 
@@ -502,7 +538,8 @@ export class Search extends React.Component {
                                 <SearchResults
                                 visibleMapItems={visibleMapItems}
                                 isMapShow={isMapShow}
-                                mapBounds={mapBounds}/>
+                                mapBounds={mapBounds}
+                                smallDevice={smallDevice}/>
                             </div>
                         }
 
@@ -549,12 +586,24 @@ export class Search extends React.Component {
     }
 }
 
+Search = reduxForm({
+    form: 'SearchForm', // a unique name for this form
+    onSubmit: submit,
+    destroyOnUnmount: false,
+  })(Search);
+
 const selector = formValueSelector('SearchForm');
 
 const mapState = state => ({
     filterToggle: state.toggle.filterToggle,
     mobileSearch: state.mobileSearch.data,
     isMapShow: state.personalized.showMap,
+    currentPage: selector(state, 'currentPage'),
+    sw_lat: selector(state, 'sw_lat'),
+    sw_lng: selector(state, 'sw_lng'),
+    ne_lat: selector(state, 'ne_lat'),
+    ne_lng: selector(state, 'ne_lng'),
+    formValues: getFormValues('SearchForm')(state),
 });
 
 const mapDispatch = {
@@ -563,6 +612,8 @@ const mapDispatch = {
     showForm,
     getListingFields,
     showFilter,
+    change,
+    submitForm,
 };
 
 export default withStyles(s)(connect(mapState, mapDispatch)(Search));

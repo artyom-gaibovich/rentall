@@ -91,37 +91,6 @@ async function submit(values, dispatch) {
           wishListStatus
           isListOwner
         }
-        resultsSearch {
-          id
-          title
-          personCapacity
-          lat
-          lng
-          beds
-          coverPhoto
-          bookingType
-          reviewsCount,
-          reviewsStarRating,
-          listPhotos {
-            id
-            name
-            type
-            status
-          }
-          listingData {
-            basePrice
-            currency
-          }
-          settingsData {
-            listsettings {
-              id
-              itemName
-              itemDescription
-            }
-          }
-          wishListStatus
-          isListOwner
-        }
       }
     }
   `;
@@ -139,6 +108,10 @@ async function submit(values, dispatch) {
     }),
     credentials: 'include',
   });
+
+  console.trace('Tracing the file and line of function call')
+  console.log('values', values)
+  console.log('MAA')
 
   const { data } = await resp.json();
 submitData = data.SearchListing;

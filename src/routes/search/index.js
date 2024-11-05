@@ -197,6 +197,8 @@ export default {
 
     await store.dispatch(searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities }));
 
+    console.log('Текущее состояние Redux Store:', store.getState())
+    
     return {
       title,
       component: <FooterLessLayout page={'search'}><Search

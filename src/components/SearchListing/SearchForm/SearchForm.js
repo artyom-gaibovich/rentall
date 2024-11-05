@@ -367,6 +367,7 @@ class SearchForm extends React.Component {
     if (filterToggle === true) {
       showFilterbuttons = true;
     }
+    console.log('123456789')
 
     const roomType = fieldsSettingsData.roomType;
     const personCapacity = fieldsSettingsData.personCapacity;

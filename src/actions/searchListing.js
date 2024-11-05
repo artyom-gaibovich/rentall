@@ -78,37 +78,6 @@ const query = gql`
           wishListStatus
           isListOwner
         }
-        resultsSearch {
-          id
-          title
-          personCapacity
-          lat
-          lng
-          beds
-          bookingType
-          coverPhoto
-          reviewsCount,
-          reviewsStarRating,
-          listPhotos {
-            id
-            name
-            type
-            status
-          }
-          listingData {
-            basePrice
-            currency
-          }
-          settingsData {
-            listsettings {
-              id
-              itemName
-              itemDescription
-            }
-          }
-          wishListStatus
-          isListOwner
-        }
       }
     }
 `;
@@ -117,6 +86,10 @@ export function searchListing({ personCapacity, dates, geography, currentPage, g
   return async (dispatch, getState, { client }) => {
     dispatch({ type: SEARCH_LISTING_START });
     dispatch(reset('SearchForm'));
+
+    console.log('coordinates', lat, lng);
+    console.log('coordinatesMap', sw_lat, sw_lng, ne_lat, ne_lng);
+
 
     try {
       const { data } = await client.query({

@@ -79,7 +79,7 @@ const SearchListing = {
         ne_lng,
     }) {
         try {
-            let limit = 12000,
+            let limit = 12,
                 offset = 0;
             const publishedFilter = {isPublished: true};
             const unAvailableFilter = {
@@ -90,7 +90,6 @@ const SearchListing = {
                 },
             };
             let mapBoundsFilter,
-                geographyFilter,
                 bookingTypeFilter = {};
             let bedRoomCountFilter = {},
                 priceRangeFilter = {},
@@ -143,6 +142,8 @@ const SearchListing = {
             if (bookingType && bookingType === 'instant') bookingTypeFilter = {bookingType};
 
             if (sw_lat && ne_lat && sw_lng && ne_lng) { // Maps NorthWest & SouthEast view ports
+                console.log('map view port');
+                console.log('hop',sw_lat, ne_lat, sw_lng, ne_lng);
                 mapBoundsFilter = {
                     id: {
                         $in: [
@@ -155,74 +156,11 @@ const SearchListing = {
                         ],
                     },
                 };
+                console.log('mapFilter',mapBoundsFilter)
+            } else {
+                console.log('MAP TATATA');
             }
 
-            // Geography Type Filter
-            if (geoType && !searchByMap) {
-                const geographyConverted = await JSON.parse(geography);
-                if (geoType === 'street') {
-                    geographyFilter = {
-                        $or: [
-                            {
-                                street: {
-                                    $like: `%${geographyConverted.route}%`,
-                                },
-                                state: geographyConverted.province,
-                                country: geographyConverted.country,
-                            },
-                            {
-                                street: {
-                                    $like: `%${geographyConverted.route}%`,
-                                },
-                                state: {
-                                    $like: `${geographyConverted.province}%`,
-                                },
-                                country: geographyConverted.country,
-                            },
-                        ],
-                    };
-                } else if (geoType === 'province') {
-                    geographyFilter = {
-                        $or: [
-                            {
-                                state: geographyConverted.province,
-                                country: geographyConverted.country,
-                            },
-                            {
-                                state: {
-                                    $like: `${geographyConverted.province}%`,
-                                },
-                                country: geographyConverted.country,
-                            },
-                        ],
-                    };
-                } else if (geoType === 'country') {
-                    geographyFilter = {country: geographyConverted.country};
-                }
-            } else if (lat && lng && !searchByMap) {
-                geographyFilter = {
-                    id: {
-                        $in: [
-                            sequelize.literal(`
-                                SELECT id
-                                FROM Listing
-                                WHERE (
-                                          6371 *
-                                          acos(
-                                                  cos(radians(${lat})) *
-                                                  cos(radians(lat)) *
-                                                  cos(
-                                                          radians(lng) - radians(${lng})
-                                                  ) +
-                                                  sin(radians(${lat})) *
-                                                  sin(radians(lat))
-                                          )
-                                          ) < ${distance}
-                            `),
-                        ],
-                    },
-                };
-            }
 
             // Price Range Filter
             if (priceRange && priceRange.length > 0) {
@@ -395,9 +333,10 @@ const SearchListing = {
                 };
             }
 
+            
             let where,
-                whereNot,
-                filters = [
+            whereNot,
+            filters = [
                     bookingTypeFilter,
                     bedRoomCountFilter,
                     priceRangeFilter,
@@ -417,28 +356,22 @@ const SearchListing = {
                     publishedFilter,
                     unAvailableFilter,
                 ];
-
-            if (mapBoundsFilter || geographyFilter) {
+                
+            if (mapBoundsFilter) {
                 where = {
                     $or: [
-                        mapBoundsFilter || {},
-                        geographyFilter || {},
+                        mapBoundsFilter || {},                        
                     ],
                     $and: filters,
                 };
-                whereNot = {
-                    $or: [
-                        {},
-                        {},
-                    ],
-                    $and: filters,
-                };
+                whereNot = {$and: filters};
             } else {
                 where = {$and: filters};
                 whereNot = {$and: filters};
             }
 
-            console.log(whereNot)
+            console.log('wrere',where)
+            console.log('wrereNot',whereNot)
 
 
             // SQL query for count
@@ -453,30 +386,35 @@ const SearchListing = {
                 order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
             });
 
-            const resultsSearch = await Listing.findAll({
-                attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-                where: whereNot,
-                limit,
-                offset,
-                order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
-            });
+            // const resultsSearch = await Listing.findAll({
+            //     attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
+            //     where: whereNot,
+            //     limit: 12000,
+            //     offset,
+            //     order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
+            // });
 
-            const allFound = await Listing.findAll({
-                attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-                where,
-                limit: 1000,
-                offset,
-                order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
-            });
+            let batchSize = 100;
+            let resultsSearch = [];
+            for (let i = 0; i < 12000; i += batchSize) {
+                const batch = await Listing.findAll({
+                    attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
+                    where: whereNot,
+                    limit: batchSize,
+                    offset: i,
+                    order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
+                });
+                resultsSearch = [...resultsSearch, ...batch];
+            }
+
             console.log({
                 count,
                 results,
-                allFound
             });
             return {
                 count,
                 results,
-                allFound,
+                allFound: [],
                 resultsSearch
             };
         } catch (e) {

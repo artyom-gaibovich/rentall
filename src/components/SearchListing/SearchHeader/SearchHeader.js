@@ -27,6 +27,11 @@ import {
 } from 'react-bootstrap';
 
 class SearchHeader extends Component {
+  static propTypes = {
+    filter: PropTypes.number,
+    setFilters: PropTypes.func.isRequired,
+    mapBounds: PropTypes.array,
+  };
 
   constructor(props) {
     super(props);
@@ -80,20 +85,21 @@ class SearchHeader extends Component {
   handleTabToggle(currentTab, isExpand) {
     const { showForm, showResults, showFilter } = this.props;
     const { tabs, smallDevice } = this.state;
-
+    
     for (const key in tabs) {
       if (key == currentTab) {
         tabs[key] = isExpand;
+
       } else {
         tabs[key] = false;
       }
     }
-
+    
     this.setState({
       tabs,
       overlay: isExpand,
     });
-
+    
     if (smallDevice) {
       if (isExpand) {
         showFilter();
@@ -101,6 +107,11 @@ class SearchHeader extends Component {
         showResults();
       }
     }
+    // const newFilters = filter + 1 
+    // console.log(newFilters)
+    // setTimeout(() => {
+    //   this.props.setFilters(newFilters)
+    // }, 5000)
   }
 
   handleOpen() {
@@ -109,9 +120,11 @@ class SearchHeader extends Component {
   }
 
   render() {
-    const { searchSettings, formValues } = this.props;
+    const { searchSettings, formValues, mapBounds } = this.props;
     const { tabs, overlay, smallDevice, verySmallDevice } = this.state;
     let isActive = false;
+
+    console.log('mapBounds',mapBounds)
 
     if (formValues && (formValues.beds || formValues.bedrooms || formValues.bathrooms
       || (formValues.amenities && formValues.amenities.length) || (formValues.spaces && formValues.spaces.length)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 // Redux
@@ -33,11 +33,14 @@ class SearchResults extends React.Component {
     currentPage: PropTypes.number,
     total: PropTypes.number,
     isResultLoading: PropTypes.bool,
+    visibleMapItems: PropTypes.array,
+    mapBounds: PropTypes.array,
+    smallDevice: PropTypes.bool,
   };
 
   static defaultProps = {
     results: [],
-    // isResultLoading: false,
+    isResultLoading: true,
     showMap: false,
     showMapLoader: false,
   };
@@ -48,6 +51,7 @@ class SearchResults extends React.Component {
       page: 1,
     };
     this.handlePagination = this.handlePagination.bind(this);
+    this.handlePaginationNotMap = this.handlePaginationNotMap.bind(this);
   }
 
   async refreshYmaps(){
@@ -61,9 +65,12 @@ class SearchResults extends React.Component {
     }
   }
   componentDidMount() {
-    const { currentPage } = this.props;
+    let { currentPage, visibleMapItems, results } = this.props;
     if (currentPage != undefined) {
       this.setState({ page: currentPage });
+    }
+    if (visibleMapItems == null || visibleMapItems.length == 0) {
+      visibleMapItems = results;
     }
   }
 
@@ -76,6 +83,12 @@ class SearchResults extends React.Component {
   }
 
   async handlePagination(currenctPage, size) {
+    this.setState({ page: currenctPage })
+    await this.refreshYmaps();
+    window.scrollTo(0, 0);
+  }
+
+  async handlePaginationNotMap(currenctPage, size) {
     const { change, submitForm } = this.props;
     console.log(currenctPage)
     await change('currentPage', currenctPage);
@@ -87,8 +100,70 @@ class SearchResults extends React.Component {
 
   render() {
     const { page } = this.state;
-    const { results, total, isResultLoading, showMap, showMapLoader, guests } = this.props;
-    console.log(results)
+    const { results, total, isResultLoading, showMap, showMapLoader, guests, visibleMapItems, mapBounds, smallDevice } = this.props;
+    console.log('see', results)
+
+    // const startIndex = (page - 1) * 12;
+    // const paginatedItems = visibleMapItems.slice(startIndex, startIndex + 12)
+
+    // if (!smallDevice && visibleMapItems != null && visibleMapItems.length > 0) {
+    //   return (
+    //     <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
+    //       {
+    //         !showMapLoader && <Row className={s.noMargin}>
+
+    //           <div className={cx(s.resultsContainer, 'resultsContainerRtl')}>
+    //             {/* <Loader
+    //                 type={"page"}
+    //                 show={isResultLoading}
+    //               /> */}
+    //             {
+    //               isResultLoading && <div className={s.loadingOverlay} />
+    //             }
+    //             {
+    //               paginatedItems.map((item, listIndex) => (
+    //                 <div className={cx(s.listItem, s.displayInlineBlock)} key={item.id}>
+    //                   <ListingItem
+    //                     id={item.id}
+    //                     basePrice={item.listingData.basePrice}
+    //                     currency={item.listingData.currency}
+    //                     title={item.title}
+    //                     beds={item.beds}
+    //                     personCapacity={item.personCapacity}
+    //                     roomType={item.settingsData[0].listsettings.itemName}
+    //                     coverPhoto={item.coverPhoto}
+    //                     listPhotos={item.listPhotos}
+    //                     bookingType={item.bookingType}
+    //                     reviewsCount={item.reviewsCount}
+    //                     reviewsStarRating={item.reviewsStarRating}
+    //                     wishListStatus={item.wishListStatus}
+    //                     isListOwner={item.isListOwner}
+    //                     personCount={guests}
+                        
+    //                   />
+    //                 </div>
+    //                 ))
+    //             }
+    //           </div>
+    //           <div className={s.resultsFooter}>
+    //             <div className={s.resultsPagination}>
+    //               <div className={s.pagination}>
+    //                 <CustomPagination
+    //                   total={visibleMapItems.length}
+    //                   current={page}
+    //                   defaultCurrenct={1}
+    //                   defaultPageSize={12}
+    //                   handleChange={this.handlePagination}
+
+    //                 />
+    //               </div>
+    //             </div>
+    //           </div>
+    //         </Row>
+    //       }
+    //     </div>
+    //   );
+    // }
     if (results != null && results.length > 0) {
       return (
         <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
@@ -136,7 +211,7 @@ class SearchResults extends React.Component {
                       current={page}
                       defaultCurrenct={1}
                       defaultPageSize={12}
-                      handleChange={this.handlePagination}
+                      handleChange={this.handlePaginationNotMap}
 
                     />
                   </div>
@@ -154,7 +229,7 @@ class SearchResults extends React.Component {
           }
         <NoResults />
       </div>
-    );
+    )
   }
 }
 

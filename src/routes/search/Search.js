@@ -298,7 +298,7 @@ export class Search extends React.Component {
                 const currentZoom = Search.map.getZoom();
         
                 // Увеличиваем зум только при клике на кластер
-                Search.map.setCenter(coordinates, currentZoom + 1);
+                Search.map.setCenter(coordinates, currentZoom + 2);
             }
         });
         Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);

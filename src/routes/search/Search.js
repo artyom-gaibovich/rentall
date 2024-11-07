@@ -236,10 +236,13 @@ export class Search extends React.Component {
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
 
-                const sw_lat = mapBounds[0][0] 
-                const sw_lng = mapBounds[0][0] 
-                const ne_lat = mapBounds[0][0] 
-                const ne_lng = mapBounds[0][0] 
+                const sw_lat = mapBounds[0][0]; // Юго-западная широта
+
+                const sw_lng = mapBounds[0][1]; // Юго-западная долгота
+
+                const ne_lat = mapBounds[1][0]; // Северо-восточная широта
+
+                const ne_lng = mapBounds[1][1]; // Северо-восточная долгота
 
                 componentInstance.setState({ sw_lat })
                 componentInstance.setState({ sw_lng })

@@ -7,6 +7,8 @@ import { getSearchResults, loadingSearchResults } from '../../../actions/getSear
 //ymaps
 export let submitData;
 async function submit(values, dispatch) {
+  // Очистка submitData перед новым запросом
+  submitData = null;
   dispatch(loadingSearchResults());
   const query =
     `query(
@@ -95,29 +97,33 @@ async function submit(values, dispatch) {
     }
   `;
 
+  console.log('Запрос с параметрами values:', values);
+  try {
+    const resp = await fetch('/graphql', {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables: values }),
+      credentials: 'include',
+    });
 
-  const resp = await fetch('/graphql', {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query,
-      variables: values,
-    }),
-    credentials: 'include',
-  });
+    const { data } = await resp.json();
+    console.log('Полученные данные:', data);
 
-  console.trace('Tracing the file and line of function call')
-  console.log('values', values)
-  console.log('MAA')
-
-  const { data } = await resp.json();
-submitData = data.SearchListing;
-  if (data && data.SearchListing) {
-
-    dispatch(getSearchResults(data.SearchListing));
+    if (data && data.SearchListing) {
+      submitData = data.SearchListing;
+      dispatch(getSearchResults(data.SearchListing));
+    } else {
+      console.warn('SearchListing не вернул результаты.');
+      submitData = { count: '0', results: [] };
+      dispatch(getSearchResults(null));
+    }
+  } catch (error) {
+    console.error('Ошибка выполнения GraphQL запроса:', error);
+    submitData = { count: '0', results: [] };
+    dispatch(getSearchResults(null));
   }
 }
 

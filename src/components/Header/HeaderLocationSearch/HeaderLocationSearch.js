@@ -115,6 +115,7 @@ class HeaderLocationSearch extends Component {
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
             this.refreshYmaps()
+            location.reload() 
         }
         if (data && data.gmaps) {
             types = data.gmaps.types;
@@ -150,6 +151,7 @@ class HeaderLocationSearch extends Component {
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
             this.refreshYmaps()
+            location.reload() 
         }
     }
 
@@ -184,6 +186,7 @@ class HeaderLocationSearch extends Component {
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
             this.refreshYmaps()
+            
         }
 
     }

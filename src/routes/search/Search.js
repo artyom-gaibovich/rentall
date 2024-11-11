@@ -1,15 +1,15 @@
 // General
 import React from 'react';
 import PropTypes from 'prop-types';
-import {FormattedMessage} from 'react-intl';
-import {formatURL} from '../../helpers/formatURL.js';
+import { FormattedMessage } from 'react-intl';
+import { formatURL } from '../../helpers/formatURL.js';
 // Redux
-import {connect} from 'react-redux';
-import {gql} from 'react-apollo';
-import {graphql} from 'react-apollo';
+import { connect } from 'react-redux';
+import { gql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 
 // Redux Form
-import {formValueSelector, getFormValues, change, submit as submitForm, reduxForm} from 'redux-form';
+import { formValueSelector, getFormValues, change, submit as submitForm, reduxForm } from 'redux-form';
 
 // Locale
 import messages from '../../locale/messages';
@@ -17,7 +17,7 @@ import messages from '../../locale/messages';
 // Style
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import cx from 'classnames';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import * as FontAwesome from 'react-icons/lib/fa';
 import * as Material from 'react-icons/lib/md';
 import s from './Search.css';
@@ -31,15 +31,15 @@ import Loader from '../../components/Loader';
 import SearchHeader from '../../components/SearchListing/SearchHeader';
 
 // Redux Action
-import {showMap, showResults, showForm, showFilter} from '../../actions/mobileSearchNavigation';
-import {getListingFields} from '../../actions/getListingFields';
+import { showMap, showResults, showForm, showFilter } from '../../actions/mobileSearchNavigation';
+import { getListingFields } from '../../actions/getListingFields';
 
 import ReactGoogleMapLoader from 'react-google-maps-loader';
-import {googleMapAPI} from '../../config';
+import { googleMapAPI } from '../../config';
 
 //yandex maps data
-import {searchResultsData} from "../../actions/getSearchResults.js"
-import {submitData} from "../../components/SearchListing/SearchForm/submit.js"
+import { searchResultsData } from "../../actions/getSearchResults.js"
+import { submitData } from "../../components/SearchListing/SearchForm/submit.js"
 import submit from "../../components/SearchListing/SearchForm/submit.js"
 
 export class Search extends React.Component {
@@ -85,14 +85,27 @@ export class Search extends React.Component {
             visibleMapItems: [],
             mapBounds: [],
             filter: 0,
-            sw_lat: 0,
-            sw_lng: 0, 
-            ne_lat: 0, 
+            lat: 0,
+            lng: 0,
+            ne_lat: 0,
             ne_lng: 0,
+            sw_lat: 0,
+            sw_lng: 0,
         };
 
         this.handleResize = this.handleResize.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    // Метод для полной очистки карты
+    static async clearMapInstance() {
+        if (Search.map) {
+            Search.map.geoObjects.removeAll(); // Удаление всех объектов с карты
+            Search.map.destroy(); // Полностью уничтожаем экземпляр карты
+            Search.map = null; // Сбрасываем ссылку на экземпляр карты
+            Search.scriptInit = false; // Флаг для повторной инициализации при необходимости
+            Search.yandexMapMobile = true; // Переключение флага мобильной карты (если требуется)
+        }
     }
 
     setFilters = (newFilters) => {
@@ -119,22 +132,27 @@ export class Search extends React.Component {
         const centerLng = (minLng + maxLng) / 2;
         const centerLat = (minLat + maxLat) / 2;
 
-        return {lng: centerLng, lat: centerLat};
+        return { lng: centerLng, lat: centerLat };
     }
 
     async handleSubmit() {
-        console.log('hahah');
-        console.log(this.state);
+        console.log('Submitting map data');
+        console.log(this.state); // Проверка текущего состояния, включая координаты границ
+
         const { change, submitForm } = this.props;
+
+        // Обновление значений формы координатами карты
         await change('currentPage', 1);
         await change('sw_lat', this.state.sw_lat);
         await change('sw_lng', this.state.sw_lng);
         await change('ne_lat', this.state.ne_lat);
         await change('ne_lng', this.state.ne_lng);
+
+        // Отправка формы с обновлёнными данными
         await submitForm('SearchForm');
-        console.log('good')
-        // handleTabToggle('guests', !isExpand);
-      }
+
+        console.log('Data submitted to backend');
+    }
 
     static async initYmaps(componentInstance) {
         await Search.sleep(1000)
@@ -179,25 +197,10 @@ export class Search extends React.Component {
             };
         }
 
-        console.log('submitData', 'searchResultsData')
-
-        if (submitData) {
-            searchedHouses = submitData.results
-            console.log(submitData.count, 'submitData.count')
-            if (submitData.count > 500) {
-                globalZoom = 7
-            }
-            else if (submitData.count >= 20 <= 500) {
-                globalZoom = 9
-            }
-            else if (submitData.count < 20) {
-                globalZoom = 16
-            }
-            globalCenter = Search.getCenter(searchedHouses);
-
-        } else {
+        console.log(submitData, 'submitData')
+        console.log(searchResultsData, 'searchResultsData')
+        if (searchResultsData && searchResultsData.results.length > 0) {
             searchedHouses = searchResultsData.results;
-            console.log(searchResultsData.count, 'searchResultsData.count')
             if (searchResultsData.count > 500) {
                 globalZoom = 6
             }
@@ -208,8 +211,36 @@ export class Search extends React.Component {
                 globalZoom = 16
             }
             globalCenter = Search.getCenter(searchedHouses);
-
         }
+        // if (submitData && submitData.results.length > 0) {
+        //     searchedHouses = submitData.results
+        //     console.log(submitData.count, 'submitData.count')
+        //     if (submitData.count > 500) {
+        //         globalZoom = 7
+        //     }
+        //     else if (submitData.count >= 20 <= 500) {
+        //         globalZoom = 9
+        //     }
+        //     else if (submitData.count < 20) {
+        //         globalZoom = 16
+        //     }
+        //     globalCenter = Search.getCenter(searchedHouses);
+
+        // } else {
+        //     searchedHouses = searchResultsData.results;
+        //     console.log(searchResultsData.count, 'searchResultsData.count')
+        //     if (searchResultsData.count > 500) {
+        //         globalZoom = 6
+        //     }
+        //     else if (searchResultsData.count >= 20 <= 500) {
+        //         globalZoom = 9
+        //     }
+        //     else if (searchResultsData.count < 20) {
+        //         globalZoom = 16
+        //     }
+        //     globalCenter = Search.getCenter(searchedHouses);
+
+        // }
 
 
         const mapSection = document.querySelector("#map")
@@ -231,30 +262,30 @@ export class Search extends React.Component {
             Search.map.controls.remove("rulerControl");
             Search.map.controls.remove("typeSelector");
             Search.map.behaviors.disable("dblClickZoom");
-            console.log(Search.map, 'map')
-            
+            console.log(Search.map, 'MAP MAP MAP')
+
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
+                console.log(mapBounds, 'mapBounds 238 mapBounds 238 mapBounds 238');
 
+                // Извлечение координат юго-западной и северо-восточной границы карты
                 const sw_lat = mapBounds[0][0]; // Юго-западная широта
-
                 const sw_lng = mapBounds[0][1]; // Юго-западная долгота
-
                 const ne_lat = mapBounds[1][0]; // Северо-восточная широта
-
                 const ne_lng = mapBounds[1][1]; // Северо-восточная долгота
+                console.log({ sw_lat, sw_lng, ne_lat, ne_lng }, '{ sw_lat, sw_lng, ne_lat, ne_lng }');
+                // Обновление состояния компонента с новыми координатами
+                componentInstance.setState({ sw_lat, sw_lng, ne_lat, ne_lng });
 
-                componentInstance.setState({ sw_lat })
-                componentInstance.setState({ sw_lng })
-                componentInstance.setState({ ne_lat })
-                componentInstance.setState({ ne_lng })
-                
-                console.log('mapBounds ', mapBounds)
-                componentInstance.handleSubmit()
+                console.log('mapBounds ', mapBounds);
+
+                // Отправка данных на сервер
+                componentInstance.handleSubmit();
             };
-    
+
+            // Добавление обработчика события на карту
             Search.map.events.add('boundschange', updateVisibleItems);
-    
+
             // updateVisibleItems();
         }
         // if (clusterer) {
@@ -291,12 +322,12 @@ export class Search extends React.Component {
             target.options.set('zIndex', zIndex);
         });
         clusterer.events.add('click', function (e) {
-            const cluster = e.get('target'); 
+            const cluster = e.get('target');
             // Увеличиваем зум при клике на класт
             if (cluster.getGeoObjects && cluster.getGeoObjects().length > 1) {
                 const coordinates = cluster.geometry.getCoordinates();
                 const currentZoom = Search.map.getZoom();
-        
+
                 // Увеличиваем зум только при клике на кластер
                 Search.map.setCenter(coordinates, currentZoom + 2);
             }
@@ -316,7 +347,7 @@ export class Search extends React.Component {
     // }
 
     componentWillMount() {
-        const {getListingFields} = this.props;
+        const { getListingFields } = this.props;
         // Get listing settings fields data
         getListingFields();
         // this.getMapItems();
@@ -363,6 +394,24 @@ export class Search extends React.Component {
     }
 
     componentWillUnmount() {
+        try {
+            // Полный сброс карты и её данных
+            Search.clearMapInstance();
+
+            // Сбрасываем локальные переменные состояния
+            this.setState({
+                ne_lat: 0,
+                ne_lng: 0,
+                sw_lat: 0,
+                sw_lng: 0,
+                load: false,
+                visibleMapItems: [],
+                mapBounds: [],
+            });
+        } catch (error) {
+            console.warn('Error during component unmount:', error);
+        }
+
         const isBrowser = typeof window !== 'undefined';
         if (isBrowser) {
             window.removeEventListener('resize', this.handleResize);
@@ -412,7 +461,7 @@ export class Search extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({query}),
+            body: JSON.stringify({ query }),
             credentials: 'include',
         });
         const response = await resp.json();
@@ -428,18 +477,18 @@ export class Search extends React.Component {
     }
 
     handleResize(e) {
-        const {showResults} = this.props;
+        const { showResults } = this.props;
         const isBrowser = typeof window !== 'undefined';
         const smallDevice = isBrowser ? window.matchMedia('(max-width: 768px)').matches : false;
         if (smallDevice) {
             showResults();
         }
-        this.setState({smallDevice});
+        this.setState({ smallDevice });
     }
 
     mobileNavigation() {
         const {
-            mobileSearch: {searchMap, searchResults},
+            mobileSearch: { searchMap, searchResults },
             showMap,
             showResults,
             showForm,
@@ -451,17 +500,17 @@ export class Search extends React.Component {
             leftNav = <Button className={cx(s.filterButton, s.locationBtn)} bsStyle="link" onClick={() => {
                 Search.initYmaps();
                 document.querySelector(".searchMapSection").classList.toggle(s.nonactiveMap);
-            }}><Material.MdRoom className={s.icon}/></Button>;
+            }}><Material.MdRoom className={s.icon} /></Button>;
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
-                               onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders/></Button>;
+                onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
         }
 
         if (searchMap) {
             leftNav = <Button className={cx(s.filterButton)}
-                              bsStyle="link"><FormattedMessage {...messages.results} />{' '}<Material.MdSettingsInputComposite
-                className={s.icon}/></Button>;
+                bsStyle="link"><FormattedMessage {...messages.results} />{' '}<Material.MdSettingsInputComposite
+                    className={s.icon} /></Button>;
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
-                               onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders/></Button>;
+                onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
         }
 
         return (
@@ -482,7 +531,7 @@ export class Search extends React.Component {
 
     render() {
         const {
-            mobileSearch: {searchMap, searchResults, searchForm, searchFilter},
+            mobileSearch: { searchMap, searchResults, searchForm, searchFilter },
             searchSettings,
             initialFilter,
             filterToggle,
@@ -491,7 +540,7 @@ export class Search extends React.Component {
             showResults,
         } = this.props;
 
-        const {smallDevice, load, visibleMapItems, mapBounds, filter} = this.state;
+        const { smallDevice, load, visibleMapItems, mapBounds, filter } = this.state;
 
         console.log(isMapShow)
 
@@ -506,7 +555,7 @@ export class Search extends React.Component {
         if (!load || !isBrowser) {
             return (
                 <div className={s.searchLoaderContainer}>
-                    <Loader type={'text'}/>
+                    <Loader type={'text'} />
                 </div>
             );
         }
@@ -517,32 +566,32 @@ export class Search extends React.Component {
             <div className={cx(s.root, 'searchPage')}>
                 <div className={s.container}>
                     {
-                        !smallDevice && <SearchHeader searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds}/>
+                        !smallDevice && <SearchHeader searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds} />
                     }
                     {
                         smallDevice && !searchMap && <SearchHeader showFilter={showFilter} showResults={showResults}
-                                                                   searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds}/>
+                            searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds} />
                     }
-                    <div className={cx(s.searchResultContainer, {[s.listItemOnly]: isMapShow == false})}>
+                    <div className={cx(s.searchResultContainer, { [s.listItemOnly]: isMapShow == false })}>
 
 
                         {
                             !smallDevice && DesktopResults && <div className={cx(s.resultsBody)}>
                                 <SearchResults
-                                visibleMapItems={visibleMapItems}
-                                isMapShow={isMapShow}
-                                mapBounds={mapBounds}
-                                smallDevice={smallDevice}/>
+                                    visibleMapItems={visibleMapItems}
+                                    isMapShow={isMapShow}
+                                    mapBounds={mapBounds}
+                                    smallDevice={smallDevice} />
                             </div>
                         }
 
                         {
                             smallDevice && searchResults && <div className={cx(s.resultsBody)}>
                                 <SearchResults
-                                visibleMapItems={visibleMapItems}
-                                isMapShow={isMapShow}
-                                mapBounds={mapBounds}
-                                smallDevice={smallDevice}/>
+                                    visibleMapItems={visibleMapItems}
+                                    isMapShow={isMapShow}
+                                    mapBounds={mapBounds}
+                                    smallDevice={smallDevice} />
                             </div>
                         }
 
@@ -551,7 +600,7 @@ export class Search extends React.Component {
                     {
                         !smallDevice &&
                         <div className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl')}>
-                            <div id="map" style={{height: '100%', width: '100%', display: 'block'}}>
+                            <div id="map" style={{ height: '100%', width: '100%', display: 'block' }}>
 
                             </div>
                             {/* <ReactGoogleMapLoader
@@ -566,15 +615,15 @@ export class Search extends React.Component {
               /> */}
                         </div>
                     }
-                    {smallDevice && <div style={{display: "block"}}
-                                         className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl', s.nonactiveMap)}>
-                        <div id="map" style={{height: '100%', maxWidth: '700px'}}>
+                    {smallDevice && <div style={{ display: "block" }}
+                        className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl', s.nonactiveMap)}>
+                        <div id="map" style={{ height: '100%', maxWidth: '700px' }}>
                         </div>
                     </div>}
                     {
                         smallDevice && searchMap &&
                         <div className={cx(s.searchMapContainer, 'searchMapSection searchMapSectionRtl')}>
-                            <MapResults initialFilter={initialFilter} searchSettings={searchSettings}/>
+                            <MapResults initialFilter={initialFilter} searchSettings={searchSettings} />
 
                         </div>
                     }
@@ -593,7 +642,7 @@ Search = reduxForm({
     form: 'SearchForm', // a unique name for this form
     onSubmit: submit,
     destroyOnUnmount: false,
-  })(Search);
+})(Search);
 
 const selector = formValueSelector('SearchForm');
 

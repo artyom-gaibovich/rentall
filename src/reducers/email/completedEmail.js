@@ -60,7 +60,7 @@ export async function emailBroadcast(id, logo) {
       hostProfilePic,
       logo,
     };
-    await sendEmail(guestEmail, 'completedGuest', contentForGuest);
+    // await sendEmail(guestEmail, 'completedGuest', contentForGuest);
 
     return {
       status: 'email is sent',

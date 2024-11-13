@@ -201,15 +201,34 @@ export class Search extends React.Component {
         console.log(searchResultsData, 'searchResultsData')
         if (searchResultsData && searchResultsData.results.length > 0) {
             searchedHouses = searchResultsData.results;
-            if (searchResultsData.count > 500) {
+            if (searchResultsData.count > 1000) {
+                globalZoom = 4
+            } else if (searchResultsData.count > 700 && searchResultsData.count <=1000) {
                 globalZoom = 6
+            } else if (searchResultsData.count > 500 && searchResultsData.count <=700) {
+                globalZoom = 8.5
+            } else if (searchResultsData.count > 400 && searchResultsData.count <=500) {
+                globalZoom = 7
+            } else if (searchResultsData.count > 300 && searchResultsData.count <=400) {
+                globalZoom = 7
+            } else if (searchResultsData.count > 200 && searchResultsData.count <=300) {
+                globalZoom = 7.5
+            } else if (searchResultsData.count > 100 && searchResultsData.count <= 200) {
+                globalZoom = 8
+            } else if (searchResultsData.count > 50 && searchResultsData.count <= 100) {
+                globalZoom = 8
+            } else if (searchResultsData.count > 20 && searchResultsData.count <= 50) {
+                globalZoom = 7
+            } else if (searchResultsData.count <= 20 && searchResultsData.count > 10) {
+                globalZoom = 10
+            } else if (searchResultsData.count <= 10 && searchResultsData.count > 5) {
+                globalZoom = 12
+            } else if (searchResultsData.count <= 5 && searchResultsData.count > 2) {
+                globalZoom = 14
+            } else if (searchResultsData.count <= 2) {
+                globalZoom = 15
             }
-            else if (searchResultsData.count >= 20 <= 500) {
-                globalZoom = 9
-            }
-            else if (searchResultsData.count < 20) {
-                globalZoom = 16
-            }
+            console.log(globalZoom, 'globalZoom')
             globalCenter = Search.getCenter(searchedHouses);
         }
         // if (submitData && submitData.results.length > 0) {
@@ -262,7 +281,6 @@ export class Search extends React.Component {
             Search.map.controls.remove("rulerControl");
             Search.map.controls.remove("typeSelector");
             Search.map.behaviors.disable("dblClickZoom");
-            console.log(Search.map, 'MAP MAP MAP')
 
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
@@ -329,7 +347,7 @@ export class Search extends React.Component {
                 const currentZoom = Search.map.getZoom();
 
                 // Увеличиваем зум только при клике на кластер
-                Search.map.setCenter(coordinates, currentZoom + 2);
+                Search.map.setCenter(coordinates, currentZoom + 1.5);
             }
         });
         Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);

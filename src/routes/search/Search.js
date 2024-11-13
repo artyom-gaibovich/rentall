@@ -183,7 +183,7 @@ export class Search extends React.Component {
         clusterer.options.set({
             minClusterSize: 3,
             maxZoom: 60,
-            gridSize: 180,
+            gridSize: 100,
             hasBalloon: false,
             hasHint: false,
             clusterDisableClickZoom: true,
@@ -200,36 +200,37 @@ export class Search extends React.Component {
         console.log(submitData, 'submitData')
         console.log(searchResultsData, 'searchResultsData')
         if (searchResultsData && searchResultsData.results.length > 0) {
+            globalZoom = 16
             searchedHouses = searchResultsData.results;
-            if (searchResultsData.count > 1000) {
-                globalZoom = 4
-            } else if (searchResultsData.count > 700 && searchResultsData.count <=1000) {
-                globalZoom = 6
-            } else if (searchResultsData.count > 500 && searchResultsData.count <=700) {
-                globalZoom = 8.5
-            } else if (searchResultsData.count > 400 && searchResultsData.count <=500) {
-                globalZoom = 7
-            } else if (searchResultsData.count > 300 && searchResultsData.count <=400) {
-                globalZoom = 7
-            } else if (searchResultsData.count > 200 && searchResultsData.count <=300) {
-                globalZoom = 7.5
-            } else if (searchResultsData.count > 100 && searchResultsData.count <= 200) {
-                globalZoom = 8
-            } else if (searchResultsData.count > 50 && searchResultsData.count <= 100) {
-                globalZoom = 8
-            } else if (searchResultsData.count > 20 && searchResultsData.count <= 50) {
-                globalZoom = 7
-            } else if (searchResultsData.count <= 20 && searchResultsData.count > 10) {
-                globalZoom = 10
-            } else if (searchResultsData.count <= 10 && searchResultsData.count > 5) {
-                globalZoom = 12
-            } else if (searchResultsData.count <= 5 && searchResultsData.count > 2) {
-                globalZoom = 14
-            } else if (searchResultsData.count <= 2) {
-                globalZoom = 15
-            }
-            console.log(globalZoom, 'globalZoom')
-            globalCenter = Search.getCenter(searchedHouses);
+            // if (searchResultsData.count > 1000) {
+            //     globalZoom = 4
+            // } else if (searchResultsData.count > 700 && searchResultsData.count <=1000) {
+            //     globalZoom = 6
+            // } else if (searchResultsData.count > 500 && searchResultsData.count <=700) {
+            //     globalZoom = 8.5
+            // } else if (searchResultsData.count > 400 && searchResultsData.count <=500) {
+            //     globalZoom = 7
+            // } else if (searchResultsData.count > 300 && searchResultsData.count <=400) {
+            //     globalZoom = 7
+            // } else if (searchResultsData.count > 200 && searchResultsData.count <=300) {
+            //     globalZoom = 7.5
+            // } else if (searchResultsData.count > 100 && searchResultsData.count <= 200) {
+            //     globalZoom = 8
+            // } else if (searchResultsData.count > 50 && searchResultsData.count <= 100) {
+            //     globalZoom = 8
+            // } else if (searchResultsData.count > 20 && searchResultsData.count <= 50) {
+            //     globalZoom = 7
+            // } else if (searchResultsData.count <= 20 && searchResultsData.count > 10) {
+            //     globalZoom = 10
+            // } else if (searchResultsData.count <= 10 && searchResultsData.count > 5) {
+            //     globalZoom = 12
+            // } else if (searchResultsData.count <= 5 && searchResultsData.count > 2) {
+            //     globalZoom = 14
+            // } else if (searchResultsData.count <= 2) {
+            //     globalZoom = 15
+            // }
+            // console.log(globalZoom, 'globalZoom')
+            // globalCenter = Search.getCenter(searchedHouses);
         }
         // if (submitData && submitData.results.length > 0) {
         //     searchedHouses = submitData.results
@@ -267,12 +268,32 @@ export class Search extends React.Component {
         const mapItems = await Search.getMapItems();
         console.log(searchResultsData, 'searchResultsData')
         if (mapSection && mapSection.children.length === 0) {
+            mapPoints = searchResultsData.results.map(el => {
+                return [el.lat, el.lng]
+            })
+            housePoints = searchedHouses.map(el => {
+                return [el.lat, el.lng]
+            })
+    
+    
+            for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
+                geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name), getPointOptions());
+            }
+            for (var i = 0, len = searchedHouses.length; i < len; i++) {
+                geoObjects[i] = new ymaps.Placemark(
+                    housePoints[i],
+                    getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name),
+                    getPointOptions()
+                );
+            }
+    
+            clusterer.add(geoObjects);
             console.log(searchedHouses, 'searchedHouses')
             console.log(globalZoom, 'globalZoom')
             Search.map = new ymaps.Map(mapSection, {
-                center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
-                //center: [globalCenter.lat, globalCenter.lng],
-                zoom: globalZoom
+                bounds: clusterer.getBounds(),
+                checkZoomRange: true,
+                controls: [],
             })
             ymaps.onHover
             Search.map.controls.remove("searchControl");
@@ -281,11 +302,11 @@ export class Search extends React.Component {
             Search.map.controls.remove("rulerControl");
             Search.map.controls.remove("typeSelector");
             Search.map.behaviors.disable("dblClickZoom");
+            
+            // Search.map.setBounds(clusterer.getBounds(), { checkZoomRange: true })
 
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
-                console.log(mapBounds, 'mapBounds 238 mapBounds 238 mapBounds 238');
-
                 // Извлечение координат юго-западной и северо-восточной границы карты
                 const sw_lat = mapBounds[0][0]; // Юго-западная широта
                 const sw_lng = mapBounds[0][1]; // Юго-западная долгота
@@ -302,13 +323,17 @@ export class Search extends React.Component {
             };
 
             // Добавление обработчика события на карту
-            Search.map.events.add('boundschange', updateVisibleItems);
+            setTimeout(() => {
+                Search.map.events.add('boundschange', updateVisibleItems);
+            }, 1000);
 
             // updateVisibleItems();
         }
         // if (clusterer) {
         //     clusterer.removeAll();
         // }    
+
+        clusterer.removeAll();
 
         mapPoints = mapItems.map(el => {
             return [el.lat, el.lng]
@@ -328,7 +353,7 @@ export class Search extends React.Component {
                 getPointOptions()
             );
         }
-        clusterer.add(geoObjects);
+        clusterer.add(geoObjects);   
         clusterer.events.once('objectsaddtomap', function () {
             Search.map.setBounds(clusterer.getBounds());
         });
@@ -343,17 +368,20 @@ export class Search extends React.Component {
             const cluster = e.get('target');
             // Увеличиваем зум при клике на класт
             if (cluster.getGeoObjects && cluster.getGeoObjects().length > 1) {
-                const coordinates = cluster.geometry.getCoordinates();
-                const currentZoom = Search.map.getZoom();
+                const clusterBounds = cluster.getBounds(); // Получаем границы кластера
 
-                // Увеличиваем зум только при клике на кластер
-                Search.map.setCenter(coordinates, currentZoom + 1.5);
+                // Устанавливаем карту так, чтобы весь кластер был виден, 
+                // таким образом карта зуммируется до уровня, при котором объекты раскладываются
+                Search.map.setBounds(clusterBounds, {
+                    checkZoomRange: true, // Проверяем, чтобы зум был в допустимых пределах
+                    zoomMargin: 20 // Оставляем небольшой отступ для комфортного отображения
+                });
             }
         });
-        Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);
+        // Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);
 
         Search.map && Search.map.geoObjects.add(clusterer);
-
+        
     }
 
     // componentDidUpdate(prevProps) {

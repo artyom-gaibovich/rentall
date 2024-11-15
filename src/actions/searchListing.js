@@ -8,8 +8,7 @@ import {
   SEARCH_LISTING_ERROR,
 } from '../constants';
 
-import { getSearchResults } from './getSearchResults';
-
+import { getSearchResults, loadingSearchResults } from './getSearchResults';
 
 const query = gql`
   query(
@@ -86,10 +85,7 @@ export function searchListing({ personCapacity, dates, geography, currentPage, g
   return async (dispatch, getState, { client }) => {
     dispatch({ type: SEARCH_LISTING_START });
     dispatch(reset('SearchForm'));
-
-    console.log('coordinates', lat, lng);
-    console.log('coordinatesMap', sw_lat, sw_lng, ne_lat, ne_lng);
-
+    dispatch(loadingSearchResults());
 
     try {
       const { data } = await client.query({

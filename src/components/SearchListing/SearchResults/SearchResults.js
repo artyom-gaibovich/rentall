@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 // Redux
@@ -23,8 +23,8 @@ import submit from '../SearchForm/submit';
 
 
 //yandex maps
-import {searchResultsData} from "../../../actions/getSearchResults.js"
-import {Search} from "../../../routes/search/Search.js"
+import { searchResultsData } from "../../../actions/getSearchResults.js"
+import { Search } from "../../../routes/search/Search.js"
 class SearchResults extends React.Component {
   static propTypes = {
     change: PropTypes.any,
@@ -54,23 +54,41 @@ class SearchResults extends React.Component {
     this.handlePaginationNotMap = this.handlePaginationNotMap.bind(this);
   }
 
-  async refreshYmaps(){
-    if(Search.map){
-      Search.map.geoObjects.removeAll();
-      await Search.initYmaps()
-      // console.log("map refreshed")
-    } else {
-      // console.log(Search.map)
-      // console.log("map not defined")
+  async refreshYmaps() {
+    // Функция для проверки состояния загрузки каждые 100 мс
+    const waitForLoadingComplete = () => {
+      return new Promise((resolve) => {
+        const checkLoading = () => {
+          if (!this.props.isResultLoading) {
+            resolve(); // Завершаем ожидание, если загрузка завершена
+          } else {
+            setTimeout(checkLoading, 100); // Проверяем снова через 100 мс
+          }
+        };
+        checkLoading();
+      });
+    };
+
+    // Ожидаем завершения загрузки
+    await waitForLoadingComplete();
+
+    // После завершения загрузки очищаем и инициализируем карту
+    await Search.clearMapInstance();
+    await Search.initYmaps();
+    console.log("Карта обновлена после завершения загрузки данных");
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.results !== prevProps.results) {
+      console.log('qsx')
+      this.refreshYmaps();
     }
   }
+
   componentDidMount() {
     let { currentPage, visibleMapItems, results } = this.props;
     if (currentPage != undefined) {
       this.setState({ page: currentPage });
-    }
-    if (visibleMapItems == null || visibleMapItems.length == 0) {
-      visibleMapItems = results;
     }
   }
 
@@ -85,18 +103,27 @@ class SearchResults extends React.Component {
   async handlePagination(currenctPage, size) {
     this.setState({ page: currenctPage })
     await this.refreshYmaps();
+    console.log('refreshYmaps 89');
     window.scrollTo(0, 0);
   }
 
   async handlePaginationNotMap(currenctPage, size) {
     const { change, submitForm } = this.props;
-    console.log(currenctPage)
+    console.log(currenctPage, 'currenctPage 94')
+
+    // Обновляем текущую страницу
     await change('currentPage', currenctPage);
+
+    // Ждём завершения submitForm
     await submitForm('SearchForm');
-    await this.refreshYmaps();
+
+    // После завершения обновляем карту
+    // await this.refreshYmaps();
+    console.log('refreshYmaps 99');
+
     window.scrollTo(0, 0);
   }
- 
+
 
   render() {
     const { page } = this.state;
@@ -139,7 +166,7 @@ class SearchResults extends React.Component {
     //                     wishListStatus={item.wishListStatus}
     //                     isListOwner={item.isListOwner}
     //                     personCount={guests}
-                        
+
     //                   />
     //                 </div>
     //                 ))
@@ -197,10 +224,10 @@ class SearchResults extends React.Component {
                         wishListStatus={item.wishListStatus}
                         isListOwner={item.isListOwner}
                         personCount={guests}
-                        
+
                       />
                     </div>
-                    ))
+                  ))
                 }
               </div>
               <div className={s.resultsFooter}>
@@ -225,8 +252,8 @@ class SearchResults extends React.Component {
     return (
       <div>
         {
-            isResultLoading && <div className={s.loadingOverlay} />
-          }
+          isResultLoading && <div className={s.loadingOverlay} />
+        }
         <NoResults />
       </div>
     )

@@ -48,6 +48,7 @@ export default {
     const geographyData = store.getState().personalized.geography;
     const personCapacityData = store.getState().personalized.personCapacity;
     const amenitiesData = store.getState().personalized.amenities;
+    const facilitiesData = store.getState().personalized.facilities;
     const startDateData = store.getState().personalized.startDate;
     const endDateData = store.getState().personalized.endDate;
     let geoType = store.getState().personalized.geoType;
@@ -61,6 +62,7 @@ export default {
     let personCapacity,
       dates,
       geography,
+      facilities,
       currentPage = 1,
       location;
     const initialFilter = {};
@@ -162,6 +164,10 @@ export default {
       safetyAmenities = amenitiesArray;
     }
 
+    if (facilitiesData != undefined && facilitiesData != null) {
+      facilities = facilitiesData;
+    }
+
     if (startDateData != undefined && startDateData != null && endDateData != undefined && endDateData != null) {
       dates = `'${startDateData}' AND '${endDateData}'`;
     } else {
@@ -197,10 +203,6 @@ export default {
 
     await store.dispatch(searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities }));
 
-    console.log('JGFF', geography);
-    console.log('JGFFn', location);
-    console.log('JGFFl', lat);
-    console.log('JGFFk', lng);
     
     return {
       title,

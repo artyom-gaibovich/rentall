@@ -48,12 +48,14 @@ class HeaderLocationSearch extends Component {
             lng: PropTypes.number,
             geography: PropTypes.string,
         }),
+        isResultLoading: PropTypes.bool,
     };
 
     static defaultProps = {
         personalized: {
             location: '',
         },
+        isResultLoading: true,
     }
 
     constructor(props) {
@@ -93,16 +95,34 @@ class HeaderLocationSearch extends Component {
 //     var suggestView1 = new ymaps.SuggestView('geosuggest__input--suggest');
 // }
     async refreshYmaps() {
-        if (Search.map) {
-            Search.map.geoObjects.removeAll();
-            await Search.initYmaps()
+        // this.props.isResultLoading = true
+        console.log(this.props.isResultLoading)
+    // Функция для проверки состояния загрузки каждые 100 мс
+        const waitForLoadingComplete = () => {
+        return new Promise((resolve) => {
+            const checkLoading = () => {
+            if (!this.props.isResultLoading) {
+                console.log('yeah')
+                resolve(); // Завершаем ожидание, если загрузка завершена
+            } else {
+                console.log('noo')
+                setTimeout(checkLoading, 100); // Проверяем снова через 100 мс
+            }
+            };
+            checkLoading();
+        });
+    };
 
-        } else {
+    // Ожидаем завершения загрузки
+    await waitForLoadingComplete();
 
-        }
-    }
+    // После завершения загрузки очищаем и инициализируем карту
+    await Search.clearMapInstance();
+    await Search.initYmaps();
+    console.log("Карта обновлена после завершения загрузки данных");
+  }
 
-    onSuggestSelect(data) {
+    async onSuggestSelect(data) {
         const {setPersonalizedValues, change} = this.props;
         const locationData = {};
         let updatedURI,
@@ -114,8 +134,9 @@ class HeaderLocationSearch extends Component {
             uri = `${uri}&address=${data.displayName}&chosen=${1}`;
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            this.refreshYmaps()
-            location.reload() 
+            console.log('qwerty')
+            this.isResultLoading = true
+            // await this.refreshYmaps()
         }
         if (data && data.gmaps) {
             types = data.gmaps.types;
@@ -150,12 +171,12 @@ class HeaderLocationSearch extends Component {
 
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            this.refreshYmaps()
-            location.reload() 
+            console.log('qwe')
+            await this.refreshYmaps()
         }
     }
 
-    onChange(value) {
+    async onChange(value) {
         const {setPersonalizedValues, change, submitForm} = this.props;
         // ymaps.ready(this.suggest);
         let location;
@@ -185,8 +206,8 @@ class HeaderLocationSearch extends Component {
             //uri = `${uri}&address=${value}&chosen=${1}`;
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            this.refreshYmaps()
-            
+            console.log('qw')
+            await this.refreshYmaps()
         }
 
     }
@@ -412,6 +433,7 @@ class HeaderLocationSearch extends Component {
 
 const mapState = state => ({
     personalized: state.personalized,
+    isResultLoading: state.search.isResultLoading,
 });
 
 const mapDispatch = {

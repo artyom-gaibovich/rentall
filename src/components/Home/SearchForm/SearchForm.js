@@ -401,7 +401,7 @@ class SearchForm extends React.Component {
                             }} className={s.suggest__item}
                           >{item.displayName}</p>)}
                         </div>}
-                        {this.state.suggestEmpty &&
+                        {this.state.suggestEmpty && !smallDevice &&
                         <span className="geosuggest__err">{'Необходимо выбрать'}</span>}
                         {/* <PlaceGeoSuggest
                           label={formatMessage(messages.homeWhere)}
@@ -450,6 +450,9 @@ class SearchForm extends React.Component {
                           {rows}
                         </FormControl>
                       </div>
+                      {this.state.suggestEmpty && smallDevice &&
+                        <div style={{ color: 'red', fontWeight: 600 }}>{'Необходимо выбрать'}</div>
+                      }
                       <div className={cx(s.tableCell, s.search, s.noBroderRight)}>
                         <Button
                           className={cx(bt.btnPrimary, s.btnBlock, s.searchButton)}

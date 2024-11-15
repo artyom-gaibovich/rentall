@@ -15,6 +15,7 @@ import Dates from '../Filters/Dates';
 import Guests from '../Filters/Guests';
 import HomeType from '../Filters/HomeType';
 import Price from '../Filters/Price';
+import Facilities from '../Filters/Facilities/Facilities.js';
 import InstantBook from '../Filters/InstantBook';
 import MoreFilters from '../Filters/MoreFilters';
 import ShowMap from '../Filters/ShowMap';
@@ -25,12 +26,16 @@ import {
   Col,
   Button,
 } from 'react-bootstrap';
+import { Search } from "../../../routes/search/Search.js"
 
 class SearchHeader extends Component {
   static propTypes = {
-    filter: PropTypes.number,
-    setFilters: PropTypes.func.isRequired,
     mapBounds: PropTypes.array,
+    isResultLoading: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isResultLoading: true,
   };
 
   constructor(props) {
@@ -42,6 +47,7 @@ class SearchHeader extends Component {
         homeType: false,
         price: false,
         instantBook: false,
+        facilities: false,
         moreFilters: false,
       },
       overlay: false,
@@ -52,6 +58,33 @@ class SearchHeader extends Component {
     this.handleTabToggle = this.handleTabToggle.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+  }
+
+  async refreshYmaps() {
+    console.log('opa')
+    // Функция для проверки состояния загрузки каждые 100 мс
+    const waitForLoadingComplete = () => {
+      return new Promise((resolve) => {
+        const checkLoading = () => {
+          if (!this.props.isResultLoading) {
+            resolve(); // Завершаем ожидание, если загрузка завершена
+            console.log('upiii')
+          } else {
+            setTimeout(checkLoading, 100); // Проверяем снова через 100 мс
+            console.log('noo')
+          }
+        };
+        checkLoading();
+      });
+    };
+
+    // Ожидаем завершения загрузки
+    await waitForLoadingComplete();
+
+    // После завершения загрузки очищаем и инициализируем карту
+    await Search.clearMapInstance();
+    await Search.initYmaps();
+    console.log("Карта обновлена после завершения загрузки данных");
   }
 
   componentDidMount() {
@@ -82,7 +115,7 @@ class SearchHeader extends Component {
     this.setState({ smallDevice, verySmallDevice, tabs, overlay: false });
   }
 
-  handleTabToggle(currentTab, isExpand) {
+  async handleTabToggle(currentTab, isExpand) {
     const { showForm, showResults, showFilter } = this.props;
     const { tabs, smallDevice } = this.state;
     
@@ -107,11 +140,8 @@ class SearchHeader extends Component {
         showResults();
       }
     }
-    // const newFilters = filter + 1 
-    // console.log(newFilters)
-    // setTimeout(() => {
-    //   this.props.setFilters(newFilters)
-    // }, 5000)
+
+    // await this.refreshYmaps();
   }
 
   handleOpen() {
@@ -159,6 +189,11 @@ class SearchHeader extends Component {
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.homeType}
                 />
+                {/* <Facilities
+                  className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
+                  handleTabToggle={this.handleTabToggle}
+                  isExpand={tabs.facilities}
+                /> */}
                 <Price
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
                   handleTabToggle={this.handleTabToggle}
@@ -218,6 +253,7 @@ const selector = formValueSelector('SearchForm'); // <-- same as form name
 
 const mapState = state => ({
   formValues: getFormValues('SearchForm')(state),
+  isResultLoading: state.search.isResultLoading,
 });
 
 const mapDispatch = {

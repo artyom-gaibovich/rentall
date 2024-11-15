@@ -202,65 +202,8 @@ export class Search extends React.Component {
         if (searchResultsData && searchResultsData.results.length > 0) {
             globalZoom = 16
             searchedHouses = searchResultsData.results;
-            // if (searchResultsData.count > 1000) {
-            //     globalZoom = 4
-            // } else if (searchResultsData.count > 700 && searchResultsData.count <=1000) {
-            //     globalZoom = 6
-            // } else if (searchResultsData.count > 500 && searchResultsData.count <=700) {
-            //     globalZoom = 8.5
-            // } else if (searchResultsData.count > 400 && searchResultsData.count <=500) {
-            //     globalZoom = 7
-            // } else if (searchResultsData.count > 300 && searchResultsData.count <=400) {
-            //     globalZoom = 7
-            // } else if (searchResultsData.count > 200 && searchResultsData.count <=300) {
-            //     globalZoom = 7.5
-            // } else if (searchResultsData.count > 100 && searchResultsData.count <= 200) {
-            //     globalZoom = 8
-            // } else if (searchResultsData.count > 50 && searchResultsData.count <= 100) {
-            //     globalZoom = 8
-            // } else if (searchResultsData.count > 20 && searchResultsData.count <= 50) {
-            //     globalZoom = 7
-            // } else if (searchResultsData.count <= 20 && searchResultsData.count > 10) {
-            //     globalZoom = 10
-            // } else if (searchResultsData.count <= 10 && searchResultsData.count > 5) {
-            //     globalZoom = 12
-            // } else if (searchResultsData.count <= 5 && searchResultsData.count > 2) {
-            //     globalZoom = 14
-            // } else if (searchResultsData.count <= 2) {
-            //     globalZoom = 15
-            // }
-            // console.log(globalZoom, 'globalZoom')
-            // globalCenter = Search.getCenter(searchedHouses);
+
         }
-        // if (submitData && submitData.results.length > 0) {
-        //     searchedHouses = submitData.results
-        //     console.log(submitData.count, 'submitData.count')
-        //     if (submitData.count > 500) {
-        //         globalZoom = 7
-        //     }
-        //     else if (submitData.count >= 20 <= 500) {
-        //         globalZoom = 9
-        //     }
-        //     else if (submitData.count < 20) {
-        //         globalZoom = 16
-        //     }
-        //     globalCenter = Search.getCenter(searchedHouses);
-
-        // } else {
-        //     searchedHouses = searchResultsData.results;
-        //     console.log(searchResultsData.count, 'searchResultsData.count')
-        //     if (searchResultsData.count > 500) {
-        //         globalZoom = 6
-        //     }
-        //     else if (searchResultsData.count >= 20 <= 500) {
-        //         globalZoom = 9
-        //     }
-        //     else if (searchResultsData.count < 20) {
-        //         globalZoom = 16
-        //     }
-        //     globalCenter = Search.getCenter(searchedHouses);
-
-        // }
 
 
         const mapSection = document.querySelector("#map")
@@ -323,9 +266,7 @@ export class Search extends React.Component {
             };
 
             // Добавление обработчика события на карту
-            setTimeout(() => {
-                Search.map.events.add('boundschange', updateVisibleItems);
-            }, 1000);
+            Search.map.events.add('boundschange', updateVisibleItems);
 
             // updateVisibleItems();
         }
@@ -384,13 +325,12 @@ export class Search extends React.Component {
         
     }
 
-    // componentDidUpdate(prevProps) {
-    //     console.log('zaq')
-    //     // Проверяем, изменились ли данные searchResultsData
-    //     if (prevProps.searchResultsData !== searchResultsData) {
-    //         Search.initYmaps(this)
-    //     }
-    // }
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            console.log('URL изменился', this.props.location.pathname);
+            Search.initYmaps(this)
+        }
+    }
 
     componentWillMount() {
         const { getListingFields } = this.props;

@@ -72,7 +72,7 @@ class Dates extends Component {
     }
     await change('currentPage', 1);
     submitForm('SearchForm');
-    handleTabToggle('dates', !isExpand);
+    handleTabToggle('dates', !isExpand, true);
   }
 
   handleReset() {

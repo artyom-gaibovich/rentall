@@ -108,6 +108,7 @@ export class Search extends React.Component {
         }
     }
 
+
     setFilters = (newFilters) => {
         this.setState({ filter: newFilters });
     };
@@ -154,8 +155,18 @@ export class Search extends React.Component {
         console.log('Data submitted to backend');
     }
 
+    async refreshMap() {
+        console.log('refreshMap12312');
+        this.initYmaps(this);
+    }
+
     static async initYmaps(componentInstance) {
+        // if (!componentInstance) {
+        //     await Search.refreshMap()
+        //     return
+        // }
         await Search.sleep(1000)
+        console.log('initYmaps', componentInstance);
         let searchedHouses
         let clusterer;
         let geoObjects;
@@ -200,7 +211,7 @@ export class Search extends React.Component {
         console.log(submitData, 'submitData')
         console.log(searchResultsData, 'searchResultsData')
         if (searchResultsData && searchResultsData.results.length > 0) {
-            globalZoom = 16
+            globalZoom = 6
             searchedHouses = searchResultsData.results;
 
         }
@@ -211,30 +222,40 @@ export class Search extends React.Component {
         const mapItems = await Search.getMapItems();
         console.log(searchResultsData, 'searchResultsData')
         if (mapSection && mapSection.children.length === 0) {
+            const mapSectionOne = document.querySelector(".searchMapSection");
+            if (componentInstance.state.smallDevice) {       
+                if (mapSectionOne.classList.contains(s.nonactiveMap)) {
+                mapSectionOne.classList.remove(s.nonactiveMap);
+                }
+                mapSectionOne.style.visibility = 'hidden'
+            }
             mapPoints = searchResultsData.results.map(el => {
                 return [el.lat, el.lng]
             })
-            housePoints = searchedHouses.map(el => {
+            housePoints = searchResultsData.results.map(el => {
                 return [el.lat, el.lng]
             })
-    
     
             for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
                 geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name), getPointOptions());
             }
-            for (var i = 0, len = searchedHouses.length; i < len; i++) {
+            for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
                 geoObjects[i] = new ymaps.Placemark(
                     housePoints[i],
                     getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name),
                     getPointOptions()
                 );
             }
-    
+
+            clusterer.removeAll();
             clusterer.add(geoObjects);
-            console.log(searchedHouses, 'searchedHouses')
-            console.log(globalZoom, 'globalZoom')
+            // Search.map = new ymaps.Map(mapSection, {
+            //     center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
+            //     //center: [globalCenter.lat, globalCenter.lng],
+            //     zoom: globalZoom
+            // })
             Search.map = new ymaps.Map(mapSection, {
-                bounds: clusterer.getBounds(),
+                bounds: clusterer.getBounds() || [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
                 checkZoomRange: true,
                 controls: [],
             })
@@ -246,11 +267,8 @@ export class Search extends React.Component {
             Search.map.controls.remove("typeSelector");
             Search.map.behaviors.disable("dblClickZoom");
             
-            // Search.map.setBounds(clusterer.getBounds(), { checkZoomRange: true })
-
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
-                // Извлечение координат юго-западной и северо-восточной границы карты
                 const sw_lat = mapBounds[0][0]; // Юго-западная широта
                 const sw_lng = mapBounds[0][1]; // Юго-западная долгота
                 const ne_lat = mapBounds[1][0]; // Северо-восточная широта
@@ -263,23 +281,19 @@ export class Search extends React.Component {
 
                 // Отправка данных на сервер
                 componentInstance.handleSubmit();
-            };
+                }
 
             // Добавление обработчика события на карту
             Search.map.events.add('boundschange', updateVisibleItems);
 
             // updateVisibleItems();
         }
-        // if (clusterer) {
-        //     clusterer.removeAll();
-        // }    
-
         clusterer.removeAll();
 
         mapPoints = mapItems.map(el => {
             return [el.lat, el.lng]
         })
-        housePoints = searchedHouses.map(el => {
+        housePoints = searchResultsData.results.map(el => {
             return [el.lat, el.lng]
         })
 
@@ -287,7 +301,7 @@ export class Search extends React.Component {
         for (var i = 0, len = mapItems.length; i < len; i++) {
             geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
         }
-        for (var i = 0, len = searchedHouses.length; i < len; i++) {
+        for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
             geoObjects[i] = new ymaps.Placemark(
                 housePoints[i],
                 getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name),
@@ -309,26 +323,22 @@ export class Search extends React.Component {
             const cluster = e.get('target');
             // Увеличиваем зум при клике на класт
             if (cluster.getGeoObjects && cluster.getGeoObjects().length > 1) {
-                const clusterBounds = cluster.getBounds(); // Получаем границы кластера
+                const clusterBounds = cluster.getBounds(); 
 
-                // Устанавливаем карту так, чтобы весь кластер был виден, 
-                // таким образом карта зуммируется до уровня, при котором объекты раскладываются
                 Search.map.setBounds(clusterBounds, {
-                    checkZoomRange: true, // Проверяем, чтобы зум был в допустимых пределах
-                    zoomMargin: 20 // Оставляем небольшой отступ для комфортного отображения
+                    checkZoomRange: true, 
+                    zoomMargin: 20
                 });
             }
         });
-        // Search.map.setCenter([searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0].lng, searchedHouses[0] ? searchedHouses[0].lng : 43]);
 
         Search.map && Search.map.geoObjects.add(clusterer);
-        
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            console.log('URL изменился', this.props.location.pathname);
-            Search.initYmaps(this)
+        const mapSectionOne = document.querySelector(".searchMapSection");
+        if (componentInstance.state.smallDevice) {       
+            if (!mapSectionOne.classList.contains(s.nonactiveMap)) {
+            mapSectionOne.classList.add(s.nonactiveMap);
+            }
+            mapSectionOne.style.visibility = 'visible'
         }
     }
 
@@ -369,7 +379,7 @@ export class Search extends React.Component {
                 return false
             } else {
                 clearInterval(ymapsInitInterval)
-                ymaps.ready(Search.initYmaps)
+                ymaps.ready(Search.initYmaps(this))
                 this.setState({
                     load: true,
                 });
@@ -484,7 +494,7 @@ export class Search extends React.Component {
             rightNav;
         if (searchResults) {
             leftNav = <Button className={cx(s.filterButton, s.locationBtn)} bsStyle="link" onClick={() => {
-                Search.initYmaps();
+                // Search.initYmaps();
                 document.querySelector(".searchMapSection").classList.toggle(s.nonactiveMap);
             }}><Material.MdRoom className={s.icon} /></Button>;
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"

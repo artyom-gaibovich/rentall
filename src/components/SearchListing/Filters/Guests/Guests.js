@@ -73,7 +73,7 @@ class Guests extends Component {
     const { change, submitForm } = this.props;
     await change('currentPage', 1);
     submitForm('SearchForm');
-    handleTabToggle('guests', !isExpand);
+    handleTabToggle('guests', !isExpand, true);
   }
 
   handleReset() {

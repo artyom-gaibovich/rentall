@@ -21,6 +21,7 @@ import ListingItem from '../ListingItem';
 import NoResults from '../NoResults';
 import submit from '../SearchForm/submit';
 
+import {showResults} from "../../../actions/mobileSearchNavigation.js"
 
 //yandex maps
 import { searchResultsData } from "../../../actions/getSearchResults.js"
@@ -36,6 +37,7 @@ class SearchResults extends React.Component {
     visibleMapItems: PropTypes.array,
     mapBounds: PropTypes.array,
     smallDevice: PropTypes.bool,
+    showResults: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -49,10 +51,35 @@ class SearchResults extends React.Component {
     super(props);
     this.state = {
       page: 1,
+      ne_lat: 0,
+      ne_lng: 0,
+      sw_lat: 0,
+      sw_lng: 0,
+      smallDevice: false
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.handlePaginationNotMap = this.handlePaginationNotMap.bind(this);
+    this.handleResize = this.handleResize.bind(this);
   }
+
+  async handleSubmit() {
+    console.log('Submitting map data');
+    console.log(this.state); // Проверка текущего состояния, включая координаты границ
+
+    const { change, submitForm } = this.props;
+
+    // Обновление значений формы координатами карты
+    await change('currentPage', 1);
+    await change('sw_lat', this.state.sw_lat);
+    await change('sw_lng', this.state.sw_lng);
+    await change('ne_lat', this.state.ne_lat);
+    await change('ne_lng', this.state.ne_lng);
+
+    // Отправка формы с обновлёнными данными
+    await submitForm('SearchForm');
+
+    console.log('Data submitted to backend');
+}
 
   async refreshYmaps() {
     // Функция для проверки состояния загрузки каждые 100 мс
@@ -74,14 +101,18 @@ class SearchResults extends React.Component {
 
     // После завершения загрузки очищаем и инициализируем карту
     await Search.clearMapInstance();
-    await Search.initYmaps();
+    await Search.initYmaps(this);
     console.log("Карта обновлена после завершения загрузки данных");
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.results !== prevProps.results) {
-      console.log('qsx')
+  async componentDidUpdate(prevProps, prevState) {
+    const currentSearch = window.location.search;
+    const prevSearch = prevState.location && prevState.location.search;
+  
+    if (currentSearch !== prevSearch) {
+      console.log('URL изменился, обновляем карту');
       this.refreshYmaps();
+      this.setState({ location: { search: currentSearch } });
     }
   }
 
@@ -90,7 +121,39 @@ class SearchResults extends React.Component {
     if (currentPage != undefined) {
       this.setState({ page: currentPage });
     }
+
+    const isBrowser = typeof window !== 'undefined';
+    if (isBrowser) {
+      this.handleResize();
+      window.addEventListener("ymap_hover", function (event) {
+          if (Search.map) {
+              Search.map.geoObjects.each(object => {
+                  if (object.roomId == event.detail.id) {
+                      object.options.set('preset', 'islands#redStretchyIcon');
+                      object.options.set('zIndex', 999);
+                      // console.log(object.roomId, object)
+                  } else {
+                      object.options.set('preset', 'islands#blackStretchyIcon');
+                      object.options.set('zIndex', 1);
+
+                  }
+              })
+          }
+
+      });
+      window.addEventListener('resize', this.handleResize);
   }
+  }
+
+  handleResize(e) {
+    const { showResults } = this.props;
+    const isBrowser = typeof window !== 'undefined';
+    const smallDevice = isBrowser ? window.matchMedia('(max-width: 768px)').matches : false;
+    if (smallDevice) {
+        showResults();
+    }
+    this.setState({ smallDevice });
+}
 
 
   componentWillReceiveProps(nextProps) {
@@ -118,7 +181,7 @@ class SearchResults extends React.Component {
     await submitForm('SearchForm');
 
     // После завершения обновляем карту
-    // await this.refreshYmaps();
+    await this.refreshYmaps();
     console.log('refreshYmaps 99');
 
     window.scrollTo(0, 0);
@@ -130,67 +193,6 @@ class SearchResults extends React.Component {
     const { results, total, isResultLoading, showMap, showMapLoader, guests, visibleMapItems, mapBounds, smallDevice } = this.props;
     console.log('see', results)
 
-    // const startIndex = (page - 1) * 12;
-    // const paginatedItems = visibleMapItems.slice(startIndex, startIndex + 12)
-
-    // if (!smallDevice && visibleMapItems != null && visibleMapItems.length > 0) {
-    //   return (
-    //     <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
-    //       {
-    //         !showMapLoader && <Row className={s.noMargin}>
-
-    //           <div className={cx(s.resultsContainer, 'resultsContainerRtl')}>
-    //             {/* <Loader
-    //                 type={"page"}
-    //                 show={isResultLoading}
-    //               /> */}
-    //             {
-    //               isResultLoading && <div className={s.loadingOverlay} />
-    //             }
-    //             {
-    //               paginatedItems.map((item, listIndex) => (
-    //                 <div className={cx(s.listItem, s.displayInlineBlock)} key={item.id}>
-    //                   <ListingItem
-    //                     id={item.id}
-    //                     basePrice={item.listingData.basePrice}
-    //                     currency={item.listingData.currency}
-    //                     title={item.title}
-    //                     beds={item.beds}
-    //                     personCapacity={item.personCapacity}
-    //                     roomType={item.settingsData[0].listsettings.itemName}
-    //                     coverPhoto={item.coverPhoto}
-    //                     listPhotos={item.listPhotos}
-    //                     bookingType={item.bookingType}
-    //                     reviewsCount={item.reviewsCount}
-    //                     reviewsStarRating={item.reviewsStarRating}
-    //                     wishListStatus={item.wishListStatus}
-    //                     isListOwner={item.isListOwner}
-    //                     personCount={guests}
-
-    //                   />
-    //                 </div>
-    //                 ))
-    //             }
-    //           </div>
-    //           <div className={s.resultsFooter}>
-    //             <div className={s.resultsPagination}>
-    //               <div className={s.pagination}>
-    //                 <CustomPagination
-    //                   total={visibleMapItems.length}
-    //                   current={page}
-    //                   defaultCurrenct={1}
-    //                   defaultPageSize={12}
-    //                   handleChange={this.handlePagination}
-
-    //                 />
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </Row>
-    //       }
-    //     </div>
-    //   );
-    // }
     if (results != null && results.length > 0) {
       return (
         <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
@@ -272,6 +274,10 @@ const selector = formValueSelector('SearchForm');
 const mapState = state => ({
   results: state.search.data,
   currentPage: selector(state, 'currentPage'),
+  sw_lat: selector(state, 'sw_lat'),
+  sw_lng: selector(state, 'sw_lng'),
+  ne_lat: selector(state, 'ne_lat'),
+  ne_lng: selector(state, 'ne_lng'),
   total: state.search.count,
   isResultLoading: state.search.isResultLoading,
   showMap: state.personalized.showMap,
@@ -282,6 +288,7 @@ const mapState = state => ({
 const mapDispatch = {
   change,
   submitForm,
+  showResults,
 };
 
 export default withStyles(s)(connect(mapState, mapDispatch)(SearchResults));

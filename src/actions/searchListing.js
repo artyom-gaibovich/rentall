@@ -10,6 +10,7 @@ import {
 
 import { getSearchResults, loadingSearchResults } from './getSearchResults';
 
+
 const query = gql`
   query(
       $personCapacity: Int,
@@ -83,9 +84,12 @@ const query = gql`
 
 export function searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities }) {
   return async (dispatch, getState, { client }) => {
+    dispatch(loadingSearchResults())
     dispatch({ type: SEARCH_LISTING_START });
     dispatch(reset('SearchForm'));
-    dispatch(loadingSearchResults());
+    console.log('coordinates', lat, lng);
+    console.log('coordinatesMap', sw_lat, sw_lng, ne_lat, ne_lng);
+
 
     try {
       const { data } = await client.query({

@@ -59,11 +59,11 @@ class HomeType extends Component {
   }
 
   async handleSubmit() {
-    const { className, handleTabToggle, isExpand } = this.props;
+    const { className, handleTabToggle, isExpand, refreshYmaps } = this.props;
     const { change, submitForm } = this.props;
     await change('currentPage', 1);
     submitForm('SearchForm');
-    handleTabToggle('homeType', !isExpand);
+    handleTabToggle('homeType', !isExpand, true);
   }
 
   handleReset() {

@@ -53,12 +53,35 @@ class SearchHeader extends Component {
       overlay: false,
       smallDevice: false,
       verySmallDevice: false,
+      ne_lat: 0,
+      ne_lng: 0,
+      sw_lat: 0,
+      sw_lng: 0,
     };
 
     this.handleTabToggle = this.handleTabToggle.bind(this);
     this.handleResize = this.handleResize.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
   }
+
+  async handleSubmit() {
+    console.log('Submitting map data');
+    console.log(this.state); // Проверка текущего состояния, включая координаты границ
+
+    const { change, submitForm } = this.props;
+
+    // Обновление значений формы координатами карты
+    await change('currentPage', 1);
+    await change('sw_lat', this.state.sw_lat);
+    await change('sw_lng', this.state.sw_lng);
+    await change('ne_lat', this.state.ne_lat);
+    await change('ne_lng', this.state.ne_lng);
+
+    // Отправка формы с обновлёнными данными
+    await submitForm('SearchForm');
+
+    console.log('Data submitted to backend');
+}
 
   async refreshYmaps() {
     console.log('opa')
@@ -83,7 +106,7 @@ class SearchHeader extends Component {
 
     // После завершения загрузки очищаем и инициализируем карту
     await Search.clearMapInstance();
-    await Search.initYmaps();
+    await Search.initYmaps(this);
     console.log("Карта обновлена после завершения загрузки данных");
   }
 
@@ -115,7 +138,7 @@ class SearchHeader extends Component {
     this.setState({ smallDevice, verySmallDevice, tabs, overlay: false });
   }
 
-  async handleTabToggle(currentTab, isExpand) {
+  async handleTabToggle(currentTab, isExpand, refresh) {
     const { showForm, showResults, showFilter } = this.props;
     const { tabs, smallDevice } = this.state;
     
@@ -141,7 +164,9 @@ class SearchHeader extends Component {
       }
     }
 
-    // await this.refreshYmaps();
+    if (refresh) {
+      await this.refreshYmaps();
+    }
   }
 
   handleOpen() {
@@ -177,17 +202,20 @@ class SearchHeader extends Component {
                   isExpand={tabs.dates}
                   smallDevice={smallDevice}
                   verySmallDevice={verySmallDevice}
+                  refreshYmaps={this.refreshYmaps}
                 />
                 <Guests
                   className={s.filterButtonContainer}
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.guests}
                   smallDevice={smallDevice}
+                  refreshYmaps={this.refreshYmaps}
                 />
                 <HomeType
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.homeType}
+                  refreshYmaps={this.refreshYmaps}
                 />
                 {/* <Facilities
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
@@ -199,6 +227,7 @@ class SearchHeader extends Component {
                   handleTabToggle={this.handleTabToggle}
                   searchSettings={searchSettings}
                   isExpand={tabs.price}
+                  refreshYmaps={this.refreshYmaps}
                 />
                 {/*
                 <InstantBook

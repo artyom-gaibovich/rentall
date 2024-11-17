@@ -97,7 +97,7 @@ class MoreFilters extends Component {
     await change('currentPage', 1);
     submitForm('SearchForm');
     closeMoreFiltersModal();
-    // handleTabToggle('moreFilters', !isExpand)
+    handleTabToggle('moreFilters', !isExpand, true)
   }
 
   handleReset() {

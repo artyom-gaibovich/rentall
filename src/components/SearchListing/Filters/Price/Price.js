@@ -93,7 +93,7 @@ class Price extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('price', !isExpand);
+        handleTabToggle('price', !isExpand, true);
       }
     }
   }

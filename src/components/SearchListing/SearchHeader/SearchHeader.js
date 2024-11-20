@@ -47,7 +47,7 @@ class SearchHeader extends Component {
         homeType: false,
         price: false,
         instantBook: false,
-        facilities: false,
+        // facilities: false,
         moreFilters: false,
       },
       overlay: false,
@@ -202,20 +202,17 @@ class SearchHeader extends Component {
                   isExpand={tabs.dates}
                   smallDevice={smallDevice}
                   verySmallDevice={verySmallDevice}
-                  refreshYmaps={this.refreshYmaps}
                 />
                 <Guests
                   className={s.filterButtonContainer}
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.guests}
                   smallDevice={smallDevice}
-                  refreshYmaps={this.refreshYmaps}
                 />
                 <HomeType
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.homeType}
-                  refreshYmaps={this.refreshYmaps}
                 />
                 {/* <Facilities
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
@@ -227,7 +224,6 @@ class SearchHeader extends Component {
                   handleTabToggle={this.handleTabToggle}
                   searchSettings={searchSettings}
                   isExpand={tabs.price}
-                  refreshYmaps={this.refreshYmaps}
                 />
                 {/*
                 <InstantBook

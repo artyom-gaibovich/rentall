@@ -105,6 +105,7 @@ export class Search extends React.Component {
             Search.map = null; // Сбрасываем ссылку на экземпляр карты
             Search.scriptInit = false; // Флаг для повторной инициализации при необходимости
             Search.yandexMapMobile = true; // Переключение флага мобильной карты (если требуется)
+            console.log('123');
         }
     }
 
@@ -155,16 +156,7 @@ export class Search extends React.Component {
         console.log('Data submitted to backend');
     }
 
-    async refreshMap() {
-        console.log('refreshMap12312');
-        this.initYmaps(this);
-    }
-
     static async initYmaps(componentInstance) {
-        // if (!componentInstance) {
-        //     await Search.refreshMap()
-        //     return
-        // }
         await Search.sleep(1000)
         console.log('initYmaps', componentInstance);
         let searchedHouses
@@ -221,13 +213,13 @@ export class Search extends React.Component {
         Search.yandexMapMobile = !Search.yandexMapMobile;
         const mapItems = await Search.getMapItems();
         console.log(searchResultsData, 'searchResultsData')
-        if (mapSection && mapSection.children.length === 0) {
-            const mapSectionOne = document.querySelector(".searchMapSection");
+        const mapSectionOne = document.querySelector(".searchMapSection");
+        if (mapSection && mapSection.children.length === 0 && searchResultsData && searchResultsData.results.length > 0 && componentInstance.props.initialFilter.address) {
             if (componentInstance.state.smallDevice) {       
                 if (mapSectionOne.classList.contains(s.nonactiveMap)) {
                 mapSectionOne.classList.remove(s.nonactiveMap);
+                mapSectionOne.style.visibility = 'hidden';
                 }
-                mapSectionOne.style.visibility = 'hidden'
             }
             mapPoints = searchResultsData.results.map(el => {
                 return [el.lat, el.lng]
@@ -257,7 +249,8 @@ export class Search extends React.Component {
             Search.map = new ymaps.Map(mapSection, {
                 bounds: clusterer.getBounds() || [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
                 checkZoomRange: true,
-                controls: [],
+            }, {
+                minZoom: 2
             })
             ymaps.onHover
             Search.map.controls.remove("searchControl");
@@ -266,9 +259,22 @@ export class Search extends React.Component {
             Search.map.controls.remove("rulerControl");
             Search.map.controls.remove("typeSelector");
             Search.map.behaviors.disable("dblClickZoom");
+
+            if (componentInstance.state.smallDevice) {       
+                if (!mapSectionOne.classList.contains(s.nonactiveMap)) {
+                mapSectionOne.classList.add(s.nonactiveMap);
+                mapSectionOne.style.visibility = 'visible';
+                }
+            }
             
             const updateVisibleItems = () => {
                 const mapBounds = Search.map.getBounds();
+                const mapSectionOne = document.querySelector(".searchMapSection");
+                if (mapSectionOne.classList.contains(s.nonactiveMap)) {
+                    return
+                }
+
+                if (mapBounds && mapBounds[0][0] && mapBounds[0][1] && mapBounds[1][0] && mapBounds[1][1] && mapBounds[0][0] > 0 && mapBounds[0][1] > 0 && mapBounds[1][0] > 0 && mapBounds[1][1] > 0) {
                 const sw_lat = mapBounds[0][0]; // Юго-западная широта
                 const sw_lng = mapBounds[0][1]; // Юго-западная долгота
                 const ne_lat = mapBounds[1][0]; // Северо-восточная широта
@@ -281,12 +287,19 @@ export class Search extends React.Component {
 
                 // Отправка данных на сервер
                 componentInstance.handleSubmit();
-                }
-
-            // Добавление обработчика события на карту
-            Search.map.events.add('boundschange', updateVisibleItems);
-
-            // updateVisibleItems();
+            }
+        }
+        
+        // Добавление обработчика события на карту
+        Search.map.events.add('boundschange', updateVisibleItems);
+        
+        // updateVisibleItems();
+    }
+        if (componentInstance.state.smallDevice) {       
+            if (!mapSectionOne.classList.contains(s.nonactiveMap)) {
+            mapSectionOne.classList.add(s.nonactiveMap);
+            mapSectionOne.style.visibility = 'visible'
+            }
         }
         clusterer.removeAll();
 
@@ -327,19 +340,13 @@ export class Search extends React.Component {
 
                 Search.map.setBounds(clusterBounds, {
                     checkZoomRange: true, 
-                    zoomMargin: 20
+                    zoomMargin: 5,
+                    duration: 500
                 });
             }
         });
 
         Search.map && Search.map.geoObjects.add(clusterer);
-        const mapSectionOne = document.querySelector(".searchMapSection");
-        if (componentInstance.state.smallDevice) {       
-            if (!mapSectionOne.classList.contains(s.nonactiveMap)) {
-            mapSectionOne.classList.add(s.nonactiveMap);
-            }
-            mapSectionOne.style.visibility = 'visible'
-        }
     }
 
     componentWillMount() {
@@ -350,10 +357,10 @@ export class Search extends React.Component {
     }
 
     componentDidMount() {
-        Search.initYmaps(this)
         const isBrowser = typeof window !== 'undefined';
         if (isBrowser) {
             this.handleResize();
+            this.setViewportHeight();
             window.addEventListener("ymap_hover", function (event) {
                 if (Search.map) {
                     Search.map.geoObjects.each(object => {
@@ -373,7 +380,6 @@ export class Search extends React.Component {
             window.addEventListener('resize', this.handleResize);
         }
 
-
         let ymapsInitInterval = setInterval(() => {
             if (!ymaps) {
                 return false
@@ -387,10 +393,17 @@ export class Search extends React.Component {
                 return false
             }
         }, 200)
+
+        const mapContainer = document.querySelector('.searchMapSection');
+        if (mapContainer) {
+            const fixedHeight = mapContainer.offsetHeight; // Запоминаем текущую высоту
+            mapContainer.style.height = `${fixedHeight}px`; // Фиксируем её
+        }
     }
 
     componentWillUnmount() {
         try {
+            console.log('12345');
             // Полный сброс карты и её данных
             Search.clearMapInstance();
 
@@ -477,9 +490,15 @@ export class Search extends React.Component {
         const isBrowser = typeof window !== 'undefined';
         const smallDevice = isBrowser ? window.matchMedia('(max-width: 768px)').matches : false;
         if (smallDevice) {
-            showResults();
+            Search.clearMapInstance();
+            Search.initYmaps(this);
         }
         this.setState({ smallDevice });
+    }
+
+    setViewportHeight() {
+        const vh = window.innerHeight * 0.01; // Рассчитываем 1vh
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
 
     mobileNavigation() {
@@ -494,20 +513,22 @@ export class Search extends React.Component {
             rightNav;
         if (searchResults) {
             leftNav = <Button className={cx(s.filterButton, s.locationBtn)} bsStyle="link" onClick={() => {
-                // Search.initYmaps();
-                document.querySelector(".searchMapSection").classList.toggle(s.nonactiveMap);
+                console.log("OHO")
+                const map = document.querySelector(".searchMapSection");
+                console.log(map)
+                map.classList.toggle(s.nonactiveMap);
             }}><Material.MdRoom className={s.icon} /></Button>;
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
                 onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
         }
 
-        if (searchMap) {
-            leftNav = <Button className={cx(s.filterButton)}
-                bsStyle="link"><FormattedMessage {...messages.results} />{' '}<Material.MdSettingsInputComposite
-                    className={s.icon} /></Button>;
-            rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
-                onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
-        }
+        // if (searchMap) {
+        //     leftNav = <Button className={cx(s.filterButton)}
+        //         bsStyle="link"><FormattedMessage {...messages.results} />{' '}<Material.MdSettingsInputComposite
+        //             className={s.icon} /></Button>;
+        //     rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
+        //         onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
+        // }
 
         return (
             <div className={cx(s.mobileNavigation)}>
@@ -536,11 +557,11 @@ export class Search extends React.Component {
             showResults,
         } = this.props;
 
+        console.log('TUDAA', searchSettings, initialFilter);
+
         const { smallDevice, load, visibleMapItems, mapBounds, filter } = this.state;
 
-        console.log(isMapShow)
-
-        console.log('visibleMapItems', visibleMapItems)
+        console.log('haha', searchMap, searchResults, searchForm, smallDevice);
 
         let DesktopResults = true;
         if (filterToggle === true) {
@@ -555,8 +576,6 @@ export class Search extends React.Component {
                 </div>
             );
         }
-
-        console.log(smallDevice, searchMap, searchResults, searchForm, searchFilter)
 
         return (
             <div className={cx(s.root, 'searchPage')}>
@@ -577,7 +596,8 @@ export class Search extends React.Component {
                                     visibleMapItems={visibleMapItems}
                                     isMapShow={isMapShow}
                                     mapBounds={mapBounds}
-                                    smallDevice={smallDevice} />
+                                    smallDevice={smallDevice}
+                                    initialFilter={initialFilter} />
                             </div>
                         }
 
@@ -587,7 +607,8 @@ export class Search extends React.Component {
                                     visibleMapItems={visibleMapItems}
                                     isMapShow={isMapShow}
                                     mapBounds={mapBounds}
-                                    smallDevice={smallDevice} />
+                                    smallDevice={smallDevice}
+                                    initialFilter={initialFilter} />
                             </div>
                         }
 
@@ -599,16 +620,6 @@ export class Search extends React.Component {
                             <div id="map" style={{ height: '100%', width: '100%', display: 'block' }}>
 
                             </div>
-                            {/* <ReactGoogleMapLoader
-                params={{
-                  key: googleMapAPI, // Define your api key here
-                  libraries: 'places,geometry,markerwithlabel', // To request multiple libraries, separate them with a comma
-                }}
-                render={googleMaps =>
-                  googleMaps && (
-                    <MapResults initialFilter={initialFilter} searchSettings={searchSettings} />
-                  )}
-              /> */}
                         </div>
                     }
                     {smallDevice && <div style={{ display: "block" }}

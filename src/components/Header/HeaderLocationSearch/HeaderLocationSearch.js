@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {change, submit as submitForm} from 'redux-form';
 
+import { FormattedMessage } from 'react-intl';
+import * as FontAwesome from 'react-icons/lib/fa';
+import { Button } from 'react-bootstrap';
+
 // Translation
 import {injectIntl} from 'react-intl';
 
@@ -20,6 +24,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from '!isomorphic-style-loader/!css-loader!react-geosuggest/module/geosuggest.css';
 import c from './HeaderLocationSearch.css';
 import cx from 'classnames';
+import bt from '../../commonStyle.css';
 
 // Redux  Action
 import {setPersonalizedValues} from '../../../actions/personalized';
@@ -69,6 +74,7 @@ class HeaderLocationSearch extends Component {
         };
         this.onSuggestSelect = this.onSuggestSelect.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount() {
@@ -122,6 +128,20 @@ class HeaderLocationSearch extends Component {
     console.log("Карта обновлена после завершения загрузки данных");
   }
 
+    handleClick() {
+        if (this.state.suggestItems.length > 0) {
+            const location = this.state.suggestItems[0].displayName
+            let updatedURI,
+            uri = '/s?';
+            uri = `${uri}&address=${location}&chosen=${1}`;
+            updatedURI = encodeURI(uri);
+            history.push(updatedURI);
+            this.inputRef.current.value = location;
+            this.props.personalized.location = location;
+            this.setState({...this.state, suggestItems: []})
+        }
+    }
+
     async onSuggestSelect(data) {
         const {setPersonalizedValues, change} = this.props;
         const locationData = {};
@@ -134,8 +154,6 @@ class HeaderLocationSearch extends Component {
             uri = `${uri}&address=${data.displayName}&chosen=${1}`;
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            console.log('qwerty')
-            this.isResultLoading = true
             // await this.refreshYmaps()
         }
         if (data && data.gmaps) {
@@ -171,8 +189,6 @@ class HeaderLocationSearch extends Component {
 
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            console.log('qwe')
-            await this.refreshYmaps()
         }
     }
 
@@ -206,8 +222,6 @@ class HeaderLocationSearch extends Component {
             //uri = `${uri}&address=${value}&chosen=${1}`;
             updatedURI = encodeURI(uri);
             history.push(updatedURI);
-            console.log('qw')
-            await this.refreshYmaps()
         }
 
     }
@@ -387,7 +401,7 @@ class HeaderLocationSearch extends Component {
                             if (e.target.value) {
                                 this.getSuggest(e);
                             } else {
-                                window.location = '/s';
+                                // window.location = '/s';
                             }
                         }} className='geosuggest__input suggest' placeholder='Направление, город, адрес'></input>
                         {this.state.suggestItems.length > 0 && <div className={c.suggest__items}>
@@ -400,31 +414,25 @@ class HeaderLocationSearch extends Component {
                                 }} className={c.suggest__item}>{item.displayName}</p>
                             })}
                         </div>}
-                        {/* <ReactGoogleMapLoader
-              params={{
-                key: googleMapAPI, // Define your api key here
-                libraries: 'places', // To request multiple libraries, separate them with a comma
-              }}
-              render={googleMaps =>
-                googleMaps && (
-                <Geosuggest
-                id="suggest"
-                  ref={el => this._geoSuggest = el}
-                  country={'ru'}
-                  placeholder={formatMessage(messages.homeWhere)}
-                  inputClassName={className}
-                  className={containerClassName}
-                  initialValue={locationValue}
-                  onChange={this.onChange}
-                  onSuggestSelect={this.onSuggestSelect}
-                  // autoComplete={'off'}
-                  onKeyDown={(e) =>  e.key == 'Enter' ? this.onChange(this._geoSuggest.current) : false }
-                  tabIndex="0"
-                />
-                )}
-            /> */}
                     </div>
                 </div>
+                    <Button
+                        className={cx(bt.btnPrimary, s.btnBlock, s.searchButton)}
+                        style={{ height: '45px', marginTop: '7px' }} onClick={this.handleClick}
+                    >
+                        {/* <span className={cx('hidden-lg hidden-xs')}>
+                            <FontAwesome.FaSearch />
+                        </span> */}
+                        {/* <span className={cx('hidden-md hidden-sm')}> */}
+                        <svg
+                            viewBox="0 0 24 24" role="presentation" aria-hidden="true"
+                            focusable="false" className={c.searchIcon}
+                            >
+                            <path
+                                d="m10.4 18.2c-4.2-.6-7.2-4.5-6.6-8.8.6-4.2 4.5-7.2 8.8-6.6 4.2.6 7.2 4.5 6.6 8.8-.6 4.2-4.6 7.2-8.8 6.6m12.6 3.8-5-5c1.4-1.4 2.3-3.1 2.6-5.2.7-5.1-2.8-9.7-7.8-10.5-5-.7-9.7 2.8-10.5 7.9-.7 5.1 2.8 9.7 7.8 10.5 2.5.4 4.9-.3 6.7-1.7v.1l5 5c .3.3.8.3 1.1 0s .4-.8.1-1.1"/>
+                        </svg>
+                        {/* </span> */}
+                    </Button>
             </div>
 
         );

@@ -19,6 +19,7 @@ import {
 import CustomPagination from '../CustomPagination';
 import ListingItem from '../ListingItem';
 import NoResults from '../NoResults';
+import AllResults from '../AllResults';
 import submit from '../SearchForm/submit';
 
 import {showResults} from "../../../actions/mobileSearchNavigation.js"
@@ -37,7 +38,7 @@ class SearchResults extends React.Component {
     visibleMapItems: PropTypes.array,
     mapBounds: PropTypes.array,
     smallDevice: PropTypes.bool,
-    showResults: PropTypes.func.isRequired,
+    initialFilter: PropTypes.array,
   };
 
   static defaultProps = {
@@ -59,7 +60,6 @@ class SearchResults extends React.Component {
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.handlePaginationNotMap = this.handlePaginationNotMap.bind(this);
-    this.handleResize = this.handleResize.bind(this);
   }
 
   async handleSubmit() {
@@ -122,39 +122,7 @@ class SearchResults extends React.Component {
       this.setState({ page: currentPage });
     }
 
-    const isBrowser = typeof window !== 'undefined';
-    if (isBrowser) {
-      this.handleResize();
-      window.addEventListener("ymap_hover", function (event) {
-          if (Search.map) {
-              Search.map.geoObjects.each(object => {
-                  if (object.roomId == event.detail.id) {
-                      object.options.set('preset', 'islands#redStretchyIcon');
-                      object.options.set('zIndex', 999);
-                      // console.log(object.roomId, object)
-                  } else {
-                      object.options.set('preset', 'islands#blackStretchyIcon');
-                      object.options.set('zIndex', 1);
-
-                  }
-              })
-          }
-
-      });
-      window.addEventListener('resize', this.handleResize);
   }
-  }
-
-  handleResize(e) {
-    const { showResults } = this.props;
-    const isBrowser = typeof window !== 'undefined';
-    const smallDevice = isBrowser ? window.matchMedia('(max-width: 768px)').matches : false;
-    if (smallDevice) {
-        showResults();
-    }
-    this.setState({ smallDevice });
-}
-
 
   componentWillReceiveProps(nextProps) {
     const { currentPage } = nextProps;
@@ -190,10 +158,10 @@ class SearchResults extends React.Component {
 
   render() {
     const { page } = this.state;
-    const { results, total, isResultLoading, showMap, showMapLoader, guests, visibleMapItems, mapBounds, smallDevice } = this.props;
+    const { results, total, isResultLoading, showMap, showMapLoader, guests, visibleMapItems, mapBounds, smallDevice, initialFilter } = this.props;
     console.log('see', results)
 
-    if (results != null && results.length > 0) {
+    if (results != null && results.length > 0 && initialFilter.address) {
       return (
         <div className={cx(s.searchResults, { [s.listItemOnly]: showMap == false })}>
           {
@@ -251,12 +219,22 @@ class SearchResults extends React.Component {
         </div>
       );
     }
+    if (initialFilter.address) {
+      return (
+        <div>
+          {
+            isResultLoading && <div className={s.loadingOverlay} />
+          }
+          <NoResults />
+        </div>
+      )
+    }
     return (
       <div>
         {
           isResultLoading && <div className={s.loadingOverlay} />
         }
-        <NoResults />
+        <AllResults />
       </div>
     )
   }

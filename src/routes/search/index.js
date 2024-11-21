@@ -48,7 +48,7 @@ export default {
     const geographyData = store.getState().personalized.geography;
     const personCapacityData = store.getState().personalized.personCapacity;
     const amenitiesData = store.getState().personalized.amenities;
-    // const facilitiesData = store.getState().personalized.facilities;
+    const facilitiesData = store.getState().personalized.facilities;
     const startDateData = store.getState().personalized.startDate;
     const endDateData = store.getState().personalized.endDate;
     let geoType = store.getState().personalized.geoType;
@@ -62,7 +62,7 @@ export default {
     let personCapacity,
       dates,
       geography,
-      // facilities,
+      facilities,
       currentPage = 1,
       location;
     const initialFilter = {};
@@ -164,9 +164,9 @@ export default {
       safetyAmenities = amenitiesArray;
     }
 
-    // if (facilitiesData != undefined && facilitiesData != null) {
-    //   facilities = facilitiesData;
-    // }
+    if (facilitiesData != undefined && facilitiesData != null) {
+      facilities = facilitiesData;
+    }
 
     if (startDateData != undefined && startDateData != null && endDateData != undefined && endDateData != null) {
       dates = `'${startDateData}' AND '${endDateData}'`;

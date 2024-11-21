@@ -47,7 +47,7 @@ class SearchHeader extends Component {
         homeType: false,
         price: false,
         instantBook: false,
-        // facilities: false,
+        facilities: false,
         moreFilters: false,
       },
       overlay: false,

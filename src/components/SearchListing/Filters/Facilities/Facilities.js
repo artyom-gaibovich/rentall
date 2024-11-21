@@ -125,11 +125,11 @@ class Facilities extends Component {
                 <div className={cx(s.displayTableCell, s.captionTitle, s.padding4, s.NhName, 'NhNameRtl')}>
                   {option.itemName}
                   <div>
-                    {
+                    {/* {
                       newSplitLineContent && newSplitLineContent.length > 0 && newSplitLineContent.map((itemValue, indexes) => (
                         <p className={s.dot} dangerouslySetInnerHTML={{ __html: itemValue }} />
                         ))
-                    }
+                    } */}
                     {/* {option.itemDescription} */}
                   </div>
                 </div>
@@ -145,6 +145,8 @@ class Facilities extends Component {
     const { className, handleTabToggle, isExpand } = this.props;
     const { fieldsSettingsData: { roomType }, homeType } = this.props;
     const { formatMessage } = this.props.intl;
+    const facilities = [{itemName: "Да", }, "Нет"];
+    console.log('zaq',roomType)
 
     let buttonLabel = formatMessage(messages.homeType);
     let singleHomeType;
@@ -167,9 +169,9 @@ class Facilities extends Component {
         <div ref={this.setBtnWrapperRef}>
           <Button
             className={cx({ [s.btnSecondary]: (isExpand === true || homeType.length > 0) }, s.btn, s.responsiveFontsize, s.searchBtn)}
-            onClick={() => handleTabToggle('homeType', !isExpand)}
+            onClick={() => handleTabToggle('facilities', !isExpand)}
           >
-            {buttonLabel}
+            Удобства
           </Button>
         </div>
         {

@@ -140,6 +140,7 @@ class MoreFilters extends Component {
   render() {
     const { className, handleTabToggle, isExpand, formValues, searchSettings, openMoreFiltersModal, closeMoreFiltersModal } = this.props;
     const { fieldsSettingsData: { essentialsAmenities, spaces, houseRules, fish, safetyAmenities } } = this.props;
+    console.log('zxccasd', safetyAmenities)
     const { formatMessage } = this.props.intl;
     const { openStatus } = this.state;
 

@@ -216,8 +216,8 @@ const SearchListing = {
                     id: {
                         $in: [
                             sequelize.literal(`SELECT listId
-                                               FROM UserAmenities
-                                               WHERE amenitiesId in (${helpData.toString()})`),
+                                               FROM UserSafetyAmenities
+                                               WHERE safetyAmenitiesId in (${helpData.toString()})`),
                         ],
                     },
                 };
@@ -238,8 +238,8 @@ const SearchListing = {
                     id: {
                         $in: [
                             sequelize.literal(`SELECT listId
-                                               FROM UserAmenities
-                                               WHERE amenitiesId in (${rentData.toString()})`),
+                                               FROM UserSafetyAmenities
+                                               WHERE safetyAmenitiesId in (${rentData.toString()})`),
                         ],
                     },
                 };

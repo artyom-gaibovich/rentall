@@ -45,10 +45,16 @@ export default {
 
 
     // From Redux Store
+    store.dispatch(setPersonalizedValues({
+      
+    }))
     const geographyData = store.getState().personalized.geography;
     const personCapacityData = store.getState().personalized.personCapacity;
     const amenitiesData = store.getState().personalized.amenities;
-    const facilitiesData = store.getState().personalized.facilities;
+    const facilitiesData = store.getState().personalized.facilitiesData;
+    const eatData = store.getState().personalized.eatData
+    const helpData = store.getState().personalized.helpData
+    const rentData = store.getState().personalized.rentData
     const startDateData = store.getState().personalized.startDate;
     const endDateData = store.getState().personalized.endDate;
     let geoType = store.getState().personalized.geoType;
@@ -63,8 +69,12 @@ export default {
       dates,
       geography,
       facilities,
+      eat,
+      help,
+      rent,
       currentPage = 1,
       location;
+
     const initialFilter = {};
 
     let amenities;
@@ -147,7 +157,6 @@ export default {
       initialFilter.personCapacity = Number(query.guests);
       personCapacity = Number(query.guests);
     }
-
     // Custom filters
     if (amenitiesData != undefined && amenitiesData != null) {
       amenities = amenitiesData;
@@ -164,8 +173,33 @@ export default {
       safetyAmenities = amenitiesArray;
     }
 
+    // let test = ['1']
+    // if (test != undefined && test != null) {
+    //   facilities = test;
+    //   facilities.map((value) => {
+    //     if(value == '1') {
+    //       if(amenities != undefined && amenities != null) {
+    //         amenities.push([27, 28, 151, 152, 210])
+    //         amenities = amenities.filter((value, index, self) => self.indexOf(value) === index);
+    //       }
+    //     }
+    //   })
+    // }
+
     if (facilitiesData != undefined && facilitiesData != null) {
       facilities = facilitiesData;
+    }
+
+    if (eatData != undefined && eatData != null) {
+      eat = eatData;
+    }
+
+    if (helpData != undefined && helpData != null) {
+      help = helpData;
+    }
+
+    if (rentData != undefined && rentData != null) {
+      rent = rentData;
     }
 
     if (startDateData != undefined && startDateData != null && endDateData != undefined && endDateData != null) {

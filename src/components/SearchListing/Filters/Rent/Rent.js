@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Facilities.css';
+import s from './Rent.css';
 import {
   Button,
 } from 'react-bootstrap';
@@ -24,7 +24,7 @@ import submit from '../../SearchForm/submit';
 
 import CustomCheckbox from '../../../CustomCheckbox';
 
-class Facilities extends Component {
+class Rent extends Component {
 
   static propTypes = {
     className: PropTypes.any,
@@ -34,7 +34,10 @@ class Facilities extends Component {
 
   static defaultProps = {
     isExpand: false,
-    facilities: [],
+    fieldsSettingsData: {
+      roomType: [],
+    },
+    rent: [],
     smallDevice: false,
   };
 
@@ -60,13 +63,13 @@ class Facilities extends Component {
     const { change, submitForm } = this.props;
     await change('currentPage', 1);
     submitForm('SearchForm');
-    handleTabToggle('facilities', !isExpand, true);
+    handleTabToggle('rent', !isExpand, true);
   }
 
   handleReset() {
     const { className, handleTabToggle, isExpand } = this.props;
     const { change, submitForm } = this.props;
-    change('facilities', []);
+    change('rent', []);
   }
 
   setWrapperRef(node) {
@@ -84,7 +87,7 @@ class Facilities extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('facilities', !isExpand, true);
+        handleTabToggle('rent', !isExpand, true);
       }
     }
   }
@@ -142,27 +145,44 @@ class Facilities extends Component {
 
   render() {
     const { className, handleTabToggle, isExpand, smallDevice } = this.props;
+    const { fieldsSettingsData: { roomType }, rent } = this.props;
     const { formatMessage } = this.props.intl;
-    const { facilities } = this.props;
-    const facilitiesList = [ {itemName: "Нет", id: 2, isEnable: "1" }, {itemName: "Да", id: 3, isEnable: "1" },];
+    const rentList = [ {itemName: "Снасти", id: 29, isEnable: "1" }, {itemName: "Плавсредства", id: 50, isEnable: "1" }, {itemName: "Снегоход", id: 202, isEnable: "1" }];
+    console.log('zaq',roomType)
+
+    // let buttonLabel = formatMessage(messages.rent);
+    let singlerent;
+
+    // if (rent && rent.length > 0) {
+    //   if (rent.length > 1) {
+    //     buttonLabel = `${buttonLabel}	· ${rent.length}`;
+    //   } else if (rent.length == 1) {
+    //     singlerent = roomType.filter(item => item.id == rent[0]);
+    //     if (singlerent && singlerent.length > 0) {
+    //       buttonLabel = singlerent[0].itemName;
+    //     } else {
+    //       buttonLabel = `${buttonLabel}	· ${rent.length}`;
+    //     }
+    //   }
+    // }
 
     return (
       <div className={className}>
         <div ref={this.setBtnWrapperRef}>
           <Button
-            className={cx({ [s.btnSecondary]: (isExpand === true || facilities.length > 0) }, s.btn, s.responsiveFontsize, s.searchBtn)}
-            onClick={() => handleTabToggle('facilities', !isExpand)}
+            className={cx({ [s.btnSecondary]: (isExpand === true || rent.length > 0) }, s.btn, s.responsiveFontsize, s.searchBtn)}
+            onClick={() => handleTabToggle('rent', !isExpand)}
           >
-            Удобства
+            Аренда
           </Button>
         </div>
         {
           isExpand && <div className={cx(s.searchFilterPopover, s.smallFilter, { [s.searchFilterPopoverFull]: smallDevice == true }, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
             <div className={s.searchFilterPopoverContent}>
               <Field
-                name="facilities"
+                name="rent"
                 component={this.checkboxHorizontalGroup}
-                options={facilitiesList}
+                options={rentList}
               />
               <div className={cx(s.searchFilterPopoverFooter, s.displayTable)}>
                 <div className={cx('text-left', s.displayTableCell)}>
@@ -191,18 +211,18 @@ class Facilities extends Component {
   }
 }
 
-Facilities = reduxForm({
+Rent = reduxForm({
   form: 'SearchForm', // a unique name for this form
   onSubmit: submit,
   destroyOnUnmount: false,
-})(Facilities);
+})(Rent);
 
 // Decorate with connect to read form values
 const selector = formValueSelector('SearchForm'); // <-- same as form name
 
 const mapState = state => ({
   fieldsSettingsData: state.listingFields.data,
-  facilities: selector(state, 'facilities'),
+  rent: selector(state, 'rent'),
 });
 
 const mapDispatch = {
@@ -210,4 +230,4 @@ const mapDispatch = {
   submitForm,
 };
 
-export default injectIntl(withStyles(s)(connect(mapState, mapDispatch)(Facilities)));
+export default injectIntl(withStyles(s)(connect(mapState, mapDispatch)(Rent)));

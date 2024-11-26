@@ -13,10 +13,6 @@ import {
 } from 'graphql';
 import moment, {unix} from 'moment';
 
-import {Search} from "../../routes/search/Search.js"
-
-// import Search from '../../routes/search/Search';
-
 import fetch from 'node-fetch';
 
 const SearchListing = {
@@ -50,6 +46,10 @@ const SearchListing = {
         ne_lng: {type: FloatType},
         location: {type: StringType},
         zoomLevel: {type: IntType},
+        facilities: {type: new List(IntType)},
+        eat: {type: new List(IntType)},
+        rent: {type: new List(IntType)},
+        help: {type: new List(IntType)},
     },
 
     async resolve({request}, {
@@ -77,6 +77,10 @@ const SearchListing = {
         sw_lng,
         ne_lat,
         ne_lng,
+        facilities,
+        eat,
+        rent,
+        help
     }) {
         try {
             let limit = 12,
@@ -106,10 +110,14 @@ const SearchListing = {
                 minNightsFilter = {},
                 maxNightsFilter = {},
                 maximumNoticeFilter = {};
+            let facilitiesFilter = {},
+                eatFilter = {},
+                rentFilter = {},
+                helpFilter = {};
 
             if (currentPage) offset = (currentPage - 1) * limit;
 
-            console.log({
+            console.log('vsj',{
                 personCapacity,
                 dates,
                 currentPage,
@@ -135,7 +143,11 @@ const SearchListing = {
                 ne_lat,
                 ne_lng,
                 limit,
-                offset
+                offset,
+                facilities,
+                eat,
+                rent,
+                help
             })
 
             // Booking Type Filter
@@ -188,6 +200,100 @@ const SearchListing = {
 
             // Person Capacity Filter
             if (personCapacity) personCapacityFilter = {personCapacity: {$gte: personCapacity}};
+
+            if (help && help.length > 0) {
+                let helpData = []
+                if (help.includes(225)) {
+                    helpData.push(166, 225, 251)
+                }
+                if (help.includes(173)) {
+                    helpData.push(173)
+                }
+                if (help.includes(230)) {
+                    helpData.push(31, 171, 217, 230, 231, 241)
+                }
+                helpFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`SELECT listId
+                                               FROM UserAmenities
+                                               WHERE amenitiesId in (${helpData.toString()})`),
+                        ],
+                    },
+                };
+            }
+
+            if (rent && rent.length > 0) {
+                let rentData = []
+                if (rent.includes(29)) {
+                    rentData.push(29, 169, 227, 252)
+                }
+                if (rent.includes(50)) {
+                    rentData.push(167, 174, 254)
+                }
+                if (rent.includes(202)) {
+                    rentData.push(202)
+                }
+                rentFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`SELECT listId
+                                               FROM UserAmenities
+                                               WHERE amenitiesId in (${rentData.toString()})`),
+                        ],
+                    },
+                };
+            }
+
+            if (facilities && facilities.length > 0 && facilities.length == 1) {
+                let facilitiesData = [27, 28, 151, 152, 210 ] 
+
+                if (facilities[0] == 3) { 
+                    facilitiesFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`SELECT listId
+                                                   FROM UserAmenities
+                                                   WHERE amenitiesId in (${facilitiesData.toString()})
+                                                   GROUP BY listId
+                                                   HAVING COUNT(listId) >= ${facilitiesData.length}`),
+                            ],
+                        },
+                    };
+                } else {
+                    facilitiesFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`SELECT listId
+                                                   FROM UserAmenities
+                                                   WHERE amenitiesId in (${facilitiesData.toString()})
+                                                   GROUP BY listId
+                                                   HAVING COUNT(listId) < ${facilitiesData.length}`),
+                            ],
+                        },
+                    };
+                }
+
+            }
+            
+
+            if (eat && eat.length > 0 && eat.length == 1) {
+                let eatData = []
+                if (eat[0] == 0) { 
+                    eatData = [ 26, 146, 147, 207 ] 
+                } else {
+                    eatData = [ 33, 154, 172 ] 
+                }
+                eatFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`SELECT listId
+                                               FROM UserAmenities
+                                               WHERE amenitiesId in (${eatData.toString()})`),
+                        ],
+                    },
+                };
+            }
 
             // Room type Filter
             if (roomType && roomType.length > 0) {
@@ -267,11 +373,13 @@ const SearchListing = {
                 fishFilter = {
                     id: {
                         $in: [
-                            sequelize.literal(`SELECT listId
-                                               FROM UserFish
-                                               WHERE fishId in (${fish.toString()})
-                                               GROUP BY listId
-                                               HAVING COUNT(listId) >= ${fish.length}`),
+                            sequelize.literal(`
+                                SELECT listId
+                                FROM UserFish
+                                WHERE fishId in (${fish.toString()})
+                                GROUP BY listId
+                                HAVING COUNT(listId) >= ${fish.length}
+                            `),
                         ],
                     },
                 };
@@ -355,6 +463,10 @@ const SearchListing = {
                     maximumNoticeFilter,
                     publishedFilter,
                     unAvailableFilter,
+                    facilitiesFilter,
+                    eatFilter,
+                    rentFilter,
+                    helpFilter
                 ];
                 
             if (mapBoundsFilter) {

@@ -15,7 +15,10 @@ import Dates from '../Filters/Dates';
 import Guests from '../Filters/Guests';
 import HomeType from '../Filters/HomeType';
 import Price from '../Filters/Price';
-import Facilities from '../Filters/Facilities/Facilities.js';
+import Facilities from '../Filters/Facilities/Facilities';
+import Eat from '../Filters/Eat/Eat';
+import Help from '../Filters/Help/Help';
+import Rent from '../Filters/Rent/Rent';
 import InstantBook from '../Filters/InstantBook';
 import MoreFilters from '../Filters/MoreFilters';
 import ShowMap from '../Filters/ShowMap';
@@ -32,6 +35,7 @@ class SearchHeader extends Component {
   static propTypes = {
     mapBounds: PropTypes.array,
     isResultLoading: PropTypes.bool,
+    initialFilter: PropTypes.object
   };
 
   static defaultProps = {
@@ -48,6 +52,9 @@ class SearchHeader extends Component {
         price: false,
         instantBook: false,
         facilities: false,
+        eat: false,
+        help: false,
+        rent: false,
         moreFilters: false,
       },
       overlay: false,
@@ -214,11 +221,30 @@ class SearchHeader extends Component {
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.homeType}
                 />
-                {/* <Facilities
-                  className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
+                <Facilities
+                  className={cx(s.filterButtonContainer)}
                   handleTabToggle={this.handleTabToggle}
                   isExpand={tabs.facilities}
-                /> */}
+                  smallDevice={smallDevice}
+                />
+                <Eat
+                  className={cx(s.filterButtonContainer)}
+                  handleTabToggle={this.handleTabToggle}
+                  isExpand={tabs.eat}
+                  smallDevice={smallDevice}
+                />
+                <Help
+                  className={cx(s.filterButtonContainer)}
+                  handleTabToggle={this.handleTabToggle}
+                  isExpand={tabs.help}
+                  smallDevice={smallDevice}
+                />
+                <Rent
+                  className={cx(s.filterButtonContainer)}
+                  handleTabToggle={this.handleTabToggle}
+                  isExpand={tabs.rent}
+                  smallDevice={smallDevice}
+                />                
                 <Price
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
                   handleTabToggle={this.handleTabToggle}
@@ -246,7 +272,7 @@ class SearchHeader extends Component {
                       <FormattedMessage {...messages.filter} />
                     </span>
                     <span className={cx('hidden-xs hidden-sm')}>
-                      <FormattedMessage {...messages.moreFilters} />
+                      Все фильтры
                     </span>
                   </Button>
                   <MoreFiltersModal

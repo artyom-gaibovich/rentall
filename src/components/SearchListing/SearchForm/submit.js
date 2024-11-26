@@ -34,7 +34,11 @@ async function submit(values, dispatch) {
       $sw_lat: Float,
       $sw_lng: Float,
       $ne_lat: Float,
-      $ne_lng: Float
+      $ne_lng: Float,
+      $facilities: [Int],
+      $eat: [Int],
+      $rent: [Int],
+      $help: [Int]
     ){
       SearchListing(
         personCapacity: $personCapacity,
@@ -59,7 +63,11 @@ async function submit(values, dispatch) {
         sw_lat: $sw_lat,
         sw_lng: $sw_lng,
         ne_lat: $ne_lat,
-        ne_lng: $ne_lng
+        ne_lng: $ne_lng,
+        facilities: $facilities,
+        eat: $eat,
+        rent: $rent,
+        help: $help
       ) {
         count
         results {

@@ -581,10 +581,10 @@ export class Search extends React.Component {
             <div className={cx(s.root, 'searchPage')}>
                 <div className={s.container}>
                     {
-                        !smallDevice && <SearchHeader searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds} />
+                        !smallDevice && <SearchHeader initialFilter={this.props.initialFilter} searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds} />
                     }
                     {
-                        smallDevice && !searchMap && <SearchHeader showFilter={showFilter} showResults={showResults}
+                        smallDevice && !searchMap && <SearchHeader initialFilter={this.props.initialFilter} showFilter={showFilter} showResults={showResults}
                             searchSettings={searchSettings} filter={filter} setFilters={this.setFilters} mapBounds={mapBounds} />
                     }
                     <div className={cx(s.searchResultContainer, { [s.listItemOnly]: isMapShow == false })}>

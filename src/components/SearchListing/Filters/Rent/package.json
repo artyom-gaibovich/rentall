@@ -1,0 +1,6 @@
+{
+    "name": "Rent",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./Rent.js"
+}

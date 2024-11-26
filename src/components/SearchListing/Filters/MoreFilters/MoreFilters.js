@@ -31,6 +31,9 @@ import RoomsBeds from './RoomsBeds';
 import CheckboxListItems from './CheckboxListItems';
 import HomeType from './HomeType';
 import Price from './Price';
+// import Facilities from './Facilities/Facilities';
+// import Eat from './Eat/Eat';
+// import Help from './Help/Help';
 import InstantBook from './InstantBook';
 import { openMoreFiltersModal, closeMoreFiltersModal } from '../../../../actions/modalActions';
 

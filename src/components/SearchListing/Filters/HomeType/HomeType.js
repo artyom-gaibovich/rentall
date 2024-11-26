@@ -146,6 +146,7 @@ class HomeType extends Component {
     const { className, handleTabToggle, isExpand } = this.props;
     const { fieldsSettingsData: { roomType }, homeType } = this.props;
     const { formatMessage } = this.props.intl;
+    console.log('yatwoirot', roomType)
 
     let buttonLabel = formatMessage(messages.homeType);
     let singleHomeType;

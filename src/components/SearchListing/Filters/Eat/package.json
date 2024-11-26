@@ -1,0 +1,6 @@
+{
+    "name": "Eat",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./Eat.js"
+}

@@ -82,7 +82,7 @@ const query = gql`
     }
 `;
 
-export function searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities }) {
+export function searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities}) {
   return async (dispatch, getState, { client }) => {
     dispatch(loadingSearchResults())
     dispatch({ type: SEARCH_LISTING_START });
@@ -106,13 +106,13 @@ export function searchListing({ personCapacity, dates, geography, currentPage, g
           ne_lng,
           location,
           amenities,
-          safetyAmenities
+          safetyAmenities,
         },
         fetchPolicy: 'network-only',
       });
       if (data.SearchListing) {
         dispatch({ type: SEARCH_LISTING_SUCCESS });
-        await dispatch(change('SearchForm', 'personCapacity', personCapacity));
+        await dispatch(change('SearchForm', 'personCapacity', personCapacity)); 
         await dispatch(change('SearchForm', 'amenities', amenities));
         await dispatch(change('SearchForm', 'dates', dates));
         await dispatch(change('SearchForm', 'geography', geography));

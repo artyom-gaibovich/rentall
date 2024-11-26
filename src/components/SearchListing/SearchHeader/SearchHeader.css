@@ -33,6 +33,7 @@
     position: relative;
     margin: 0 4px 0 8px;
 }
+
 @media (max-width: 993px) and (min-width:769px) {
     .filterButtonContainer {
         display: inline-block;
@@ -60,7 +61,13 @@
         position: relative;
         display: block;
         min-width: 310px;
+        overflow-x: scroll;
+        white-space: nowrap;
+        scrollbar-width: none;
     }
+    .searchHeaderResponsive::-webkit-scrollbar {
+        display: none; /* Для Chrome, Safari и Edge */
+      }
     .searchHeaderResponsiveScroll {
         overflow-x: scroll;
     }

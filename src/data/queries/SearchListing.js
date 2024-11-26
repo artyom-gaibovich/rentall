@@ -281,18 +281,27 @@ const SearchListing = {
                 let eatData = []
                 if (eat[0] == 0) { 
                     eatData = [ 26, 146, 147, 207 ] 
+                    eatFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`SELECT listId
+                                                   FROM UserAmenities
+                                                   WHERE amenitiesId in (${eatData.toString()})`),
+                            ],
+                        },
+                    };
                 } else {
                     eatData = [ 33, 154, 172 ] 
+                    eatFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`SELECT listId
+                                                   FROM UserSafetyAmenities
+                                                   WHERE safetyAmenitiesId in (${eatData.toString()})`),
+                            ],
+                        },
+                    };
                 }
-                eatFilter = {
-                    id: {
-                        $in: [
-                            sequelize.literal(`SELECT listId
-                                               FROM UserAmenities
-                                               WHERE amenitiesId in (${eatData.toString()})`),
-                        ],
-                    },
-                };
             }
 
             // Room type Filter

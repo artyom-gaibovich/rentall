@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { reset, change, submit as submitForm, formValueSelector, getFormValues } from 'redux-form';
+import { reset, change, submit as submitForm, formValueSelector, getFormValues, reduxForm } from 'redux-form';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './SearchHeader.css';
 import cx from 'classnames';
@@ -30,6 +30,7 @@ import {
   Button,
 } from 'react-bootstrap';
 import { Search } from "../../../routes/search/Search.js"
+import submit from '../SearchForm/submit';
 
 class SearchHeader extends Component {
   static propTypes = {
@@ -60,6 +61,7 @@ class SearchHeader extends Component {
       overlay: false,
       smallDevice: false,
       verySmallDevice: false,
+      page: 1,
       ne_lat: 0,
       ne_lng: 0,
       sw_lat: 0,
@@ -300,14 +302,27 @@ class SearchHeader extends Component {
   }
 }
 
+SearchHeader = reduxForm({
+  form: 'SearchForm', // a unique name for this form
+  onSubmit: submit,
+  destroyOnUnmount: false,
+})(SearchHeader);
+
 const selector = formValueSelector('SearchForm'); // <-- same as form name
 
 const mapState = state => ({
+  currentPage: selector(state, 'currentPage'),
+  sw_lat: selector(state, 'sw_lat'),
+  sw_lng: selector(state, 'sw_lng'),
+  ne_lat: selector(state, 'ne_lat'),
+  ne_lng: selector(state, 'ne_lng'),
   formValues: getFormValues('SearchForm')(state),
   isResultLoading: state.search.isResultLoading,
 });
 
 const mapDispatch = {
+  change,
+  submitForm,
   openMoreFiltersModal,
 };
 // export default withStyles(s)(SearchHeader);

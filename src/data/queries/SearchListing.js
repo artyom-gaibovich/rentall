@@ -507,36 +507,24 @@ const SearchListing = {
                 order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
             });
 
-            // const resultsSearch = await Listing.findAll({
-            //     attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-            //     where: whereNot,
-            //     limit: 12000,
-            //     offset,
-            //     order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
-            // });
-
-            let batchSize = 100;
-            let resultsSearch = [];
-            for (let i = 0; i < 12000; i += batchSize) {
-                const batch = await Listing.findAll({
-                    attributes: ['id', 'title', 'personCapacity', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-                    where: whereNot,
-                    limit: batchSize,
-                    offset: i,
-                    order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
-                });
-                resultsSearch = [...resultsSearch, ...batch];
-            }
+            // const resultsMap = await Listing.findAll({
+            //     attributes: ['id', 'title', 'personCapacity', 'lat', 'city', 'street', 'state', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
+            //     where: {
+            //         $and: filters,
+            //     },
+            //     order: [['id', 'DESC'],['reviewsCount', 'DESC']],
+            //   });
 
             console.log({
                 count,
                 results,
+                // resultsMap
             });
             return {
                 count,
                 results,
                 allFound: [],
-                resultsSearch
+                // resultsMap,
             };
         } catch (e) {
             console.error(e);
@@ -544,7 +532,7 @@ const SearchListing = {
                 count: 0,
                 results: [],
                 allFound: [],
-                resultsSearch: []
+                // resultsMap: []
             };
         }
     },

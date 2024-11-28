@@ -81,6 +81,7 @@ class SearchResults extends React.Component {
     console.log('Data submitted to backend');
 }
 
+
   async refreshYmaps() {
     // Функция для проверки состояния загрузки каждые 100 мс
     const waitForLoadingComplete = () => {
@@ -113,6 +114,14 @@ class SearchResults extends React.Component {
       console.log('URL изменился, обновляем карту');
       this.refreshYmaps();
       this.setState({ location: { search: currentSearch } });
+    } else {
+      if (typeof localStorage !== 'undefined') {
+        if (localStorage.getItem('locationRefresh') === 'true') {
+          console.log('URL не изменился, обновляем карту');
+          this.refreshYmaps();
+          localStorage.setItem('locationRefresh', 'false');
+        }
+      }
     }
   }
 

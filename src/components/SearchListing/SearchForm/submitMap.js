@@ -3,14 +3,11 @@ import fetch from '../../../core/fetch';
 
 // Redux
 import { getSearchResults, loadingSearchResults } from '../../../actions/getSearchResults';
-import submitMap from './submitMap';
 
 //ymaps
-export let submitData;
 export let submitMapData;
-async function submit(values, dispatch) {
+async function submitMap(values, dispatch) {
   // Очистка submitData перед новым запросом
-  submitData = null;
   submitMapData = null;
   dispatch(loadingSearchResults());
   const query =
@@ -43,7 +40,7 @@ async function submit(values, dispatch) {
       $rent: [Int],
       $help: [Int]
     ){
-      SearchListing(
+      SearchListingMap(
         personCapacity: $personCapacity,
         dates: $dates,
         currentPage: $currentPage
@@ -76,14 +73,9 @@ async function submit(values, dispatch) {
         results {
           id
           title
-          personCapacity
           lat
           lng
-          beds
           coverPhoto
-          bookingType
-          reviewsCount,
-          reviewsStarRating,
           listPhotos {
             id
             name
@@ -94,21 +86,12 @@ async function submit(values, dispatch) {
             basePrice
             currency
           }
-          settingsData {
-            listsettings {
-              id
-              itemName
-              itemDescription
-            }
-          }
-          wishListStatus
-          isListOwner
         }
       }
     }
   `;
 
-  console.log('Запрос с параметрами values:', values);
+  console.log('DAAAAAAA:', values);
   try {
     const resp = await fetch('/graphql', {
       method: 'post',
@@ -123,21 +106,19 @@ async function submit(values, dispatch) {
     const { data } = await resp.json();
     console.log('Полученные данные:', data);
 
-    if (data && data.SearchListing) {
-      submitData = data.SearchListing;
-      dispatch(getSearchResults(data.SearchListing));
+    if (data && data.SearchListingMap) {
+      submitMapData = data.SearchListingMap;
+      dispatch(getSearchResults(data.SearchListingMap));
     } else {
       console.warn('SearchListing не вернул результаты.');
-      submitData = { count: '0', results: [] };
+      submitMapData = { count: '0', results: [] };
       dispatch(getSearchResults(null));
     }
   } catch (error) {
     console.error('Ошибка выполнения GraphQL запроса:', error);
-    submitData = { count: '0', results: [] };
+    submitMapData = { count: '0', results: [] };
     dispatch(getSearchResults(null));
   }
-  submitMap(values, dispatch);
-  
 }
 
-export default submit;
+export default submitMap;

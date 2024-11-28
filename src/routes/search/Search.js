@@ -40,7 +40,9 @@ import { googleMapAPI } from '../../config';
 //yandex maps data
 import { searchResultsData } from "../../actions/getSearchResults.js"
 import { submitData } from "../../components/SearchListing/SearchForm/submit.js"
+import { submitMapData } from "../../components/SearchListing/SearchForm/submitMap.js"
 import submit from "../../components/SearchListing/SearchForm/submit.js"
+import submitMap from "../../components/SearchListing/SearchForm/submitMap.js"
 
 export class Search extends React.Component {
     // static resultData = searchResultsData;
@@ -95,6 +97,7 @@ export class Search extends React.Component {
 
         this.handleResize = this.handleResize.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        SearchResults.instance = this
     }
 
     // Метод для полной очистки карты
@@ -109,6 +112,42 @@ export class Search extends React.Component {
         }
     }
 
+    async refreshYmaps() {
+        // Функция для проверки состояния загрузки каждые 100 мс
+        const waitForLoadingComplete = () => {
+          return new Promise((resolve) => {
+            const checkLoading = () => {
+              if (!this.props.isResultLoading) {
+                resolve(); // Завершаем ожидание, если загрузка завершена
+              } else {
+                setTimeout(checkLoading, 100); // Проверяем снова через 100 мс
+              }
+            };
+            checkLoading();
+          });
+        };
+    
+        // Ожидаем завершения загрузки
+        await waitForLoadingComplete();
+    
+        // После завершения загрузки очищаем и инициализируем карту
+        await Search.clearMapInstance();
+        await Search.initYmaps(this);
+        console.log("Карта обновлена после завершения загрузки данных");
+      }
+
+    static async restart(props) {
+        const instance = SearchResults.instance;
+
+        if (!instance) {
+            console.error("No instance of SearchResults is available.");
+            return;
+        }
+        const { change, submitForm } = props;
+        await change('currentPage', 1);
+        await submitForm('SearchForm');
+        await instance.refreshYmaps();
+      }
 
     setFilters = (newFilters) => {
         this.setState({ filter: newFilters });
@@ -211,7 +250,13 @@ export class Search extends React.Component {
 
         const mapSection = document.querySelector("#map")
         Search.yandexMapMobile = !Search.yandexMapMobile;
-        const mapItems = await Search.getMapItems();
+        let mapItems = []
+        if (submitMapData && submitMapData.length > 0) {
+            mapItems = submitMapData
+        } else {
+            mapItems = await Search.getMapItems();
+        }
+        // await componentInstance.props.submitForm('SearchFormMap')
         console.log(searchResultsData, 'searchResultsData')
         const mapSectionOne = document.querySelector(".searchMapSection");
         if (mapSection && mapSection.children.length === 0 && searchResultsData && searchResultsData.results.length > 0 && componentInstance.props.initialFilter.address) {
@@ -650,6 +695,7 @@ Search = reduxForm({
     onSubmit: submit,
     destroyOnUnmount: false,
 })(Search);
+
 
 const selector = formValueSelector('SearchForm');
 

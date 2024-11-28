@@ -34,7 +34,7 @@ const searchListingType = new ObjectType({
         minLng: { type: new GraphQLNonNull(FloatType) },
         maxLng: { type: new GraphQLNonNull(FloatType) },
       }*/ },
-    resultsSearch: {
+    resultsMap: {
       /*resolve: async (root, { minLat, maxLat, minLng, maxLng }) => {
         const listing = await Listing.findAll({
           where: {

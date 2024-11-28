@@ -31,6 +31,7 @@ import {
 } from 'react-bootstrap';
 import { Search } from "../../../routes/search/Search.js"
 import submit from '../SearchForm/submit';
+import submitMap from '../SearchForm/submitMap';
 
 class SearchHeader extends Component {
   static propTypes = {
@@ -218,6 +219,12 @@ class SearchHeader extends Component {
                   isExpand={tabs.guests}
                   smallDevice={smallDevice}
                 />
+                <Price
+                  className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
+                  handleTabToggle={this.handleTabToggle}
+                  searchSettings={searchSettings}
+                  isExpand={tabs.price}
+                />
                 <HomeType
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
                   handleTabToggle={this.handleTabToggle}
@@ -247,12 +254,6 @@ class SearchHeader extends Component {
                   isExpand={tabs.rent}
                   smallDevice={smallDevice}
                 />                
-                <Price
-                  className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
-                  handleTabToggle={this.handleTabToggle}
-                  searchSettings={searchSettings}
-                  isExpand={tabs.price}
-                />
                 {/*
                 <InstantBook
                   className={cx(s.filterButtonContainer, 'hidden-xs', s.hideTabletSection)}
@@ -308,6 +309,12 @@ SearchHeader = reduxForm({
   destroyOnUnmount: false,
 })(SearchHeader);
 
+SearchHeader = reduxForm({
+  form: 'SearchFormMap', // a unique name for this form
+  onSubmit: submitMap,
+  destroyOnUnmount: false,
+})(SearchHeader);
+
 const selector = formValueSelector('SearchForm'); // <-- same as form name
 
 const mapState = state => ({
@@ -317,6 +324,7 @@ const mapState = state => ({
   ne_lat: selector(state, 'ne_lat'),
   ne_lng: selector(state, 'ne_lng'),
   formValues: getFormValues('SearchForm')(state),
+  formValues: getFormValues('SearchFormMap')(state),
   isResultLoading: state.search.isResultLoading,
 });
 

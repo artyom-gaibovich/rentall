@@ -21,6 +21,7 @@ import messages from '../../../../locale/messages';
 
 // Submit
 import submit from '../../SearchForm/submit';
+import submitMap from '../../SearchForm/submitMap';
 
 import CustomCheckbox from '../../../CustomCheckbox';
 

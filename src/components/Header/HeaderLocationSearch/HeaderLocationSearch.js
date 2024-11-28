@@ -59,6 +59,7 @@ class HeaderLocationSearch extends Component {
     static defaultProps = {
         personalized: {
             location: '',
+            prevLocation: '',
         },
         isResultLoading: true,
     }
@@ -70,7 +71,9 @@ class HeaderLocationSearch extends Component {
         this.state = {
             locationValue: '',
             chosenSuggest: '',
-            suggestItems: []
+            suggestItems: [],
+            onLocation: null,
+            prevLocation: null
         };
         this.onSuggestSelect = this.onSuggestSelect.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -129,8 +132,18 @@ class HeaderLocationSearch extends Component {
   }
 
     handleClick() {
+        console.log('zc', this.props.personalized.location)
         if (this.state.suggestItems.length > 0) {
-            const location = this.state.suggestItems[0].displayName
+            this.props.personalized.location = this.state.suggestItems[0].displayName
+        }
+        if (this.props.personalized.location) {
+            if (this.props.personalized.location == this.props.personalized.prevLocation) {
+                Search.restart(this.props)
+                return
+            }
+            const location = this.props.personalized.location
+            this.props.personalized.prevLocation = location
+            console.log('ss', this.props.personalized.prevLocation)
             let updatedURI,
             uri = '/s?';
             uri = `${uri}&address=${location}&chosen=${1}`;
@@ -151,9 +164,10 @@ class HeaderLocationSearch extends Component {
             geoType;
 
         if (data.displayName) {
-            uri = `${uri}&address=${data.displayName}&chosen=${1}`;
-            updatedURI = encodeURI(uri);
-            history.push(updatedURI);
+            // this.setState({ onLocation: data.displayName })
+            // uri = `${uri}&address=${data.displayName}&chosen=${1}`;
+            // updatedURI = encodeURI(uri);
+            // history.push(updatedURI);
             // await this.refreshYmaps()
         }
         if (data && data.gmaps) {
@@ -410,6 +424,7 @@ class HeaderLocationSearch extends Component {
                                     this.onSuggestSelect(item);
                                     this.inputRef.current.value = item.displayName;
                                     this.props.personalized.location = item.displayName;
+                                    console.log(this.props.personalized.location)
                                     this.setState({...this.state, suggestItems: []})
                                 }} className={c.suggest__item}>{item.displayName}</p>
                             })}

@@ -78,7 +78,7 @@
         width: 100%;
         margin-bottom: 10px;
     }
-    .filterButtonContainer:first-child {
-        margin-left: 0;
+    .filterButtonContainer{
+        position: relative;
     }
 }

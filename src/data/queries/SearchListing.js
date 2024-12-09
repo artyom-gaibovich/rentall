@@ -176,17 +176,93 @@ const SearchListing = {
 
             // Price Range Filter
             if (priceRange && priceRange.length > 0) {
-                priceRangeFilter = {
-                    id: {
-                        $in: [
-                            sequelize.literal(`SELECT listId
-                                               FROM ListingData
-                                               WHERE (basePrice /
-                                                      (SELECT rate FROM CurrencyRates WHERE currencyCode = currency limit 1)) BETWEEN ${priceRange[0]}
-                                                 AND ${priceRange[1]}`),
-                        ],
-                    },
-                };
+                let priceRanges = []
+                if (priceRange.includes(2913)) {
+                    priceRanges.push([0, 5000])
+                }
+                if (priceRange.includes(2914)) {
+                    priceRanges.push([5000, 10000])
+                }
+                if (priceRange.includes(2915)) {
+                    priceRanges.push([10000, 20000])
+                }
+                if (priceRange.includes(2916)) {
+                    priceRanges.push([20000, 100000])
+                }
+
+                if (priceRanges.length == 1) {
+                    priceRangeFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`SELECT listId
+                                                FROM ListingData
+                                                WHERE (basePrice /
+                                                        (SELECT rate FROM CurrencyRates WHERE currencyCode = currency limit 1)) BETWEEN ${priceRanges[0][0]}
+                                                    AND ${priceRanges[0][1]}`),
+                            ],
+                        },
+                    };
+                }
+                if (priceRanges.length == 2) {
+                    priceRangeFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`
+                                    SELECT listId
+                                    FROM ListingData
+                                    WHERE 
+                                    (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                    )
+                                `),
+                            ],
+                        },
+                    };
+                }
+                if (priceRanges.length == 3) {
+                    priceRangeFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`
+                                    SELECT listId
+                                    FROM ListingData
+                                    WHERE 
+                                    (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[2][0]} AND ${priceRanges[2][1]}
+                                    )
+                                `),
+                            ],
+                        },
+                    };
+                }
+                if (priceRanges.length == 4) {
+                    priceRangeFilter = {
+                        id: {
+                            $in: [
+                                sequelize.literal(`
+                                    SELECT listId
+                                    FROM ListingData
+                                    WHERE 
+                                    (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[2][0]} AND ${priceRanges[2][1]}
+                                    ) OR (
+                                        (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[3][0]} AND ${priceRanges[3][1]}
+                                    )
+                                `),
+                            ],
+                        },
+                    };
+                }
             }
 
             // Number of Bed Rooms Filter

@@ -104,7 +104,7 @@ class Dates extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('dates', !isExpand);
+        handleTabToggle('dates', !isExpand, true);
       }
     }
   }
@@ -162,9 +162,9 @@ class Dates extends Component {
           </Button>
         </div>
         {
-          isExpand && <div className={cx(s.searchFilterPopover, { [s.searchFilterPopoverFull]: smallDevice == true }, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
+          isExpand && <div className={cx(s.searchFilterPopover, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
             <div className={s.searchFilterPopoverContent}>
-              <div className={cx('visible-xs visible-sm', s.searchFilterPopoverHeader)}>
+              {/* <div className={cx('visible-xs visible-sm', s.searchFilterPopoverHeader)}>
                 <div className={cx(s.displayTable)}>
                   <div className={cx('text-left', s.displayTableCell, s.searchFilterCloseIcon, 'textAlignRightRtl')}>
                     <span onClick={this.handleSubmit}>
@@ -183,7 +183,7 @@ class Dates extends Component {
                     }
                   </div>
                 </div>
-              </div>
+              </div> */}
               <Field
                 name="dates"
                 component={this.renderDateRange}

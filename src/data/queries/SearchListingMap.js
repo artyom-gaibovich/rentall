@@ -40,10 +40,6 @@ const SearchListingMap = {
     bookingType: {type: StringType},
     geoType: {type: StringType},
     searchByMap: {type: BoolType},
-    sw_lat: {type: FloatType},
-    sw_lng: {type: FloatType},
-    ne_lat: {type: FloatType},
-    ne_lng: {type: FloatType},
     location: {type: StringType},
     zoomLevel: {type: IntType},
     facilities: {type: new List(IntType)},
@@ -73,10 +69,6 @@ const SearchListingMap = {
         bookingType,
         geoType,
         searchByMap,
-        sw_lat,
-        sw_lng,
-        ne_lat,
-        ne_lng,
         facilities,
         eat,
         rent,
@@ -94,6 +86,10 @@ const SearchListingMap = {
                 ],
             },
         };
+        let filters = [
+            publishedFilter,
+            unAvailableFilter,
+          ];
         let mapBoundsFilter,
             bookingTypeFilter = {};
         let bedRoomCountFilter = {},
@@ -138,10 +134,6 @@ const SearchListingMap = {
               bookingType,
               geoType,
               searchByMap,
-              sw_lat,
-              sw_lng,
-              ne_lat,
-              ne_lng,
               limit,
               offset,
               facilities,
@@ -150,34 +142,126 @@ const SearchListingMap = {
               help
           })
 
-          if (bookingType && bookingType === 'instant') bookingTypeFilter = {bookingType};
+          if (bookingType && bookingType === 'instant') {
+            bookingTypeFilter = {bookingType};
+            filters.push(bookingTypeFilter);
+          }
 
           // Price Range Filter
           if (priceRange && priceRange.length > 0) {
-              priceRangeFilter = {
-                  id: {
-                      $in: [
-                          sequelize.literal(`SELECT listId
-                                             FROM ListingData
-                                             WHERE (basePrice /
-                                                    (SELECT rate FROM CurrencyRates WHERE currencyCode = currency limit 1)) BETWEEN ${priceRange[0]}
-                                               AND ${priceRange[1]}`),
-                      ],
-                  },
-              };
-          }
+            let priceRanges = []
+            if (priceRange.includes(2913)) {
+                priceRanges.push([0, 5000])
+            }
+            if (priceRange.includes(2914)) {
+                priceRanges.push([5000, 10000])
+            }
+            if (priceRange.includes(2915)) {
+                priceRanges.push([10000, 20000])
+            }
+            if (priceRange.includes(2916)) {
+                priceRanges.push([20000, 100000])
+            }
+
+            if (priceRanges.length == 1) {
+                priceRangeFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`SELECT listId
+                                            FROM ListingData
+                                            WHERE (basePrice /
+                                                    (SELECT rate FROM CurrencyRates WHERE currencyCode = currency limit 1)) BETWEEN ${priceRanges[0][0]}
+                                                AND ${priceRanges[0][1]}`),
+                        ],
+                    },
+                };
+            }
+            if (priceRanges.length == 2) {
+                priceRangeFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`
+                                SELECT listId
+                                FROM ListingData
+                                WHERE 
+                                (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                )
+                            `),
+                        ],
+                    },
+                };
+            }
+            if (priceRanges.length == 3) {
+                priceRangeFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`
+                                SELECT listId
+                                FROM ListingData
+                                WHERE 
+                                (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[2][0]} AND ${priceRanges[2][1]}
+                                )
+                            `),
+                        ],
+                    },
+                };
+            }
+            if (priceRanges.length == 4) {
+                priceRangeFilter = {
+                    id: {
+                        $in: [
+                            sequelize.literal(`
+                                SELECT listId
+                                FROM ListingData
+                                WHERE 
+                                (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[0][0]} AND ${priceRanges[0][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[1][0]} AND ${priceRanges[1][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[2][0]} AND ${priceRanges[2][1]}
+                                ) OR (
+                                    (basePrice / (SELECT rate FROM CurrencyRates WHERE currencyCode = currency LIMIT 1)) BETWEEN ${priceRanges[3][0]} AND ${priceRanges[3][1]}
+                                )
+                            `),
+                        ],
+                    },
+                };
+            }
+            filters.push(priceRangeFilter);
+        }
 
           // Number of Bed Rooms Filter
-          if (bedrooms) bedRoomCountFilter = {bedrooms: {$gte: bedrooms}};
+          if (bedrooms) {
+            bedRoomCountFilter = {bedrooms: {$gte: bedrooms}} 
+            filters.push(bedRoomCountFilter)
+          };
 
           // Number of  Bathrooms Filter
-          if (bathrooms) bathRoomCountFilter = {bathrooms: {$gte: bathrooms}};
+          if (bathrooms) {
+            bathRoomCountFilter = {bathrooms: {$gte: bathrooms}}
+            filters.push(bathRoomCountFilter)
+          };
 
           // Number of Beds Filter
-          if (beds) bedCountFilter = {beds: {$gte: beds}};
+          if (beds) {
+            bedCountFilter = {beds: {$gte: beds}}
+            filters.push(bedCountFilter)
+          };
 
           // Person Capacity Filter
-          if (personCapacity) personCapacityFilter = {personCapacity: {$gte: personCapacity}};
+          if (personCapacity) {
+            personCapacityFilter = {personCapacity: {$gte: personCapacity}}
+            filters.push(personCapacity)
+          };
 
           if (help && help.length > 0) {
               let helpData = []
@@ -199,6 +283,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(helpFilter)
           }
 
           if (rent && rent.length > 0) {
@@ -221,6 +306,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(rentFilter)
           }
 
           if (facilities && facilities.length > 0 && facilities.length == 1) {
@@ -252,6 +338,8 @@ const SearchListingMap = {
                   };
               }
 
+              filters.push(facilitiesFilter)
+
           }
           
 
@@ -280,6 +368,7 @@ const SearchListingMap = {
                       },
                   };
               }
+              filters.push(eatFilter)
           }
 
           // Room type Filter
@@ -293,6 +382,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(roomTypeFilter)
           }
 
           // Amenities Filter
@@ -308,6 +398,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(amenitiesFilter)
           }
 
           // Safety Amenities Filter
@@ -323,6 +414,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(safetyAmenitiesFilter)
           }
 
           // Spaces Filter
@@ -338,6 +430,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(spacesFilter)
           }
 
           // House Rules Filter
@@ -353,6 +446,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(houseRulesFilter)
           }
 
           // Fish Filter
@@ -370,6 +464,7 @@ const SearchListingMap = {
                       ],
                   },
               };
+              filters.push(fishFilter)
           }
 
           if (dates && dates.toString().trim() !== '') {
@@ -426,47 +521,32 @@ const SearchListingMap = {
                       ],
                   },
               };
+
+              filters.push(maximumNoticeFilter, dateRangeFilter, minNightsFilter, maxNightsFilter)
           }
 
 
-          let where,
-          whereNot,
-          filters = [
-                  bookingTypeFilter,
-                  bedRoomCountFilter,
-                  priceRangeFilter,
-                  bathRoomCountFilter,
-                  bedCountFilter,
-                  personCapacityFilter,
-                  roomTypeFilter,
-                  amenitiesFilter,
-                  safetyAmenitiesFilter,
-                  spacesFilter,
-                  houseRulesFilter,
-                  fishFilter,
-                  dateRangeFilter,
-                  minNightsFilter,
-                  maxNightsFilter,
-                  maximumNoticeFilter,
-                  publishedFilter,
-                  unAvailableFilter,
-                  facilitiesFilter,
-                  eatFilter,
-                  rentFilter,
-                  helpFilter
-              ];
-              
-              where = {$and: filters};
-              whereNot = {$and: filters};
+          let where = {$and: filters}
           
-
-
       // SQL query for results
-      const results = await Listing.findAll({
-        attributes: ['id', 'title', 'personCapacity', 'lat', 'city', 'street', 'state', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
-        where,
-        order: [['id', 'DESC'],['reviewsCount', 'DESC']],
-      });
+    //   const results = await Listing.findAll({
+    //     attributes: ['id', 'title', 'personCapacity', 'lat', 'city', 'street', 'state', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId', 'reviewsCount'],
+    //     where,
+    //     order: [['id', 'DESC'],['reviewsCount', 'DESC']],
+    //   });
+
+      let batchSize = 50;
+      let results = [];
+            for (let i = 0; i < 1500; i += batchSize) {
+                const batch = await Listing.findAll({
+                    attributes: ['id', 'title', 'lat', 'lng', 'beds', 'coverPhoto', 'bookingType', 'userId'],
+                    where,
+                    limit: batchSize,
+                    offset: i,
+                    order: [['id', 'DESC'], ['reviewsCount', 'DESC']],
+                });
+                results = [...results, ...batch];
+            }
 
       return {
         count: 0,

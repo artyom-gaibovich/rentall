@@ -21,13 +21,14 @@ import ListingItem from '../ListingItem';
 import NoResults from '../NoResults';
 import AllResults from '../AllResults';
 import submit from '../SearchForm/submit';
+import {getValuesFilterDelete} from '../SearchForm/submit';
 
 import {showResults} from "../../../actions/mobileSearchNavigation.js"
 
 //yandex maps
 import { searchResultsData } from "../../../actions/getSearchResults.js"
 import { Search } from "../../../routes/search/Search.js"
-class SearchResults extends React.Component {
+export class SearchResults extends React.Component {
   static propTypes = {
     change: PropTypes.any,
     submitForm: PropTypes.any,
@@ -60,6 +61,7 @@ class SearchResults extends React.Component {
     };
     this.handlePagination = this.handlePagination.bind(this);
     this.handlePaginationNotMap = this.handlePaginationNotMap.bind(this);
+    SearchResults.instance = this
   }
 
   async handleSubmit() {
@@ -79,6 +81,20 @@ class SearchResults extends React.Component {
     await submitForm('SearchForm');
 
     console.log('Data submitted to backend');
+}
+
+static async restart(props) {
+  const instance = SearchResults.instance;
+
+  if (!instance) {
+      console.error("No instance of SearchResults is available.");
+      return;
+  }
+  // const { change, submitForm } = props;
+  // await change('currentPage', 1);
+  // await submitForm('SearchForm');
+  instance.props.isResultLoading = true
+  await instance.refreshYmaps();
 }
 
 
@@ -102,7 +118,7 @@ class SearchResults extends React.Component {
 
     // После завершения загрузки очищаем и инициализируем карту
     await Search.clearMapInstance();
-    await Search.initYmaps(this);
+    await Search.initYmaps(this, true);
     console.log("Карта обновлена после завершения загрузки данных");
   }
 
@@ -113,13 +129,17 @@ class SearchResults extends React.Component {
     if (currentSearch !== prevSearch) {
       console.log('URL изменился, обновляем карту');
       this.refreshYmaps();
+      getValuesFilterDelete();
       this.setState({ location: { search: currentSearch } });
-    } else {
+    }
+    if (prevProps.results !== this.props.results) {
       if (typeof localStorage !== 'undefined') {
-        if (localStorage.getItem('locationRefresh') === 'true') {
-          console.log('URL не изменился, обновляем карту');
+        let location = localStorage.getItem('onLocation')
+        if (location == 'true') {
+          console.log('results изменились, обновляем карту');
           this.refreshYmaps();
-          localStorage.setItem('locationRefresh', 'false');
+          getValuesFilterDelete();
+          localStorage.setItem('onLocation', 'false')
         }
       }
     }

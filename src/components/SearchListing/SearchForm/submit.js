@@ -3,15 +3,25 @@ import fetch from '../../../core/fetch';
 
 // Redux
 import { getSearchResults, loadingSearchResults } from '../../../actions/getSearchResults';
-import submitMap from './submitMap';
 
 //ymaps
 export let submitData;
-export let submitMapData;
+let valuesFilter;
+
+export function getValuesFilter() {
+  return valuesFilter;
+}
+
+export function getValuesFilterDelete() {
+  valuesFilter = null
+}
+
 async function submit(values, dispatch) {
   // Очистка submitData перед новым запросом
   submitData = null;
-  submitMapData = null;
+  valuesFilter = null;
+  valuesFilter = values;
+  console.log('Текущее значение valuesFilter:', valuesFilter);
   dispatch(loadingSearchResults());
   const query =
     `query(
@@ -136,7 +146,7 @@ async function submit(values, dispatch) {
     submitData = { count: '0', results: [] };
     dispatch(getSearchResults(null));
   }
-  submitMap(values, dispatch);
+  // submitMap(values, dispatch);
   
 }
 

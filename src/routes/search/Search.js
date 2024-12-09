@@ -42,7 +42,8 @@ import { searchResultsData } from "../../actions/getSearchResults.js"
 import { submitData } from "../../components/SearchListing/SearchForm/submit.js"
 import { submitMapData } from "../../components/SearchListing/SearchForm/submitMap.js"
 import submit from "../../components/SearchListing/SearchForm/submit.js"
-import submitMap from "../../components/SearchListing/SearchForm/submitMap.js"
+import {getValuesFilter} from "../../components/SearchListing/SearchForm/submit.js"
+let mapItemsGlobal = []
 
 export class Search extends React.Component {
     // static resultData = searchResultsData;
@@ -97,7 +98,6 @@ export class Search extends React.Component {
 
         this.handleResize = this.handleResize.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        SearchResults.instance = this
     }
 
     // Метод для полной очистки карты
@@ -134,19 +134,6 @@ export class Search extends React.Component {
         await Search.clearMapInstance();
         await Search.initYmaps(this);
         console.log("Карта обновлена после завершения загрузки данных");
-      }
-
-    static async restart(props) {
-        const instance = SearchResults.instance;
-
-        if (!instance) {
-            console.error("No instance of SearchResults is available.");
-            return;
-        }
-        const { change, submitForm } = props;
-        await change('currentPage', 1);
-        await submitForm('SearchForm');
-        await instance.refreshYmaps();
       }
 
     setFilters = (newFilters) => {
@@ -195,7 +182,7 @@ export class Search extends React.Component {
         console.log('Data submitted to backend');
     }
 
-    static async initYmaps(componentInstance) {
+    static async initYmaps(componentInstance, onPage) {
         await Search.sleep(1000)
         console.log('initYmaps', componentInstance);
         let searchedHouses
@@ -250,12 +237,19 @@ export class Search extends React.Component {
 
         const mapSection = document.querySelector("#map")
         Search.yandexMapMobile = !Search.yandexMapMobile;
+        // let mapItems = []
+        // if (submitMapData && submitMapData.length > 0) {
+        //     mapItems = submitMapData
+        // } else {
+        // }
         let mapItems = []
-        if (submitMapData && submitMapData.length > 0) {
-            mapItems = submitMapData
+        console.log('ejnjd', onPage)
+        if (onPage) {
+            mapItems = mapItemsGlobal
         } else {
             mapItems = await Search.getMapItems();
         }
+        console.log('kkkk', mapItems)
         // await componentInstance.props.submitForm('SearchFormMap')
         console.log(searchResultsData, 'searchResultsData')
         const mapSectionOne = document.querySelector(".searchMapSection");
@@ -351,7 +345,7 @@ export class Search extends React.Component {
         mapPoints = mapItems.map(el => {
             return [el.lat, el.lng]
         })
-        housePoints = searchResultsData.results.map(el => {
+        housePoints = mapItems.map(el => {
             return [el.lat, el.lng]
         })
 
@@ -405,7 +399,6 @@ export class Search extends React.Component {
         const isBrowser = typeof window !== 'undefined';
         if (isBrowser) {
             this.handleResize();
-            this.setViewportHeight();
             window.addEventListener("ymap_hover", function (event) {
                 if (Search.map) {
                     Search.map.geoObjects.each(object => {
@@ -476,18 +469,69 @@ export class Search extends React.Component {
         const cacheKey = 'mapItemsCache';
         const cacheTimeKey = 'mapItemsCacheTime';
         const cacheDuration = 1000 * 60 * 60 * 24 * 7; // Кэшируем данные на 10 минут
+        const valuesFilter = getValuesFilter();
+        console.log(valuesFilter)
 
         const cachedData = localStorage.getItem(cacheKey);
         const cacheTime = localStorage.getItem(cacheTimeKey);
 
-        if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime)) < cacheDuration) {
+        if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime)) < cacheDuration && !valuesFilter ) {
             console.log('Returning cached data');
             console.log(JSON.parse(cachedData).slice(0, 10))
+            mapItemsGlobal = JSON.parse(cachedData);
             return JSON.parse(cachedData);
         }
         const query = `
-    query SearchListingMap {
-      SearchListingMap {
+    query SearchListingMap(
+    $personCapacity: Int,
+    $dates: String,
+    $currentPage: Int,
+    $lat: Float,
+    $lng: Float,
+    $roomType: [Int],
+    $bedrooms: Int,
+    $bathrooms: Int,
+    $beds: Int,
+    $amenities: [Int],
+    $safetyAmenities: [Int],
+    $spaces: [Int],
+    $houseRules: [Int],
+    $fish: [Int],
+    $priceRange: [Int],
+    $geography: String,
+    $bookingType: String,
+    $geoType: String,
+    $searchByMap: Boolean,
+    $facilities: [Int],
+    $eat: [Int],
+    $rent: [Int],
+    $help: [Int]
+    ){
+      SearchListingMap(
+        personCapacity: $personCapacity,
+        dates: $dates,
+        currentPage: $currentPage
+        lat: $lat,
+        lng: $lng,
+        roomType: $roomType,
+        bedrooms: $bedrooms,
+        bathrooms: $bathrooms,
+        beds: $beds,
+        amenities: $amenities,
+        safetyAmenities: $safetyAmenities,
+        spaces: $spaces,
+        houseRules: $houseRules,
+        fish: $fish,
+        priceRange: $priceRange,
+        geography: $geography,
+        bookingType: $bookingType,
+        geoType: $geoType,
+        searchByMap: $searchByMap,
+        facilities: $facilities,
+        eat: $eat,
+        rent: $rent,
+        help: $help
+      ){
         count
         results {
           id
@@ -515,17 +559,22 @@ export class Search extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ query }),
+            body: JSON.stringify({ query, variables: valuesFilter }),
             credentials: 'include',
         });
+        console.log('sfifjqi', valuesFilter)
         const response = await resp.json();
         console.log('map results_', response, query);
 
         const filteredResults = response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng);
 
         // Сохраняем данные в кэш
+        if (!valuesFilter){
         localStorage.setItem(cacheKey, JSON.stringify(filteredResults));
         localStorage.setItem(cacheTimeKey, Date.now().toString());
+        }
+
+        mapItemsGlobal = filteredResults;
 
         return filteredResults;
     }
@@ -539,11 +588,6 @@ export class Search extends React.Component {
             Search.initYmaps(this);
         }
         this.setState({ smallDevice });
-    }
-
-    setViewportHeight() {
-        const vh = window.innerHeight * 0.01; // Рассчитываем 1vh
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
 
     mobileNavigation() {
@@ -566,14 +610,6 @@ export class Search extends React.Component {
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
                 onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
         }
-
-        // if (searchMap) {
-        //     leftNav = <Button className={cx(s.filterButton)}
-        //         bsStyle="link"><FormattedMessage {...messages.results} />{' '}<Material.MdSettingsInputComposite
-        //             className={s.icon} /></Button>;
-        //     rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
-        //         onClick={() => showForm()}><FormattedMessage {...messages.filters} /><FontAwesome.FaSliders /></Button>;
-        // }
 
         return (
             <div className={cx(s.mobileNavigation)}>

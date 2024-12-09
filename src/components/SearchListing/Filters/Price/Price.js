@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Translation
@@ -22,9 +21,9 @@ import messages from '../../../../locale/messages';
 
 // Submit
 import submit from '../../SearchForm/submit';
+import submitMap from '../../SearchForm/submitMap';
 
-import PriceRange from '../../PriceRange';
-import CurrencyConverter from '../../../CurrencyConverter';
+import CustomCheckbox from '../../../CustomCheckbox';
 
 class Price extends Component {
 
@@ -32,18 +31,15 @@ class Price extends Component {
     className: PropTypes.any,
     handleTabToggle: PropTypes.any,
     isExpand: PropTypes.bool,
-    searchSettings: PropTypes.shape({
-      minPrice: PropTypes.number.isRequired,
-      maxPrice: PropTypes.number.isRequired,
-      priceRangeCurrency: PropTypes.string.isRequired,
-    }).isRequired,
   };
 
   static defaultProps = {
     isExpand: false,
-    searchSettings: {
-      priceRangeCurrency: 'USD',
+    fieldsSettingsData: {
+      roomType: [],
     },
+    priceRange: [],
+    smallDevice: false,
   };
 
   constructor(props) {
@@ -68,7 +64,7 @@ class Price extends Component {
     const { change, submitForm } = this.props;
     await change('currentPage', 1);
     submitForm('SearchForm');
-    handleTabToggle('price', !isExpand);
+    handleTabToggle('price', !isExpand, true);
   }
 
   handleReset() {
@@ -98,80 +94,90 @@ class Price extends Component {
     }
   }
 
-  renderPriceRange = ({ input, label, meta: { touched, error }, className, min, max, rangeCurrency, minPrice, maxPrice }) => {
+  checkboxHorizontalGroup = ({ label, name, options, input }) => {
     const { formatMessage } = this.props.intl;
-    const { handleSubmit, change } = this.props;
+    console.log('inp', input);
     return (
-      <div className={cx(s.priceRangeContainer, s.space4)}>
-        <PriceRange
-          {...input}
-          min={min}
-          max={max}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          from={rangeCurrency}
-        />
+      <div className={cx(s.displayTable)}>
+        {
+          options.map((option, index) => {
+            if (option.isEnable !== '1') {
+              return <span maxPrice />;
+            }
+            // const splitLineContent = option.itemDescription && option.itemDescription.split('\n');
+            // const newSplitLineContent = splitLineContent && splitLineContent.filter(el => el);
+            return (
+              <div className={cx(s.displayTableRow)}>
+                <div className={cx(s.displayTableCell, s.padding2, s.checkboxSection, s.NHtype)}>
+                  <CustomCheckbox
+                    key={index}
+                    className={'icheckbox_square-green'}
+                    name={`${input.name}[${index}]`}
+                    value={option.id}
+                    checked={input.value.indexOf(option.id) !== -1}
+                    onChange={(event) => {
+                      const newValue = [...input.value];
+                      if (event === true) {
+                        newValue.push(option.id);
+                      } else {
+                        newValue.splice(newValue.indexOf(option.id), 1);
+                      }
+                      input.onChange(newValue);
+                    }}
+                  />
+                </div>
+                <div className={cx(s.displayTableCell, s.captionTitle, s.padding2, s.NhName, 'NhNameRtl')}>
+                  {option.itemName}
+                  <div>
+                    {/* {
+                      newSplitLineContent && newSplitLineContent.length > 0 && newSplitLineContent.map((itemValue, indexes) => (
+                        <p className={s.dot} dangerouslySetInnerHTML={{ __html: itemValue }} />
+                        ))
+                    } */}
+                    {/* {option.itemDescription} */}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        }
       </div>
     );
-  }
+  };
 
   render() {
-    const { className, handleTabToggle, isExpand, searchSettings } = this.props;
-    const { priceRangeLabel, priceRange } = this.props;
+    const { className, handleTabToggle, isExpand, smallDevice } = this.props;
+    const { fieldsSettingsData: { roomType }, priceRange } = this.props;
     const { formatMessage } = this.props.intl;
-
-    const minPrice = searchSettings.minPrice;
-    const maxPrice = searchSettings.maxPrice;
-    const rangeCurrency = searchSettings.priceRangeCurrency;
-    const minPriceRange = priceRangeLabel != undefined ? priceRangeLabel[0] : minPrice;
-    const maxPriceRange = priceRangeLabel != undefined ? priceRangeLabel[1] : maxPrice;
+    const priceList = [ {itemName: "До 5 тыс. руб.", id: 2913, isEnable: "1", minPrice: 0, maxPrice: 5000 }, {itemName: "5 - 10 тыс. руб.", id: 2914, isEnable: "1", minPrice: 5000, maxPrice: 10000  }, {itemName: "10 - 20 тыс. руб.", id: 2915, isEnable: "1", minPrice: 10000, maxPrice: 20000  }, {itemName: "От 20 тыс. руб.", id: 2916, isEnable: "1", minPrice: 20000, maxPrice: 100000  }];
+    console.log('zaq',roomType)
 
     return (
       <div className={className}>
         <div ref={this.setBtnWrapperRef}>
           <Button
-            className={cx({ [s.btnSecondary]: (isExpand === true || (priceRange && priceRange.length > 1)) }, s.btn, s.responsiveFontsize, s.searchBtn)}
+            className={cx({ [s.btnSecondary]: (isExpand === true || priceRange.length > 0) }, s.btn, s.responsiveFontsize, s.searchBtn)}
             onClick={() => handleTabToggle('price', !isExpand)}
           >
-            {
-              !priceRange && <FormattedMessage {...messages.price} />
-            }
-            {
-              priceRange && priceRange.length > 1 && <span>
-                <CurrencyConverter amount={minPriceRange} from={rangeCurrency} />
-                {' - '}
-                <CurrencyConverter amount={maxPriceRange} from={rangeCurrency} />
-              </span>
-            }
+            Цена
           </Button>
         </div>
         {
           isExpand && <div className={cx(s.searchFilterPopover, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
             <div className={s.searchFilterPopoverContent}>
-              <p className={cx(s.captionTitle, s.space4)}>
-                <CurrencyConverter amount={minPriceRange} from={rangeCurrency} />
-                <span>{' - '}</span>
-                <CurrencyConverter amount={maxPriceRange} from={rangeCurrency} />
-              </p>
               <Field
                 name="priceRange"
-                component={this.renderPriceRange}
-                min={minPrice}
-                max={maxPrice}
-                minPrice={minPriceRange}
-                maxPrice={maxPriceRange}
-                rangeCurrency={rangeCurrency}
+                component={this.checkboxHorizontalGroup}
+                options={priceList}
               />
               <div className={cx(s.searchFilterPopoverFooter, s.displayTable)}>
                 <div className={cx('text-left', s.displayTableCell)}>
-                  {
-                    /* priceRange && <Button
-                      bsStyle="link"
-                      className={cx(s.btnLink)}
-                      onClick={this.handleReset}>
-                      <FormattedMessage {...messages.clear} />
-                    </Button> */
-                  }
+                  {/* <Button
+                    bsStyle="link"
+                    className={cx(s.btnLink)}
+                    onClick={this.handleReset}>
+                    <FormattedMessage {...messages.clear} />
+                  </Button> */}
                 </div>
                 <div className={cx('text-right', s.displayTableCell, 'textAlignLeftRtl')}>
                   <Button

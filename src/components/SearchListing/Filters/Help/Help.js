@@ -70,7 +70,7 @@ class Help extends Component {
   handleReset() {
     const { className, handleTabToggle, isExpand } = this.props;
     const { change, submitForm } = this.props;
-    change('help', [], true);
+    change('help', []);
   }
 
   setWrapperRef(node) {
@@ -88,7 +88,7 @@ class Help extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('help', !isExpand);
+        handleTabToggle('help', !isExpand, true);
       }
     }
   }
@@ -107,7 +107,7 @@ class Help extends Component {
             // const newSplitLineContent = splitLineContent && splitLineContent.filter(el => el);
             return (
               <div className={cx(s.displayTableRow)}>
-                <div className={cx(s.displayTableCell, s.padding4, s.checkboxSection, s.NHtype)}>
+                <div className={cx(s.displayTableCell, s.padding2, s.checkboxSection, s.NHtype)}>
                   <CustomCheckbox
                     key={index}
                     className={'icheckbox_square-green'}
@@ -125,7 +125,7 @@ class Help extends Component {
                     }}
                   />
                 </div>
-                <div className={cx(s.displayTableCell, s.captionTitle, s.padding4, s.NhName, 'NhNameRtl')}>
+                <div className={cx(s.displayTableCell, s.captionTitle, s.padding2, s.NhName, 'NhNameRtl')}>
                   {option.itemName}
                   <div>
                     {/* {
@@ -178,7 +178,7 @@ class Help extends Component {
           </Button>
         </div>
         {
-          isExpand && <div className={cx(s.searchFilterPopover, s.smallFilter, { [s.searchFilterPopoverFull]: smallDevice == true }, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
+          isExpand && <div className={cx(s.searchFilterPopover, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
             <div className={s.searchFilterPopoverContent}>
               <Field
                 name="help"

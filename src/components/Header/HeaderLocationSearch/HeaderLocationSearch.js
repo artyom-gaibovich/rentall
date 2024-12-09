@@ -37,6 +37,7 @@ import history from '../../../core/history';
 
 //yandex
 import {Search} from "../../../routes/search/Search.js"
+import {SearchResults} from "../../SearchListing/SearchResults"
 import {need_locations} from "../../../helpers/locations";
 
 class HeaderLocationSearch extends Component {
@@ -82,6 +83,7 @@ class HeaderLocationSearch extends Component {
 
     componentDidMount() {
         const {personalized, personalized: {location}} = this.props;
+        this.props.personalized.prevLocation = location
         if (personalized && location) {
             this.setState({
                 locationValue: location,
@@ -137,10 +139,6 @@ class HeaderLocationSearch extends Component {
             this.props.personalized.location = this.state.suggestItems[0].displayName
         }
         if (this.props.personalized.location) {
-            if (this.props.personalized.location == this.props.personalized.prevLocation) {
-                Search.restart(this.props)
-                return
-            }
             const location = this.props.personalized.location
             this.props.personalized.prevLocation = location
             console.log('ss', this.props.personalized.prevLocation)
@@ -152,6 +150,11 @@ class HeaderLocationSearch extends Component {
             this.inputRef.current.value = location;
             this.props.personalized.location = location;
             this.setState({...this.state, suggestItems: []})
+            if (this.props.personalized.location == this.props.personalized.prevLocation) {
+                // SearchResults.restart(this.props)
+                localStorage.setItem('onLocation', 'true')
+            }
+
         }
     }
 

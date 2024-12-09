@@ -87,7 +87,7 @@ class HomeType extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('homeType', !isExpand);
+        handleTabToggle('homeType', !isExpand, true);
       }
     }
   }
@@ -105,7 +105,7 @@ class HomeType extends Component {
             const newSplitLineContent = splitLineContent && splitLineContent.filter(el => el);
             return (
               <div className={cx(s.displayTableRow)}>
-                <div className={cx(s.displayTableCell, s.padding4, s.checkboxSection, s.NHtype)}>
+                <div className={cx(s.displayTableCell, s.padding2, s.checkboxSection, s.NHtype)}>
                   <CustomCheckbox
                     key={index}
                     className={'icheckbox_square-green'}
@@ -123,7 +123,7 @@ class HomeType extends Component {
                     }}
                   />
                 </div>
-                <div className={cx(s.displayTableCell, s.captionTitle, s.padding4, s.NhName, 'NhNameRtl')}>
+                <div className={cx(s.displayTableCell, s.captionTitle, s.padding2, s.NhName, 'NhNameRtl')}>
                   {option.itemName}
                   <div>
                     {

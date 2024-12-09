@@ -128,6 +128,7 @@ export default {
           ne_lng = data.GetAddressComponents.ne_lng;
         location = query.address;
         store.dispatch(setPersonalizedValues({ name: 'location', value: query.address }));
+        
       }
     } else {
       lat = null;

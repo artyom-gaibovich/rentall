@@ -76,23 +76,6 @@ const query = gql`
           wishListStatus
           isListOwner
         }
-        resultsMap {
-          id
-          title
-          lat
-          lng
-          coverPhoto
-          listPhotos {
-            id
-            name
-            type
-            status
-          }
-          listingData {
-            basePrice
-            currency
-          }
-        }
       }
     }
 `;

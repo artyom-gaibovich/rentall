@@ -1,5 +1,18 @@
 @import '../../../../components/common.css';
-
-.priceRangeContainer {
-    padding: 0px 12px;
+.checkboxSection {
+    width: 2%;
+    padding-right: 10px;
+}
+.NHtype{
+    padding: 3px 0 0;
+    vertical-align: top;
+}
+.NhName{
+    padding: 0 0 0 10px;
+    vertical-align: bottom !important;
+}
+@media(max-width:767px){
+    .smallFilter{
+        padding-top: 100px;
+    }
 }

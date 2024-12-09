@@ -31,7 +31,7 @@ import {
 } from 'react-bootstrap';
 import { Search } from "../../../routes/search/Search.js"
 import submit from '../SearchForm/submit';
-import submitMap from '../SearchForm/submitMap';
+import {getValuesFilterDelete} from '../SearchForm/submit';
 
 class SearchHeader extends Component {
   static propTypes = {
@@ -166,13 +166,13 @@ class SearchHeader extends Component {
       overlay: isExpand,
     });
     
-    if (smallDevice) {
-      if (isExpand) {
-        showFilter();
-      } else {
-        showResults();
-      }
-    }
+    // if (smallDevice) {
+    //   if (isExpand) {
+    //     showFilter();
+    //   } else {
+    //     showResults();
+    //   }
+    // }
 
     if (refresh) {
       await this.refreshYmaps();
@@ -189,13 +189,13 @@ class SearchHeader extends Component {
     const { tabs, overlay, smallDevice, verySmallDevice } = this.state;
     let isActive = false;
 
-    console.log('mapBounds',mapBounds)
+    console.log('formVAlues',formValues)
 
     if (formValues && (formValues.beds || formValues.bedrooms || formValues.bathrooms
       || (formValues.amenities && formValues.amenities.length) || (formValues.spaces && formValues.spaces.length)
       || (formValues.houseRules && formValues.houseRules.length)
       || (formValues.fish && formValues.fish.length)
-      || (formValues.safetyAmenities && formValues.safetyAmenities.length))) {
+      || (formValues.safetyAmenities && formValues.safetyAmenities.length) || (formValues.roomType && formValues.roomType.length && smallDevice) || (formValues.priceRange && formValues.priceRange.length && smallDevice))) {
       isActive = true;
     }
     return (
@@ -272,7 +272,7 @@ class SearchHeader extends Component {
                     onClick={this.handleOpen}
                   >
                     <span className={cx('hidden-md hidden-lg')}>
-                      <FormattedMessage {...messages.filter} />
+                      Все фильтры
                     </span>
                     <span className={cx('hidden-xs hidden-sm')}>
                       Все фильтры
@@ -309,12 +309,6 @@ SearchHeader = reduxForm({
   destroyOnUnmount: false,
 })(SearchHeader);
 
-SearchHeader = reduxForm({
-  form: 'SearchFormMap', // a unique name for this form
-  onSubmit: submitMap,
-  destroyOnUnmount: false,
-})(SearchHeader);
-
 const selector = formValueSelector('SearchForm'); // <-- same as form name
 
 const mapState = state => ({
@@ -324,7 +318,6 @@ const mapState = state => ({
   ne_lat: selector(state, 'ne_lat'),
   ne_lng: selector(state, 'ne_lng'),
   formValues: getFormValues('SearchForm')(state),
-  formValues: getFormValues('SearchFormMap')(state),
   isResultLoading: state.search.isResultLoading,
 });
 

@@ -97,7 +97,7 @@ class Guests extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('guests', !isExpand);
+        handleTabToggle('guests', !isExpand, true);
       }
     }
   }
@@ -132,9 +132,9 @@ class Guests extends Component {
           </Button>
         </div>
         {
-          isExpand && <div className={cx(s.searchFilterPopover, { [s.searchFilterPopoverFull]: smallDevice == true }, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
+          isExpand && <div className={cx(s.searchFilterPopover, 'searchFilterPopoverRtl')} ref={this.setWrapperRef}>
             <div className={s.searchFilterPopoverContent}>
-              <div className={cx('visible-xs visible-sm', s.searchFilterPopoverHeader)}>
+              {/* <div className={cx('visible-xs visible-sm', s.searchFilterPopoverHeader)}>
                 <div className={cx(s.displayTable)}>
                   <div className={cx('text-left', s.displayTableCell, s.searchFilterCloseIcon, 'searchFilterCloseIconRtl')}>
                     <span onClick={this.handleSubmit}>
@@ -151,9 +151,9 @@ class Guests extends Component {
                     </Button>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div
-                className={cx(s.displayTable, s.space4, { [s.spaceTop7]: smallDevice == true }, { [s.paddingTop2]: smallDevice == true })}
+                className={cx(s.displayTable, s.space4)}
               >
                 <div className={cx(s.displayTableCell, s.captionTitle, s.fullWidth, s.capitalizeText)}>
                   {personCapacity[0].otherItemName}

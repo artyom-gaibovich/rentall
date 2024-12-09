@@ -126,7 +126,7 @@ class MoreFilters extends Component {
       change('currentPage', 1);
       submitForm('SearchForm');
       if (this.btnWrapperRef && !this.btnWrapperRef.contains(event.target)) {
-        handleTabToggle('moreFilters', !isExpand);
+        handleTabToggle('moreFilters', !isExpand, true);
       }
     }
   }

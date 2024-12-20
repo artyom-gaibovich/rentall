@@ -56,7 +56,7 @@ async function submit(values, dispatch) {
       SearchListing(
         personCapacity: $personCapacity,
         dates: $dates,
-        currentPage: $currentPage
+        currentPage: $currentPage,
         lat: $lat,
         lng: $lng,
         roomType: $roomType,

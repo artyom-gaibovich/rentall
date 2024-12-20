@@ -43,7 +43,8 @@ import { submitData } from "../../components/SearchListing/SearchForm/submit.js"
 import { submitMapData } from "../../components/SearchListing/SearchForm/submitMap.js"
 import submit from "../../components/SearchListing/SearchForm/submit.js"
 import {getValuesFilter} from "../../components/SearchListing/SearchForm/submit.js"
-let mapItemsGlobal = []
+let geoObjectsGlobal
+let clustererGlobal
 
 export class Search extends React.Component {
     // static resultData = searchResultsData;
@@ -108,7 +109,6 @@ export class Search extends React.Component {
             Search.map = null; // Сбрасываем ссылку на экземпляр карты
             Search.scriptInit = false; // Флаг для повторной инициализации при необходимости
             Search.yandexMapMobile = true; // Переключение флага мобильной карты (если требуется)
-            console.log('123');
         }
     }
 
@@ -133,7 +133,6 @@ export class Search extends React.Component {
         // После завершения загрузки очищаем и инициализируем карту
         await Search.clearMapInstance();
         await Search.initYmaps(this);
-        console.log("Карта обновлена после завершения загрузки данных");
       }
 
     setFilters = (newFilters) => {
@@ -164,9 +163,6 @@ export class Search extends React.Component {
     }
 
     async handleSubmit() {
-        console.log('Submitting map data');
-        console.log(this.state); // Проверка текущего состояния, включая координаты границ
-
         const { change, submitForm } = this.props;
 
         // Обновление значений формы координатами карты
@@ -179,12 +175,161 @@ export class Search extends React.Component {
         // Отправка формы с обновлёнными данными
         await submitForm('SearchForm');
 
-        console.log('Data submitted to backend');
     }
 
-    static async initYmaps(componentInstance, onPage) {
+    static mapItemMouse(value) {
+    console.log(geoObjectsGlobal)
+    const item = geoObjectsGlobal.find(obj => obj.id === value);
+    if (item) {
+        console.log(item);
+        item.placemark.options.set('iconColor', 'red'); // Меняем цвет
+
+        console.log(clustererGlobal);
+
+        const clusters = clustererGlobal.getClusters();
+
+        // Проверяем, что кластеры получены
+        if (clusters) {
+            console.log(clusters);
+            // Ищем кластер, который содержит этот геообъект
+            clusters.forEach(cluster => {
+                const clusterGeoObjects = cluster.getGeoObjects();
+                if (clusterGeoObjects.includes(item.placemark)) { // предполагаем, что item.placemark - это ваш объект
+                    console.log('LOOH')
+                    console.log(cluster);
+                    console.log(clusterGeoObjects);
+                    cluster.options.set('preset', 'islands#redClusterIcons')
+                }
+            });
+        } else {
+            console.error("Кластеры не найдены.");
+        }
+
+
+        }
+    }
+
+    static mapItemMouseOut(value) {
+    console.log(geoObjectsGlobal)
+    const item = geoObjectsGlobal.find(obj => obj.id === value);
+    if (item) {
+        console.log(item);
+        item.placemark.options.set('iconColor', 'black'); // Меняем цвет
+
+        const clusters = clustererGlobal.getClusters();
+
+        // Проверяем, что кластеры получены
+        if (clusters) {
+            console.log(clusters);
+            // Ищем кластер, который содержит этот геообъект
+            clusters.forEach(cluster => {
+                const clusterGeoObjects = cluster.getGeoObjects();
+                if (clusterGeoObjects.includes(item.placemark)) { // предполагаем, что item.placemark - это ваш объект
+                    console.log('LOOH')
+                    console.log(cluster);
+                    console.log(clusterGeoObjects);
+                    
+                    cluster.options.set('preset', 'twirl#invertedVioletClusterIcons')
+                }
+            });
+        } else {
+            console.error("Кластеры не найдены.");
+        }
+    }
+    }
+
+    static async reloadYmaps() {
+        // Search.map.clusterer.removeAll();
+        Search.map.geoObjects.removeAll()
+
+        let geoObjects;
+        let getPointOptions;
+        let getPointData;
+        let mapPoints;
+        let housePoints;
+        let clusterer;
+
+        clusterer = new ymaps.Clusterer({
+            preset: 'twirl#invertedVioletClusterIcons',
+            groupByCoordinates: false,
+            clusterDisableClickZoom: true,
+            clusterHideIconOnBalloonOpen: false,
+            geoObjectHideIconOnBalloonOpen: false
+        })
+        clusterer.options.set({
+            minClusterSize: 3,
+            maxZoom: 60,
+            gridSize: 80,
+            hasBalloon: false,
+            hasHint: false,
+            clusterDisableClickZoom: true,
+        });
+
+        getPointOptions = function () {
+            return {
+                preset: 'islands#blackStretchyIcon'
+            };
+        }
+        geoObjects = [];
+        getPointData = function (index, title, id, listingData, coverPhotoUrl) {
+            return {
+                balloonContentHeader: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank">${title}</a>`,
+                balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
+                balloonContentFooter: listingData.basePrice + " за ночь",
+                iconContent: listingData.basePrice,
+            };
+        }
+
+        let mapItems = await Search.getMapItems();
+
+        mapPoints = mapItems.map(el => {
+            return [el.lat, el.lng]
+        })
+        housePoints = mapItems.map(el => {
+            return [el.lat, el.lng]
+        })
+
+
+        geoObjectsGlobal = []
+        for (var i = 0, len = mapItems.length; i < len; i++) {
+            geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
+            geoObjectsGlobal.push({ id: mapItems[i].id, placemark: geoObjects[i] })
+        }
+
+
+        clusterer.add(geoObjects);
+
+        clusterer.events.once('objectsaddtomap', function () {
+            Search.map.setBounds(clusterer.getBounds());
+        });
+        clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
+            var target = e.get('target'), // Геообъект - источник события.
+                eType = e.get('type'), // Тип события.
+                zIndex = Number(eType === 'mouseenter') * 1000; // 1000 или 0 в зависимости от типа события.
+
+            target.options.set('zIndex', zIndex);
+        });
+        clusterer.events.add('click', function (e) {
+            const cluster = e.get('target');
+            // Увеличиваем зум при клике на класт
+            if (cluster.getGeoObjects && cluster.getGeoObjects().length > 1) {
+                const clusterBounds = cluster.getBounds(); 
+
+                Search.map.setBounds(clusterBounds, {
+                    checkZoomRange: true, 
+                    zoomMargin: 5,
+                    duration: 500
+                });
+            }
+        });
+
+        clustererGlobal = clusterer
+
+        Search.map && Search.map.geoObjects.add(clusterer);
+    }
+
+    static async initYmaps(componentInstance) {
         await Search.sleep(1000)
-        console.log('initYmaps', componentInstance);
         let searchedHouses
         let clusterer;
         let geoObjects;
@@ -212,7 +357,7 @@ export class Search extends React.Component {
         clusterer.options.set({
             minClusterSize: 3,
             maxZoom: 60,
-            gridSize: 100,
+            gridSize: 80,
             hasBalloon: false,
             hasHint: false,
             clusterDisableClickZoom: true,
@@ -223,11 +368,10 @@ export class Search extends React.Component {
                 balloonContentBody: `<a href="/rooms/${formatURL(title)}-${id}" target="_blank"><div style='background-image: url("/images/upload/${coverPhotoUrl}"); background-position: center; background-size: contain; background-repeat: no-repeat;height:150px; width: 150px'/></div></a> `,
                 balloonContentFooter: listingData.basePrice + " за ночь",
                 iconContent: listingData.basePrice,
+                iconClassName: `mapItem${id}`,
             };
         }
 
-        console.log(submitData, 'submitData')
-        console.log(searchResultsData, 'searchResultsData')
         if (searchResultsData && searchResultsData.results.length > 0) {
             globalZoom = 6
             searchedHouses = searchResultsData.results;
@@ -242,16 +386,11 @@ export class Search extends React.Component {
         //     mapItems = submitMapData
         // } else {
         // }
-        let mapItems = []
-        console.log('ejnjd', onPage)
-        if (onPage) {
-            mapItems = mapItemsGlobal
-        } else {
-            mapItems = await Search.getMapItems();
-        }
-        console.log('kkkk', mapItems)
-        // await componentInstance.props.submitForm('SearchFormMap')
-        console.log(searchResultsData, 'searchResultsData')
+        
+        let mapItems = await Search.getMapItems();
+        
+        console.log(searchResultsData)
+
         const mapSectionOne = document.querySelector(".searchMapSection");
         if (mapSection && mapSection.children.length === 0 && searchResultsData && searchResultsData.results.length > 0 && componentInstance.props.initialFilter.address) {
             if (componentInstance.state.smallDevice) {       
@@ -260,37 +399,21 @@ export class Search extends React.Component {
                 mapSectionOne.style.visibility = 'hidden';
                 }
             }
-            mapPoints = searchResultsData.results.map(el => {
-                return [el.lat, el.lng]
-            })
-            housePoints = searchResultsData.results.map(el => {
-                return [el.lat, el.lng]
-            })
-    
-            for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
-                geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name), getPointOptions());
-            }
-            for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
-                geoObjects[i] = new ymaps.Placemark(
-                    housePoints[i],
-                    getPointData(i, searchResultsData.results[i].title, searchResultsData.results[i].id, searchResultsData.results[i].listingData, searchResultsData.results[i].listPhotos[0].name),
-                    getPointOptions()
-                );
-            }
-
-            clusterer.removeAll();
-            clusterer.add(geoObjects);
-            // Search.map = new ymaps.Map(mapSection, {
-            //     center: [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
-            //     //center: [globalCenter.lat, globalCenter.lng],
-            //     zoom: globalZoom
-            // })
+            
+            const sw_lat = componentInstance.props.formValues.sw_lat; // Юго-западная широта
+            const sw_lng = componentInstance.props.formValues.sw_lng; // Юго-западная долгота
+            const ne_lat = componentInstance.props.formValues.ne_lat; // Северо-восточная широта
+            const ne_lng = componentInstance.props.formValues.ne_lng; // Северо-восточная долгота
+            
             Search.map = new ymaps.Map(mapSection, {
-                bounds: clusterer.getBounds() || [searchedHouses[0] ? searchedHouses[0].lat : 39, searchedHouses[0] ? searchedHouses[0].lng : 43],
-                checkZoomRange: true,
+                bounds: [[sw_lat, sw_lng], [ne_lat, ne_lng]],
             }, {
                 minZoom: 2
             })
+
+            Search.map.setBounds([[sw_lat, sw_lng], [ne_lat, ne_lng]], {
+                checkZoomRange: true, // Активируем проверку диапазона зума
+            });
             ymaps.onHover
             Search.map.controls.remove("searchControl");
             Search.map.controls.remove("geolocationControl");
@@ -318,11 +441,8 @@ export class Search extends React.Component {
                 const sw_lng = mapBounds[0][1]; // Юго-западная долгота
                 const ne_lat = mapBounds[1][0]; // Северо-восточная широта
                 const ne_lng = mapBounds[1][1]; // Северо-восточная долгота
-                console.log({ sw_lat, sw_lng, ne_lat, ne_lng }, '{ sw_lat, sw_lng, ne_lat, ne_lng }');
                 // Обновление состояния компонента с новыми координатами
                 componentInstance.setState({ sw_lat, sw_lng, ne_lat, ne_lng });
-
-                console.log('mapBounds ', mapBounds);
 
                 // Отправка данных на сервер
                 componentInstance.handleSubmit();
@@ -334,14 +454,6 @@ export class Search extends React.Component {
         
         // updateVisibleItems();
     }
-        if (componentInstance.state.smallDevice) {       
-            if (!mapSectionOne.classList.contains(s.nonactiveMap)) {
-            mapSectionOne.classList.add(s.nonactiveMap);
-            mapSectionOne.style.visibility = 'visible'
-            }
-        }
-        clusterer.removeAll();
-
         mapPoints = mapItems.map(el => {
             return [el.lat, el.lng]
         })
@@ -350,26 +462,45 @@ export class Search extends React.Component {
         })
 
 
+        geoObjectsGlobal = []
         for (var i = 0, len = mapItems.length; i < len; i++) {
             geoObjects[i] = new ymaps.Placemark(mapPoints[i], getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name), getPointOptions());
+            geoObjectsGlobal.push({ id: mapItems[i].id, placemark: geoObjects[i] })
         }
-        for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
-            geoObjects[i] = new ymaps.Placemark(
-                housePoints[i],
-                getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name),
-                getPointOptions()
-            );
-        }
+        // for (var i = 0, len = searchResultsData.results.length; i < len; i++) {
+        //     geoObjects[i] = new ymaps.Placemark(
+        //         housePoints[i],
+        //         getPointData(i, mapItems[i].title, mapItems[i].id, mapItems[i].listingData, mapItems[i].listPhotos[0].name),
+        //         getPointOptions()
+        //     );
+        // }
         clusterer.add(geoObjects);   
+        clustererGlobal = clusterer
         clusterer.events.once('objectsaddtomap', function () {
             Search.map.setBounds(clusterer.getBounds());
         });
         clusterer.events.add(['mouseenter', 'mouseleave'], function (e) {
-            var target = e.get('target'), // Геообъект - источник события.
+            const target = e.get('target'), // Геообъект - источник события.
                 eType = e.get('type'), // Тип события.
                 zIndex = Number(eType === 'mouseenter') * 1000; // 1000 или 0 в зависимости от типа события.
 
             target.options.set('zIndex', zIndex);
+
+            if (typeof target.getGeoObjects != 'undefined') {
+                // Событие произошло на кластере.
+                if (eType == 'mouseenter') {
+                    target.options.set('preset', 'islands#redClusterIcons');
+                } else {
+                    target.options.set('preset', 'twirl#invertedVioletClusterIcons');
+                }
+            } else {
+                // Событие произошло на геообъекте.
+                if (eType == 'mouseenter') {
+                    target.options.set('iconColor', 'red');
+                } else {
+                    target.options.set('iconColor', 'black');
+                }
+            }
         });
         clusterer.events.add('click', function (e) {
             const cluster = e.get('target');
@@ -385,6 +516,8 @@ export class Search extends React.Component {
             }
         });
 
+        // geoObjectsGlobal = geoObjects
+        console.log('tidish', geoObjects)
         Search.map && Search.map.geoObjects.add(clusterer);
     }
 
@@ -405,7 +538,6 @@ export class Search extends React.Component {
                         if (object.roomId == event.detail.id) {
                             object.options.set('preset', 'islands#redStretchyIcon');
                             object.options.set('zIndex', 999);
-                            // console.log(object.roomId, object)
                         } else {
                             object.options.set('preset', 'islands#blackStretchyIcon');
                             object.options.set('zIndex', 1);
@@ -441,8 +573,6 @@ export class Search extends React.Component {
 
     componentWillUnmount() {
         try {
-            console.log('12345');
-            // Полный сброс карты и её данных
             Search.clearMapInstance();
 
             // Сбрасываем локальные переменные состояния
@@ -470,15 +600,11 @@ export class Search extends React.Component {
         const cacheTimeKey = 'mapItemsCacheTime';
         const cacheDuration = 1000 * 60 * 60 * 24 * 7; // Кэшируем данные на 10 минут
         const valuesFilter = getValuesFilter();
-        console.log(valuesFilter)
 
         const cachedData = localStorage.getItem(cacheKey);
         const cacheTime = localStorage.getItem(cacheTimeKey);
 
         if (cachedData && cacheTime && (Date.now() - parseInt(cacheTime)) < cacheDuration && !valuesFilter ) {
-            console.log('Returning cached data');
-            console.log(JSON.parse(cachedData).slice(0, 10))
-            mapItemsGlobal = JSON.parse(cachedData);
             return JSON.parse(cachedData);
         }
         const query = `
@@ -562,9 +688,7 @@ export class Search extends React.Component {
             body: JSON.stringify({ query, variables: valuesFilter }),
             credentials: 'include',
         });
-        console.log('sfifjqi', valuesFilter)
         const response = await resp.json();
-        console.log('map results_', response, query);
 
         const filteredResults = response.data.SearchListingMap.results.filter(item => item.title && item.listPhotos.length && item.lat && item.lng);
 
@@ -573,8 +697,6 @@ export class Search extends React.Component {
         localStorage.setItem(cacheKey, JSON.stringify(filteredResults));
         localStorage.setItem(cacheTimeKey, Date.now().toString());
         }
-
-        mapItemsGlobal = filteredResults;
 
         return filteredResults;
     }
@@ -602,9 +724,7 @@ export class Search extends React.Component {
             rightNav;
         if (searchResults) {
             leftNav = <Button className={cx(s.filterButton, s.locationBtn)} bsStyle="link" onClick={() => {
-                console.log("OHO")
                 const map = document.querySelector(".searchMapSection");
-                console.log(map)
                 map.classList.toggle(s.nonactiveMap);
             }}><Material.MdRoom className={s.icon} /></Button>;
             rightNav = <Button className={cx(s.filterButton)} bsStyle="link"
@@ -638,11 +758,8 @@ export class Search extends React.Component {
             showResults,
         } = this.props;
 
-        console.log('TUDAA', searchSettings, initialFilter);
 
         const { smallDevice, load, visibleMapItems, mapBounds, filter } = this.state;
-
-        console.log('haha', searchMap, searchResults, searchForm, smallDevice);
 
         let DesktopResults = true;
         if (filterToggle === true) {

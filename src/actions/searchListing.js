@@ -44,7 +44,7 @@ const query = gql`
         ne_lng: $ne_lng,
         location: $location,
         amenities: $amenities,
-        safetyAmenities: $safetyAmenities
+        safetyAmenities: $safetyAmenities,
       ) {
         count
         results {
@@ -106,11 +106,12 @@ export function searchListing({ personCapacity, dates, geography, currentPage, g
           ne_lng,
           location,
           amenities,
-          safetyAmenities,
+          safetyAmenities, 
         },
         fetchPolicy: 'network-only',
       });
       if (data.SearchListing) {
+        console.log('beee', data)
         dispatch({ type: SEARCH_LISTING_SUCCESS });
         await dispatch(change('SearchForm', 'personCapacity', personCapacity)); 
         await dispatch(change('SearchForm', 'amenities', amenities));
@@ -135,6 +136,7 @@ export function searchListing({ personCapacity, dates, geography, currentPage, g
         dispatch(hideLoading());
       }
     } catch (error) {
+      console.log('d', error)
       dispatch({
         type: SEARCH_LISTING_ERROR,
         payload: {

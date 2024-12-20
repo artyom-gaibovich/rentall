@@ -235,8 +235,9 @@ export default {
     }
     // Default Map Show
     store.dispatch(setPersonalizedValues({ name: 'showMap', value: true }));
+    
 
-    await store.dispatch(searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities }));
+    await store.dispatch(searchListing({ personCapacity, dates, geography, currentPage, geoType, lat, lng, distance, sw_lat, sw_lng, ne_lat, ne_lng, location, amenities, safetyAmenities}));
 
     
     return {

@@ -75,9 +75,6 @@ class SearchHeader extends Component {
   }
 
   async handleSubmit() {
-    console.log('Submitting map data');
-    console.log(this.state); // Проверка текущего состояния, включая координаты границ
-
     const { change, submitForm } = this.props;
 
     // Обновление значений формы координатами карты
@@ -89,22 +86,16 @@ class SearchHeader extends Component {
 
     // Отправка формы с обновлёнными данными
     await submitForm('SearchForm');
-
-    console.log('Data submitted to backend');
 }
 
   async refreshYmaps() {
-    console.log('opa')
-    // Функция для проверки состояния загрузки каждые 100 мс
     const waitForLoadingComplete = () => {
       return new Promise((resolve) => {
         const checkLoading = () => {
           if (!this.props.isResultLoading) {
             resolve(); // Завершаем ожидание, если загрузка завершена
-            console.log('upiii')
           } else {
             setTimeout(checkLoading, 100); // Проверяем снова через 100 мс
-            console.log('noo')
           }
         };
         checkLoading();
@@ -115,9 +106,8 @@ class SearchHeader extends Component {
     await waitForLoadingComplete();
 
     // После завершения загрузки очищаем и инициализируем карту
-    await Search.clearMapInstance();
-    await Search.initYmaps(this);
-    console.log("Карта обновлена после завершения загрузки данных");
+    // await Search.clearMapInstance();
+    await Search.reloadYmaps();
   }
 
   componentDidMount() {
@@ -188,8 +178,6 @@ class SearchHeader extends Component {
     const { searchSettings, formValues, mapBounds } = this.props;
     const { tabs, overlay, smallDevice, verySmallDevice } = this.state;
     let isActive = false;
-
-    console.log('formVAlues',formValues)
 
     if (formValues && (formValues.beds || formValues.bedrooms || formValues.bathrooms
       || (formValues.amenities && formValues.amenities.length) || (formValues.spaces && formValues.spaces.length)

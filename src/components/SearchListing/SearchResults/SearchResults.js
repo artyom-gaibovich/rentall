@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // Redux Form
-import { change, submit as submitForm, formValueSelector, reduxForm } from 'redux-form';
+import { change, submit as submitForm, formValueSelector, getFormValues, reduxForm } from 'redux-form';
 
 // Style
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
@@ -162,7 +162,7 @@ static async restart(props) {
 
   async handlePagination(currenctPage, size) {
     this.setState({ page: currenctPage })
-    await this.refreshYmaps();
+    // await this.refreshYmaps();
     console.log('refreshYmaps 89');
     window.scrollTo(0, 0);
   }
@@ -178,7 +178,7 @@ static async restart(props) {
     await submitForm('SearchForm');
 
     // После завершения обновляем карту
-    await this.refreshYmaps();
+    // await this.refreshYmaps();
     console.log('refreshYmaps 99');
 
     window.scrollTo(0, 0);
@@ -286,6 +286,7 @@ const mapState = state => ({
   ne_lat: selector(state, 'ne_lat'),
   ne_lng: selector(state, 'ne_lng'),
   total: state.search.count,
+  formValues: getFormValues('SearchForm')(state),
   isResultLoading: state.search.isResultLoading,
   showMap: state.personalized.showMap,
   showMapLoader: state.loader.showMapLoading,

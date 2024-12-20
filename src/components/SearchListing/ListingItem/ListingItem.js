@@ -31,6 +31,8 @@ import messages from '../../../locale/messages';
 import { formatURL } from '../../../helpers/formatURL';
 import { isRTL } from '../../../helpers/formatLocale';
 
+import { Search } from "../../../routes/search/Search.js"
+ 
 export let exportedPersonalizedUrl;
 
 class ListingItem extends React.Component {
@@ -68,11 +70,19 @@ class ListingItem extends React.Component {
     }
     // console.log()
     change('SearchForm', 'markerHighlight', { id: value, hover: 'true' });
+    console.log('value', value)
+    Search.mapItemMouse(value)
+
+    // const item = Search.map.geoObjects.find(obj => obj.id === value);
+    // if (item) {
+    //     item.placemark.options.set('iconColor', 'red'); // Меняем цвет
+    // }
   }
 
   handleMouseOut(value) {
     const { change } = this.props;
     change('SearchForm', 'markerHighlight', {});
+    Search.mapItemMouseOut(value)
   }
 
   render() {
